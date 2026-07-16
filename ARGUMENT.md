@@ -149,9 +149,12 @@ public and graded, each grade priced:
   the kernel does not merely inspect the recursions it verifies, it
   *runs* them. Every check of `Becoming.lean` computes the two-tick
   clock. On the reading that a computation instances its process, the
-  clock has run — as a side effect of checking this argument. The run
-  class has width one (`run_class_generated`): a generated territory,
-  not a map of one.
+  clock has run — as a side effect of checking this argument. The claim
+  is not that the kernel's micro-physics is a two-tick clock, but that
+  the process it realizes is, for all descriptive purposes, that clock:
+  the run class has width one (`run_class_generated`), so every
+  expressible distinction between the map and the run is settled and no
+  vocabulary separates the territory from its law (`map_is_territory`).
 
 The grades do not collapse and are never collapsed in summary. What the
 argument does **not** have, at any grade, is a premise-free proof that
