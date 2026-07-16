@@ -1,0 +1,10 @@
+# LaTeX build artifacts (keep the built PDF; ignore the rest)
+paper/*.aux
+paper/*.log
+paper/*.out
+paper/*.toc
+paper/*.synctex.gz
+paper/*.fls
+paper/*.fdb_latexmk
+paper/*.bbl
+paper/*.blg
