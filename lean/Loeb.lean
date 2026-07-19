@@ -1,43 +1,24 @@
 /-!
 # Loeb
 
-Löb's rule over discrete time, and guarded recursion. The `later`
+Löb's rule over discrete time, and guarded recursion: the `later`
 modality over `Nat`; streams over `A`; the guarded map
 `z ↦ prepend c (lift f z)`.
-
-Main results:
-* `loeb`, `loeb_iff_induction` — `(∀ n, later P n → P n) → ∀ n, P n`,
-  interderivable with induction over `Nat`.
-* `guard_is_later` — `Agree (n+1) (prepend c x) (prepend c y) ↔ Agree n x y`.
-* `unique_by_loeb` — fixed points of contractive maps are unique.
-* `deJonghSambin` — every contractive map has exactly one fixed point
-  (the de Jongh–Sambin fixed-point shape, in this setting).
-* `godel_is_clock` — `z = prepend true (lift not z)` has exactly one
-  solution, satisfying `z 0 = true`, `z 1 = false`, `z (n+2) = z n`.
-
-Lean 4, prelude only; no imports. Axiom footprint: within
-`[propext, Quot.sound]`.
 -/
 
 namespace Loeb
 
-/- ---------- the rule over Nat ---------- -/
-
-/-- The later modality ▷ over discrete time. -/
+/-- ▷ over discrete time. -/
 def later (P : Nat → Prop) : Nat → Prop
   | 0     => True
   | n + 1 => P n
 
-/-- Löb's rule over `Nat`: what follows from its own predecessor
-    holds always. -/
 theorem loeb {P : Nat → Prop} (h : ∀ n, later P n → P n) : ∀ n, P n := by
   intro n
   induction n with
   | zero => exact h 0 trivial
   | succ k ih => exact h (k + 1) ih
 
-/-- Löb's rule over Nat and induction over Nat are
-    interderivable. -/
 theorem loeb_iff_induction :
     (∀ P : Nat → Prop, (∀ n, later P n → P n) → ∀ n, P n)
     ↔ (∀ P : Nat → Prop, P 0 → (∀ n, P n → P (n + 1)) → ∀ n, P n) := by
@@ -48,8 +29,6 @@ theorem loeb_iff_induction :
       | k + 1 => fun hk => hs k hk)
   · intro hi P h
     exact hi P (h 0 trivial) (fun n hn => h (n + 1) hn)
-
-/- ---------- streams ---------- -/
 
 abbrev Stream (A : Type u) := Nat → A
 
@@ -76,10 +55,6 @@ theorem eq_of_agree_all {A : Type u} {x y : Stream A}
   funext n
   exact h (n + 1) n (Nat.lt_succ_self n)
 
-/- ---------- prepend and later ---------- -/
-
-/-- One application of prepend converts depth-n agreement into
-    depth-(n+1) agreement. -/
 theorem guard_is_later {A : Type u} (c : A) (x y : Stream A) (n : Nat) :
     Agree (n + 1) (prepend c x) (prepend c y) ↔ Agree n x y := by
   constructor
@@ -101,8 +76,6 @@ theorem guard_is_later {A : Type u} (c : A) (x y : Stream A) (n : Nat) :
     · rw [if_neg h0, if_neg h0]
       exact h (i - 1) (by omega)
 
-/-- Fixed points of contractive maps are unique; proved by
-    applying loeb with P n := Agree n x y. -/
 theorem unique_by_loeb {A : Type u} {Φ : Stream A → Stream A}
     (hΦ : Contractive Φ) {x y : Stream A}
     (hx : Φ x = x) (hy : Φ y = y) : x = y := by
@@ -117,8 +90,6 @@ theorem unique_by_loeb {A : Type u} {Φ : Stream A → Stream A}
     have hk : Agree k x y := hn
     have := hΦ k x y hk
     rwa [hx, hy] at this
-
-/- ---------- de Jongh–Sambin ---------- -/
 
 def iter {A : Type u} (Φ : Stream A → Stream A) : Nat → Stream A → Stream A
   | 0,     z => z
@@ -148,7 +119,6 @@ theorem iter_agree {A : Type u} {Φ : Stream A → Stream A}
   | zero => intro i hi; exact absurd hi (Nat.not_lt_zero i)
   | succ k ih => exact hΦ k _ _ ih
 
-/-- Guarded recursion: the ▷-fixpoint, built digit by digit. -/
 def gfix {A : Type u} (Φ : Stream A → Stream A) (z₀ : Stream A) : Stream A :=
   fun n => iter Φ (n + 1) z₀ n
 
@@ -171,15 +141,11 @@ theorem gfix_fixed {A : Type u} {Φ : Stream A → Stream A}
   funext n
   exact hΦ n _ _ (gfix_agree hΦ z₀ n) n (Nat.lt_succ_self n)
 
-/-- Every contractive Φ has exactly one fixed point: existence
-    by gfix, uniqueness by unique_by_loeb. -/
 theorem deJonghSambin {A : Type u} [Inhabited A]
     {Φ : Stream A → Stream A} (hΦ : Contractive Φ) :
     ∃ z, Φ z = z ∧ ∀ y, Φ y = y → y = z :=
   ⟨gfix Φ (fun _ => default), gfix_fixed hΦ _,
    fun y hy => unique_by_loeb hΦ hy (gfix_fixed hΦ _)⟩
-
-/- ---------- the guarded liar over Bool ---------- -/
 
 theorem guard_contractive {A : Type u} (f : A → A) (c : A) :
     Contractive (fun z => prepend c (lift f z)) := by
@@ -187,8 +153,6 @@ theorem guard_contractive {A : Type u} (f : A → A) (c : A) :
   exact (guard_is_later c (lift f x) (lift f y) n).mpr
     (fun i hi => congrArg f (h i hi))
 
-/-- z = prepend true (lift not z) has exactly one solution;
-    it satisfies z 0 = true, z 1 = false, z (n+2) = z n. -/
 theorem godel_is_clock :
     (∃ z : Stream Bool, prepend true (lift not z) = z
       ∧ ∀ y, prepend true (lift not y) = y → y = z)
@@ -211,7 +175,6 @@ theorem godel_is_clock :
 
 end Loeb
 
-/- audit -/
 #print axioms Loeb.loeb
 #print axioms Loeb.loeb_iff_induction
 #print axioms Loeb.guard_is_later

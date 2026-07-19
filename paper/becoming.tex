@@ -4,378 +4,87 @@
 \usepackage[utf8]{inputenc}
 \usepackage{mathpazo}
 \usepackage{microtype}
-\usepackage[margin=1.15in]{geometry}
+\usepackage[margin=1in,a4paper]{geometry}
 \usepackage{amsmath,amssymb,amsthm}
-\usepackage{booktabs}
-\usepackage{array}
 \usepackage{enumitem}
-\usepackage{setspace}
 \usepackage[hidelinks]{hyperref}
-\usepackage{ragged2e}
 \usepackage{parskip}
-\emergencystretch=2.5em
-\tolerance=2000
+\pagestyle{empty}
+\setlength{\parskip}{4pt}
 
-\newtheorem{prop}{Proposition}[section]
-\theoremstyle{remark}
-\newtheorem*{scholium}{Scholium}
-
-\newcommand{\lf}[1]{\texttt{#1}}       % Lean file / identifier
-\newcommand{\tagf}{\textsc{forced}}
-\newcommand{\tagfr}{\textsc{free}}
-\newcommand{\tagp}{\textsc{premise}}
-\newcommand{\tagi}{\textsc{interpretation}}
-\newcommand{\dem}[1]{\par\nopagebreak\addvspace{3pt}{\small\noindent\RaggedRight\emph{Demonstration.}~#1\par}\addvspace{5pt}}
-
-\title{\textbf{The Ontological Argument of Becoming}\\
-\large A Formal Existence Argument Based on the Concept of Presuppositionlessness}
-\author{}
-\date{July 2026\thanks{The demonstrations cited throughout are Lean~4 proof files, standalone (prelude only, no imports), each checkable with plain \lf{lean} under the pinned toolchain \lf{leanprover/lean4:v4.31.0} and each ending with a printed axiom audit (\lf{\#print axioms}). File names refer to the \lf{lean/} directory of the accompanying repository, which vendors the twenty-one files this argument cites; the full process-metaphysics corpus they are drawn from is a separate document.}}
+\newcommand{\Fix}{\mathrm{Fix}}
+\newcommand{\Run}{\mathrm{Run}}
+\newcommand{\lf}[1]{\texttt{#1}}
 
 \begin{document}
-\maketitle
-
-\begin{abstract}
-\noindent
-Ontological arguments aim to demonstrate the existence of an entity solely through conceptual analysis without using empirical evidence. Classical formulations start with the concept of a maximally perfect being and infer its necessary existence. Such arguments have consistently faced challenges when moving from conceptualisation to actuality, with Kant’s assertion that existence is not a real predicate remaining influential. This study addresses the issue from a contrasting perspective by employing a contemporary tool, a proof assistant, as previously applied to Gödel’s version. The central methodological principle is presuppositionlessness, defined as a specification that introduces no structure, names, or distinctions. Machine-verified theorems carry the argument. The entry point is a retorsion: to token the claim that no distinction is drawn, as opposed to its denial, is to draw one, so the denial is unsayable rather than false. The arena of a drawn distinction is two-valued, not by choice but by theorem: one value is mute, three or more are mute, and anything a structureless law moves is on exactly two. Only one structureless specification yields substantive content: $x = \lnot x$ (uniqueness). Interpreted as an equation over states, this admits no solution (no being). Interpreted as a process over time, it yields a unique solution for each initial state, analogous to a two-tick clock (unique becoming). These outcomes are equivalent: a specification lacks a static solution if and only if every state transitions at each step (the frame correspondence). And the seed the run is unique up to is a label, not an assumption: the two runs are one run relabelled. Thus, the most minimal concept does not necessitate the existence of a being but instead necessitates a process of becoming. The principal tool is Lawvere’s diagonal theorem in its fixed-point-free form, used as a generative mechanism. In contrast to classical arguments, which implicitly move from concept to reality, this approach articulates each step explicitly and subjects it to verification. Earlier versions of the argument carried four named premises above the core; the present version carries none. Each former premise is shown to be a theorem, a hypothesis the result is stronger without, or a condition whose denial cannot be coherently tokened, and the criterion under which zero premises is claimed is stated and defended rather than left implicit. The core argument is assumption-free and validated by the Lean proof assistant; the metaphysical interpretations that remain are explicitly identified and severable.\end{abstract}
-
-\section{Introduction}\label{sec:intro}
-
-Anselm's argument can be summarised succinctly: God is defined as the greatest conceivable being. This argument is entirely a priori and seeks to establish God's existence solely through conceptual analysis to avoid contradiction.
-
-Gaunilo, Anselm's earliest critic, applied similar reasoning to the concept of the most perfect island.  Descartes later revived the argument, treating existence as one of the perfections of a perfect being. Kant subsequently offered the most enduring critique, arguing that existence is not a real predicate. Stating that something exists does not add to its concept; rather, it asserts that the concept corresponds to an object. Therefore, regardless of how detailed a concept may be, it cannot include the object's existence, and all these arguments share this fundamental error.
-
-Kant's objection redirected the debate toward modal and subsequently formal logic. Hartshorne and Plantinga reconstructed the argument based on necessity, asserting that if a maximally great being is even possible, then, under appropriate modal logic, it must exist and therefore be actual. Gödel developed an axiomatic formulation in higher-order modal logic, employing positive properties and an essence relation, which he documented in a notebook. Benzmüller and Woltzenlogel Paleo formalised Gödel's axioms using automated theorem provers. Their analysis demonstrated that the system results in modal collapse, indicating that whatever is the case must necessarily be the case. Additionally, they identified an inconsistency in Gödel's original axioms, whereas Scott's version remains consistent \cite{benzmuller2014,benzmuller2016}. Oppenheimer and Zalta previously utilised a prover to simplify the logical core of the argument \cite{oppenheimerzalta2011}. The primary insight is not that the ontological argument is successful, but rather that proof assistants fundamentally alter the discourse. The central question now concerns whether the inference is mechanically valid and upon which axioms it relies.
-
-This paper employs the same analytical tools and pursues the same objective as previous studies, but approaches the problem from the opposite direction. Rather than starting with the most comprehensive concept, the analysis begins with the simplest possible specification, one that makes no assumptions and can be formulated prior to establishing any structure. The central question is whether such a concept necessitates the existence of anything. The findings, demonstrated through machine-checked theorems, reveal a bifurcation in outcomes. In one interpretation, the concept establishes the non-existence of any static object that satisfies it, thereby not only failing to prove a necessary being but actively refuting it. In an alternative interpretation, the same concept demonstrates the unique, constructed existence of a process that fulfils the specification. These two interpretations are, in fact, equivalent. When the analytical tool is applied in this manner, the notion of a necessary being terminates precisely where a necessary becoming commences, occurring at a single diagonal point.
-
-The remainder of this paper presents a unified argument divided into seven steps, followed by a graded treatment of actuality. Step 1 establishes the entry point: any tokening of a claim already draws a distinction, so the denial that any distinction is drawn is unsayable rather than false. Step 2 establishes that the arena of a drawn distinction is two-valued, as a theorem rather than a choice. Step 3 establishes that, on the basic distinction, only one structureless specification possesses content. Step 4 demonstrates that this specification lacks a static instance, and that no structureless specification could have had one. Step 5 establishes that there is exactly one running instance for each seed. Step 6 clarifies that steps 4 and 5 describe the same phenomenon. Step 7 establishes that the seed is a label rather than an assumption. Section \ref{sec:actuality} examines the relationship of these findings to actuality, considering three levels of strength, none of which now carries a premise. Sections \ref{sec:diagonal} to \ref{sec:modal} emphasise novel aspects, including a generative interpretation of a fixed-point theorem and the modal structure, specifically necessity without presupposing possibility. Section \S\ref{sec:premises} states the criterion under which the argument claims no premises and accounts for where each former premise went. Section \S\ref{sec:objections} addresses eight objections. Section \S\ref{sec:literature} situates the argument within the broader literature. Section \S\ref{sec:claims} explicitly states the main claims.
-
-\section{Ground Rules}\label{sec:rules}
-
-Each cited result is formalised as a theorem in Lean~4 \cite{demoura2021}, a proof assistant with a minimal trusted kernel that verifies every inference. All files are standalone, relying only on the prelude, with no imported libraries or inter-file dependencies, and can be checked using the basic \lf{lean} binary under a single pinned toolchain. Each file concludes by printing the axioms used in its results. The repository accompanying this paper includes the twenty-one files referenced in the argument. The file that consolidates the core of the argument into a single statement, \lf{Becoming.lean}, does not invoke any axioms, and its audit reports ``does not depend on any axioms'' for the assembled theorem.
-
-Each clause within the argument is assigned one of three possible verdicts.
-\begin{description}[leftmargin=1.6em, itemsep=1pt]
-\item[\tagf.] Carried by a machine-checked theorem, cited by file and name.
-\item[\tagfr.] Proved undecidable in the relevant vocabulary.
-\item[\tagi.] A suggested reading of a theorem, marked and severable.
-\end{description}
-
-Earlier versions of this argument used a fourth verdict, \tagp{} --- a named assumption joining a theorem to an informal reading --- and assigned it four times (R1--R4), with a further residue on the reading of the classification. No clause carries it now. Section \S\ref{sec:premises} states the criterion under which the count is zero, accounts for where each former premise went, and names the one place a reader should press.
-
-The philosophical meaning (for example, how these theorems relate to ideas such as being, becoming, and existence) derives from our interpretations, which are clearly described. Where a proposition is settled identically across every admissible world, it needs no bridge to any vocabulary (\lf{NoFloor.lean}: \lf{constant\_is\_expressible\_everywhere}); where an interpretation goes beyond that, it is tagged \tagi{} and the mathematics stands without it. So, the certainty offered here applies only to the proof itself, not to the interpretations.
-
-\section{The Argument}\label{sec:argument}
-
-A \emph{specification} is a rule that a state must satisfy. There are two main ways to understand it. If we write $x = f(x)$, it is an equation: this means we want a state that is the same as its image under $f$, which is called a fixed point. If we write $x_{n+1} = f(x_n)$, it is a recursion: this means we want a sequence of states, each one produced from the previous one by $f$. The first way asks what is true, without reference to time. The second way asks what happens step by step. We can call these the object frame and the process frame.
-
-We build up to it from a constraint on the concept.
-
-\subsection*{Step 1 --- The distinction is drawn}
-
-A medium with one state gives every claim the same mark, which is to token none of them: nothing is said rather than anything else. Consequently, any medium that marks two claims differently has two distinct states, which is to say that a distinction is drawn. Now let the claim in question be \emph{that no distinction is drawn}. To token that claim as opposed to its denial is to draw one. The denial is not refuted by argument; it is refuted by being tokened, and is therefore unsayable rather than false.
-
-\begin{prop}[The retorsion; \tagf, its denial unsayable]\label{prop:retorsion}
-Any medium that marks ``no distinction is drawn'' differently from its denial has two distinct marks, and so draws the distinction it denies. There is no seat from which the denial can be said.
-\end{prop}
-
-\dem{\lf{Becoming.lean}: \lf{retorsion}, \lf{no\_undrawn\_denial}; \lf{Tokening.lean}: \lf{subsingleton\_tokens\_nothing}, \lf{denial\_draws\_the\_distinction}, \lf{discrimination\_says\_and\_sat}, \lf{the\_outside\_is\_the\_premise}. Axiom-free.}
-
-This is the only entry point the argument has, and it is not an assumption but the shape of any act that could contain one. The scope of its binding force is itself a theorem, and it is the honest boundary of the method: a retorsion never binds a claim with somewhere else to stand, since one can truly write ``this page is blank'' on another page (\lf{the\_outside\_is\_the\_premise}). It binds only a claim that has claimed everything, which is what ``absolute'' means. The act of tokening, finally, already exhibits the two conditions the later steps impose on an articulation: the mark of a claim excludes something (the mark of its denial) and is satisfied by something (itself), so those conditions are not further hypotheses about a ground (\lf{discrimination\_says\_and\_sat}).
-
-\subsection*{Step 2 --- The arena is two}
-
-Every subsequent classification runs on a two-valued alphabet, and if that count were chosen, the choice would be a premise, and an unlisted one. It is not chosen. On a bare carrier of one value, every law is the identity. On a bare carrier of three or more values, every law invariant under all relabelings is also the identity: if $f$ moves $x$ to $y \neq x$, a third value $z$ yields a transposition of $y$ and $z$ that fixes $x$, and equivariance then forces $f(x)$ to be $y$ and $z$ at once. The third value is precisely what gives the symmetry group room to pin every map down. Only on exactly two values is there a structureless law that is not the identity. The converse also holds: if any structureless law on a bare carrier moves anything, that carrier has exactly two values.
-
-\begin{prop}[The arena is forced; \tagf]\label{prop:arena}
-One value is mute; three or more are mute; two speaks. A structureless law that moves anything lives on a carrier of exactly two values, so the count of values is a consequence of there being an articulation at all, not a setting the argument chose.
-\end{prop}
-
-\dem{\lf{Becoming.lean}: \lf{bare\_one\_is\_mute}, \lf{bare\_three\_is\_mute}, \lf{two\_speaks}; \lf{Arena.lean}: \lf{arena\_is\_forced}, \lf{speaks\_needs\_exactly\_two}, \lf{arena\_iff\_two}. The becoming-side results axiom-free; the converse within \lf{[propext, Classical.choice, Quot.sound]}.}
-
-The point has a concrete edge, because the three-element alphabet appears to offer an escape from the whole argument: there, $x = \mathrm{neg}(x)$ has a static solution, the vacuum, so becoming looks optional. But that alphabet's negation fixes the vacuum \emph{by naming it} --- the classification for it carries the name as a hypothesis (\lf{OnlyShape.lean}: \lf{equivariant\_endomaps\_V3}, hypothesis $g(b) = b$) --- and naming an element is importing structure. Drop the name and nothing is left but the identity: not a static absolute, but no absolute at all (\lf{Arena.lean}: \lf{v3\_negation\_names\_the\_vacuum}, \lf{escape\_costs\_a\_name}). Nor does reading specifications as graphs reopen the case: on three values the inequation speaks but does not determine --- two of its runs share a seed and diverge at the next tick, and no structureless law selects between them (\lf{three\_does\_not\_determine}).
-
-\subsection*{Step 3 --- One candidate}
-
-The foundational concept of this argument is presuppositionlessness, defined as a specification that introduces no structure. Importing no structure entails naming no particular element, singling out no constant, and preserving symmetry, such that the statement remains valid before any element of the alphabet is distinguished from another. In the context of the simplest possible alphabet, consisting of a single distinction with two sides, this notion acquires a precise formal interpretation. A law is said to import no structure if it commutes with relabeling that exchanges the two sides; that is, the law yields the same result after the sides are swapped, as it lacks any means to differentiate between them. This property is referred to as equivariance.
-
-The association between the concept of "imports no structure" and "equivariant" is substantiated by a formal theorem. Specifically, the class of laws whose graphs are definable solely from equality (constructed from statements such as "these two are equal" using negation, conjunction, and disjunction, without naming any elements) corresponds precisely to the equivariant laws, with no constant law included (\lf{Structureless.lean}). Syntactic innocence, where no elements are named, and semantic innocence, where nothing persists after relabeling, are thus shown to constitute the same class.
-
-Given these conditions, the candidates can be enumerated. For the two-sided distinction, there are exactly two equivariant laws: the identity, which maps each side to itself, and the negation, which interchanges them. Constants are excluded because a law that always returns a fixed side effectively names an element. Thus, only two laws remain, and one is trivial: the identity equation $x = \mathrm{id}(x)$ holds for every state and therefore imposes no constraints and generates no new information. The only nontrivial structureless specification is $x = \lnot x$.
-
-\begin{prop}[One candidate; \tagf]\label{prop:one}
-According to the basic distinction, a structureless law is either the identity or the negation. In contrast, a constant law possesses structure. The identity holds for all elements and therefore conveys no substantive content. The only structureless specification with content is $x = \lnot x$.
-\end{prop}
-
-\dem{\lf{Becoming.lean}: \lf{one\_candidate}, \lf{constants\_not\_structureless}, \lf{id\_says\_nothing}; fuller generality in \lf{OnlyShape.lean}: \lf{spec\_forced}; the equivariance identification in \lf{Structureless.lean}: \lf{structureless\_iff\_equivariant}, \lf{constants\_not\_defble}. Axiom-free.}
-
-Earlier versions of this argument left a residue here: the equation of ``importing no structure'' with ``having no vocabulary beyond the distinction itself'' was carried as the argument's primary substantive assumption, named premise R3. The residue is now closed by a theorem, from the other side. A law on the bare distinction that \emph{fails} to commute with the relabeling is a constant: it ignores its input and names a value, which is the maximally structured case, not a structureless case that equivariance missed (\lf{Articulation.lean}: \lf{non\_equivariant\_names}, \lf{constant\_ignores\_the\_distinction}). Together with the definability theorem, this leaves no third thing for ``structureless'' to mean on the bare distinction. What was a premise is a classification exhaustive from both directions.
-
-Reading specifications as graphs rather than endomaps strengthens the classification further, and the strengthening matters for a question the endomap reading cannot ask. An endomap is already a commitment: it says every state has a successor. Over relations, a fourth candidate stands beside equality, inequality, and the total relation --- the empty relation, which is \emph{nothing}. It is ruled out for a stateable reason: it says something, in that it excludes every state, but nothing satisfies it in any frame. It is not a rival absolute; it is silence (\lf{Articulation.lean}: \lf{nothing\_is\_silent}). The one specification that is both contentful and satisfiable is the inequation.
-
-\subsection*{Step 4 --- No being}
-
-When the candidate is considered within the object frame and interpreted as an equation, this approach requires a state that is identical to its own negation, meaning one side of a distinction would have to be the other side as well. Such a state is impossible. In a two-sided distinction, each side is necessarily distinct, so neither can satisfy $x = \lnot x$. And the impasse is not a peculiarity of the negation. No structureless specification could have singled out a state at all: read of itself, a structureless specification holds of every state or of none --- the diagonal is uniform --- so one that excludes anything excludes everything, and its object frame is empty (\lf{diagonal\_uniform}, \lf{says\_kills\_the\_object}). The absolute cannot be a thing, not because its law happens to lack a solution, but because nothing structureless could have had one. This limitation persists at the propositional level, where a proposition equal to its own negation leads to a direct contradiction, as illustrated by the reasoning behind the liar paradox and Russell's paradox. Therefore, when the presuppositionless candidate is construed as a demand for an object, it becomes a demand that cannot be satisfied.
-
-\begin{prop}[No being; \tagf]\label{prop:nobeing}
-
-The founding specification has no static instance: $x = \lnot x$ has no solution among states, and a proposition equal to its own negation is absurd. More generally, no structureless specification singles out a state.
-\end{prop}
-
-\dem{\lf{Becoming.lean}: \lf{no\_static\_instance}, \lf{no\_being}, \lf{diagonal\_uniform}, \lf{says\_kills\_the\_object}; \lf{TwoReadings.lean}: \lf{object\_reading\_empty}; \lf{Aseity.lean}: \lf{founding\_diagonal}. Axiom-free.}
-
-\subsection*{Step 5 --- Unique becoming}
-
-Consider the same candidate within the process framework, formulated as a recursion: $x_{n+1} = \lnot x_n$. In this context, the equation is satisfiable in the strongest sense. For any initial seed, there exists a unique trajectory that alternates between the two possible values indefinitely. Each subsequent value is determined by its predecessor, resulting in a fixed pattern: the two-tick clock, $\mathit{true}, \mathit{false}, \mathit{true}, \mathit{false}, \dots$, which repeats every second tick. Here, existence is not merely asserted but explicitly constructed. The trajectory is formalised through the function \lf{orbit}, and in its guarded form, \lf{gfix}; uniqueness follows by a brief induction. Notably, this object reappears as the Gödel-style guarded fixed point of the foundational specification: the fixed point established by the discipline that ensures well-founded self-reference is precisely this clock (\lf{godel\_is\_clock}). The construction that, in the context of incompleteness, produces a sentence asserting its own unprovability, here, gives rise to time.
-
-\begin{prop}[Unique becoming; \tagf]\label{prop:becoming}
-When interpreted recursively, the founding specification yields exactly one solution from every seed: the two-tick clock with a period of two.
-\end{prop}
-
-\dem{\lf{Becoming.lean}: \lf{becoming\_exists}, \lf{becoming\_unique}, \lf{two\_tick\_clock}; \lf{TwoReadings.lean}: \lf{founding\_two\_readings}; \lf{Loeb.lean}: \lf{deJonghSambin}, \lf{godel\_is\_clock} (within \lf{[propext, Quot.sound]}). Axiom-free.}
-
-Steps 3 through 5 assemble relationally into a single statement. Let $R$ be a specification that imports nothing (definable from the distinction alone) and that \emph{articulates}: it excludes something, and something satisfies it in some frame. Those two conditions are not premises about a ground --- they unpack what it is to articulate at all, and Step~1 shows that their denial cannot be tokened, since any tokening already exhibits both. Then $R$ \emph{is} the negation graph, its object frame is empty, its process frame is inhabited, and its run is the two-tick clock, unique given a seed (\lf{Becoming.lean}: \lf{absolute\_law}, \lf{absolute\_articulation}; the antecedent is checked to be non-vacuous in \lf{absolute\_is\_inhabited}). Axiom-free.
-
-\subsection*{Step 6 --- Refusal corresponds to execution.}
-
-Steps 4 and 5 may appear to represent two distinct facts about a single specification, namely, the absence of a fixed point and the existence of a unique orbit. But they constitute a single fact. Specifically, a specification lacks a static solution if and only if every orbit it generates changes at every tick. In one direction, if any orbit were ever stationary, the corresponding state would be a fixed point, which contradicts the condition of restlessness. Conversely, a fixed point would correspond to a one-state orbit that remains unchanged. Therefore, the statements "refuses to be" and "cannot stop running" express the same hypothesis regarding $f$, articulated in two different frameworks. This equivalence is a biconditional.
-
-\begin{prop}[The frame correspondence; \tagf]\label{prop:frames}
-A specification has no fixed point if and only if every orbit moves at every tick. The object frame's emptiness and the process frame's perpetual motion are one hypothesis read in two frames.
-\end{prop}
-
-\dem{\lf{Becoming.lean}: \lf{refusal\_is\_running}; \lf{TwoReadings.lean}: \lf{frames\_one\_fact}. Axiom-free.}
-
-\subsection*{Step 7 --- The seed is a record, not a premise}
-
-The run is unique \emph{given a seed}. Two seeds, two runs --- and a choice left open by the mathematics and closed by the world is exactly what a premise is. If the seed were one, the count would be one, not zero. It is not. The two runs are related by the relabeling, and the relabeling is the whole symmetry of the bare distinction, so no structureless proposition separates them: to the only vocabulary the absolute allows itself, the two runs are one world. A proposition that \emph{did} separate them --- ``the run starts \lf{true}'' --- would name a value, and naming a value is importing structure. The seed is therefore neither assumed nor derived; it is \emph{read}, a record rather than a premise, of exactly the kind the corpus proves must be underivable from any law (\lf{SelfDerivation.lean}).
-
-\begin{prop}[The seed is invisible; \tagf]\label{prop:seed}
-The run from \lf{false} is the run from \lf{true} relabelled, so every structureless proposition gives the two runs the same verdict, and any proposition separating them fails to be structureless.
-\end{prop}
-
-\dem{\lf{Becoming.lean}: \lf{seed\_is\_relabel}, \lf{seed\_is\_invisible}; \lf{Seed.lean}: \lf{structureless\_blind\_to\_seed}, \lf{absolute\_class\_is\_a\_point}, \lf{naming\_the\_seed\_imports}, \lf{starts\_true\_is\_not\_structureless}. \lf{seed\_is\_relabel} axiom-free; the invisibility corollaries within \lf{[Quot.sound]} (function extensionality).}
-
-\medskip
-
-This constitutes the core of the argument. The seven steps together form a single kernel-checked conjunction (\lf{Becoming.lean}: \lf{ontological\_argument}), free of axioms; the assembled theorem carries the seed link in its pointwise form, which needs nothing. Specifically, from the concept of presuppositionlessness alone, it follows that the denial of a drawn distinction is unsayable, that the arena is two-valued, that exactly one specification corresponds to the concept, that nothing static instantiates it, that exactly one process does, that these last two are identical, and that the residual seed is a label rather than an assumption. If an ontological argument is defined as an a priori derivation of an existence verdict from a concept, this construction qualifies, but with two inversions. It begins with the most minimal concept and concludes with a process of becoming rather than a state of being; the being-version is actively refuted, using the same specification, in the adjacent frame.
-
-Regarding the scale of the argument, the mathematical triviality of the two-tick clock is a necessary feature. An ontological argument relying on complex structures, such as elaborate definitions, choice principles, or infinite constructs, would introduce precisely the structure that the initial concept prohibits, thereby undermining its claim to originate from nothing. The argument remains minimal by necessity: any additional apparatus would introduce elements, disrupt symmetry, and eliminate the emptiness that compels the result.
-
-\section{The Running Diagonal}\label{sec:diagonal}
-
-The central mechanism underlying Steps 4 through 6 is identified and formally named as the principal contribution of this paper.
-
-Step 4 is grounded in a theorem of considerable generality. Lawvere's fixed-point theorem states that if a system can sufficiently encode its own maps (specifically, if a carrier point-surjectively enumerates the maps from that carrier to a value type), then every endomap on that value type has a fixed point. Contrapositively, the existence of an endomap without a fixed point implies that no such self-enumeration is possible. In this context, the endomap that lacks a fixed point is negation: no element of a two-valued type equals its own negation. Applying this instance to Lawvere's theorem yields, through a unified argument, Cantor's theorem (no set surjects onto its power set), Russell's paradox (no set of all non-self-membered sets), Tarski's undefinability of truth, Gödel's first incompleteness theorem, and the undecidability of the halting problem. The construction remains consistent: construct the diagonal map $g(a) = f(e(a)(a))$, determine its enumeration, and derive a contradiction at the diagonal. In Lean, this is implemented in four lines (\lf{OneDiagonal.lean}: \lf{lawvere}, \lf{diagonal\_no\_go}).
-
-Traditionally, these results are interpreted as limitations. They represent foundational negative outcomes: boundaries on what sets can contain, what theories can prove, what programs can decide, and what languages can define. The diagonal construction serves as the instrument of negation.
-
-This work demonstrates that, when interpreted within the process framework, the same theorem functions as an instrument of affirmation. While negation denies a fixed point to a state, recursion uniquely grants it to a process. \lf{frames\_one\_fact} serves as the precise pivot: the restlessness characterised as 'no fixed point' in the object frame corresponds to 'movement at every tick' in the process frame. The boundary and the generative mechanism are unified under a single hypothesis. This identification is precise: the guarded fixed point constructed by standard well-founded methods, which underlies Gödel's self-referential sentence, is equivalent to the two-tick clock (\lf{godel\_is\_clock}). The diagonal construction not only establishes boundaries for being; when executed, it generates becoming.
-
-Once identified, this pattern recurs throughout the literature. The same diagonal construction, applied to the fixed-point-free instance, denies a distinct totality variously. At each site, this denial, when interpreted constructively, constitutes a positive structural insight.
-\begin{center}
-\small
-\begin{tabular}{@{}p{0.15\textwidth}p{0.27\textwidth}p{0.27\textwidth}p{0.20\textwidth}@{}}
-\toprule
-\textbf{Seat} & \textbf{Refused as a state (the wall)} & \textbf{Delivered as a process (the running)} & \textbf{Lean} \\
-\midrule
-The ground & a solution of $x = \lnot x$ & time: the unique two-tick clock & \lf{TwoReadings}: \lf{founding\_two\_readings}; \lf{Loeb}: \lf{godel\_is\_clock} \\
-\addlinespace[2pt]
-The ground's certificate & a faithful self-model & the aseity question held open in principle & \lf{Aseity}: \lf{no\_self\_model}, \lf{aseity} \\
-\addlinespace[2pt]
-The describer & derivation of its own anti-diagonal record & novelty: value-class records, underivable in principle & \lf{SelfDerivation}: \lf{no\_self\_derivation}, \lf{two\_obstructions} \\
-\addlinespace[2pt]
-The chooser & a correct self-prediction & interior openness inside strict determinism & \lf{FreeWill}: \lf{never\_foreknown}, \lf{free\_will\_is\_the\_diagonal} \\
-\addlinespace[2pt]
-The doubter & a consistent total self-doubt & the undeniability of occurrence & \lf{Cogito}: \lf{the\_gap}, \lf{no\_self\_denial} \\
-\bottomrule
-\end{tabular}
-\end{center}
-
-Each row represents a theorem or a small cluster of related results, each expressing a similar structural insight. A system cannot contain a complete model of itself (the certificate), which prevents any system from internally determining whether it constitutes the fundamental ground; this undecidability constitutes a substantive result. An entity describing the world from within cannot derive its own anti-diagonal record, indicating the existence of facts that are genuinely novel and, in principle, underivable. When a chooser attempts to predict its own subsequent choice, the act of choosing falsifies the prediction, demonstrating that a system may be fully determined externally while remaining indeterminate internally at the self-referential point. Furthermore, total self-doubt is logically inconsistent, as the doubter cannot coherently doubt its own existence; this is the cogito, which emerges as the affirmative aspect of the same diagonal whose negative aspect is the incompleteness barrier.
-
-Spencer-Brown's Laws of Form established an algebra based on a single mark and interpreted its self-reentry as oscillatory, thereby generating a rudimentary concept of time; Kauffman and Varela extended this interpretation into a dynamic framework \cite{spencerbrown1969,kauffmanvarela1980}. Yanofsky demonstrated that diagonal arguments share a common categorical structure \cite{yanofsky2003}. The primacy of process has even earlier origins, including Heraclitus and, in the modern era, Whitehead \cite{whitehead1929}. The present contribution is more narrowly focused than these precedents and can be summarised succinctly. No previous argument, to the best of current knowledge, derives an existence verdict directly from the diagonal's refusal itself; that is, treating it as the foundational basis for asserting the existence of a unique process. The novel elements introduced here include the uniqueness clause in Step 3 (the candidate is the only structureless entity with content), the frame-correspondence biconditional in Step 6, the identification \lf{godel\_is\_clock}, and the discharge of every premise the derivation once carried (\S\ref{sec:premises}). While oscillation has been previously recognised, the aspects of uniqueness, the biconditional, and the existence verdict have not.
-
-\section{Graded Actuality}\label{sec:actuality}
-
-The seven core steps establish a specific kind of necessity: necessity de dicto, or the necessity of a theorem. It is demonstrated that nothing static satisfies the presuppositionless concept, while exactly one process does. However, none of these steps establishes that anything actual corresponds to the concept; that is, they do not show that some real entity serves as the ground, that the clock is instantiated, or that becoming is more than a well-defined mathematical object and is instead an active feature of the world. Classical arguments traverse this gap without explicit justification. Anselm does so within the premise that existence in reality is greater than existence in the understanding. Descartes achieves this by including existence among the perfections. Plantinga incorporates it in the premise that a maximally great being is possible. In each case, actuality is embedded within a value term such as "greater," "perfection," or "great," and the argument's apparent a priori inevitability largely results from the subtlety of this embedding.
-
-\begin{prop}[Grade 1 --- the shape of any ground; \tagf]\label{prop:regress}
-Any articulation that imports nothing and says anything is already the founding shape, and it can only run. And the chain of grounding demands closes into the clock whether or not it terminates: drop well-foundedness entirely, apply structurelessness and generativity to the demand relation itself, and the law is still negation, its chain is still the alternation, and no static resting point lies anywhere on it.
-\end{prop}
-
-\dem{\lf{Articulation.lean}: \lf{absolute\_law}, \lf{absolute\_articulation}, \lf{generativity\_is\_saying\_something}; \lf{Eternal.lean}: \lf{eternal\_shape}, \lf{wf\_excludes\_both}, \lf{regress\_dichotomy}. \lf{eternal\_shape} and the \lf{Articulation} results axiom-free; \lf{regress\_dichotomy} within \lf{[propext, Classical.choice, Quot.sound]}.}
-
-Earlier versions of this argument reached this grade conditionally, through four named premises: that every seeded specification's demand for a ground is answered (R1), that the demand relation is well-founded (R2), that an unseeded ground imports no structure (R3), and that it is generative (R4). None remains, and the accounting is given in \S\ref{sec:premises}. Briefly: R3 and R4 are theorems (Steps 3 and 4); R2 is dropped, and the result is stronger without it, since well-foundedness excludes the clock by name --- the chain refuting it is the alternation itself --- and cannot tell the contentless self-loop from the generative two-cycle apart, so it was never a filter on content, only on running at all; and R1's denial is a brute contingency, a fact whose demand for a ground goes unanswered, which is precisely the kind of fact the corpus already calls a record and proves underivable. What is lost is the superseded proposition's reach: it spoke of the demand chains of arbitrary existing things, and the replacements do not. That loss is real, it is priced in \S\ref{sec:premises}, and the superseded conditional route survives in \lf{Regress.lean} (\lf{time\_selects\_the\_shape}) and still checks.
-
-\begin{prop}[Grade 2 --- tokened actuality; \tagf]\label{prop:cogito}
-Denying the occurrence of any token is self-refuting, since asserting 'this does not occur' requires the token to be present, thereby establishing its occurrence. Occurrence does not require a bearer and cannot be coherently denied from the standpoint in which it occurs.
-\end{prop}
-
-\dem{\lf{Becoming.lean}: \lf{denial\_self\_refutes}; \lf{Cogito.lean}: \lf{no\_self\_denial}, \lf{cogito\_valid\_necessarily}. Axiom-free.}
-
-This grade requires no premise, only a token, which the denier provides by objecting. This represents the cogito, distinguished from the classical version along a line that the classical account obscured. What is required is the validity of the seat's self-affirmation: for any token, its occurrence is certain, and its denial is self-defeating, and this is demonstrable without a specific instance. However, this does not establish that any particular carrier is inhabited; some types are empty, so the statement "there is a doubter" is contingent rather than a theorem (\lf{Cogito.lean}: \lf{existence\_is\_contingent}). The conclusion is that the occurrence is affirmed, but the existence of a bearer is not.
-
-\begin{prop}[Grade 3 --- enacted actuality; \tagf, the reflexive reading \tagi]\label{prop:instantiation}
-The class of runs generated by a known law from a known seed possesses width one; possession of both the law and the seed determines a unique world. Within such a generated class, no degrees of freedom remain, and every proposition is expressible in any vocabulary. The map thus provides a complete theory of its territory, and the territory, as instantiated by a concrete run of the theory, is indistinguishable from the map with respect to all expressible distinctions.
-\end{prop}
-
-\dem{\lf{Instantiation.lean}: \lf{run\_class\_generated}, \lf{map\_is\_territory}. \lf{run\_class\_generated} within \lf{[Quot.sound]}; the conjunction within \lf{[propext, Classical.choice, Quot.sound]}.}
-
-This grade represents both the most unconventional and the most robust interpretation, with its additional strength explicitly identified as interpretative. The Lean kernel does not simply inspect the recursions it verifies; rather, it normalises and executes them. Each time \lf{TwoReadings.lean} or \lf{Becoming.lean} is checked, the two-tick clock is computed, and the foundational recursion is evaluated step by step during verification. If one accepts that a concrete execution of the defining recursion (whether in a proof assistant or any physical medium) constitutes a genuine occurrence of the process, then verifying the core theorems already instantiates the clock. In this context, the kernel does not merely describe the process but enacts it, in the only sense the law itself can distinguish: a run that realises every step prescribed by the law and omits any step it does not. The claim that within the run class, every distinction expressible in the law's vocabulary is resolved to a definite value, and no further distinctions can be made (\lf{map\_is\_territory}). Thus, the description and the run are indistinguishable according to every interpretation permitted by the law. In this sense, the corpus constitutes a generated territory rather than a map, with its law embodied in the source files and its run in the kernel's verification. Whether, in the limiting case of a world generated entirely by its own law, the description is identical to the thing described depends on the criteria one adopts for such identity.
-
-The grades remain distinct and should not be conflated in summary. Grade 1 is unconditional but speaks of articulations and demand chains, not of the inventory of the world. Grade 2 is unconditional but pertains solely to occurrence, not to a bearer. Grade 3 is both unconditional and concrete, but it relies on a particular interpretation of computation. The argument offers a progression, with each rung explicitly marked, in contrast to classical arguments, which typically present a single, unmarked step --- and no rung is an assumption.
-
-\section{Necessity Without a Possibility Premise}\label{sec:modal}
-
-Modal ontological arguments rely on a specific logical structure. Beginning with the premise, "it is possible that a maximally great being exists," these arguments conclude that "a maximally great being exists." This inference requires two conditions: first, that the property of greatness entails that a merely possible maximally great being would necessarily exist; second, that the modal logic employed is S5, which allows possible necessity to collapse into actuality. The argument's force rests almost entirely on the possibility premise. If the possibility of a maximally great being is granted, then in S5, the conclusion follows; if it is denied, the argument fails. The possibility premise closely approximates the conclusion, and to grant the possibility of a necessary being is nearly equivalent to granting its existence.
-
-This argument does not require a possibility premise. Its necessity is the necessity of a theorem, holding across every admissible world because it is inherent to the structures themselves. The S5 emerges as a result. Interpreting necessity as truth in every admissible world and possibility as truth in some, the corpus demonstrates that the verdict calculus validates K, T, the collapse of iterated modality, and the duality of necessity and possibility (the complete S5 framework) without invoking any accessibility relation that would permit a weaker logic (\lf{Modality.lean}: \lf{modality\_is\_S5}). The modality is determined by the initial setup, and Steps 1 through 7 are necessary in that they hold in every world of every admissible class, as they are facts about $x = \lnot x$, a property shared by all such worlds.
-
-The existence verdict in Step 3 is established through construction. In contrast to G\"odel's version, which leads to modal collapse, the present calculus avoids this fate. Contingency is preserved as a formally established third verdict: a proposition can be \emph{free}, holding true in some admissible worlds and false in others. The trichotomy of necessary, impossible, and contingent is itself a theorem (\lf{Modality.lean}: \lf{verdict\_trichotomy}). This argument secures necessity for the core without reducing all propositions to necessity, as occurs in G\"odel's system.
-
-\section{Why There Are No Premises}\label{sec:premises}
-
-Everything turns on what a premise is, so it is stated rather than left to work in the dark: \emph{a premise is a proposition that the argument's claims depend on and whose negation is coherently assertable.} Under that criterion the count is zero. The count is not reached by moving assumptions into antecedents, since relocating a hypothesis is not discharging one. It is reached by showing that each thing earlier versions of this argument assumed is a theorem, a hypothesis the result is stronger without, or a condition whose denial cannot be tokened.
 
 \begin{center}
-\small
-\begin{tabular}{@{}lp{0.14\textwidth}p{0.38\textwidth}p{0.26\textwidth}@{}}
-\toprule
-\textbf{Was} & \textbf{Verdict} & \textbf{Why} & \textbf{Carried by} \\
-\midrule
-R3 & forced & A law on the bare distinction that fails to commute with the relabeling is a constant: it names a value. ``Structureless but not equivariant'' is not the case equivariance missed; it is the maximally structured one. & \lf{Structureless}: \lf{structureless\_iff\_equivariant}; \lf{Articulation}: \lf{non\_equivariant\_names} \\
-\addlinespace[2pt]
-R4 & forced & A structureless specification that excludes any state excludes them all. Generativity is what saying anything already amounts to; the static rival is the case where nothing was said. & \lf{Articulation}: \lf{generativity\_is\_saying\_something}, \lf{identity\_is\_mute} \\
-\addlinespace[2pt]
-R2 & dropped & Well-foundedness excludes the clock by name and cannot tell the contentless loop from the generative cycle apart. Drop it and the shape arrives anyway, axiom-free, where the old route needed \lf{Classical.choice}. & \lf{Eternal}: \lf{eternal\_shape}, \lf{wf\_excludes\_both} \\
-\addlinespace[2pt]
-R1 & void & Its denial is a brute contingency: a fact whose demand goes unanswered. The argument calls such facts records and proves their underivability; the denial populates the position rather than embarrassing it. & \lf{SelfDerivation}: \lf{no\_self\_derivation} \\
-\addlinespace[2pt]
-the arena & forced & One value is mute, three or more are mute, two speaks --- and anything that speaks is on exactly two. The count of values was an unlisted premise, and is a consequence. & \lf{Arena}: \lf{arena\_iff\_two} \\
-\addlinespace[2pt]
-the seed & forced & The two runs are one run relabelled; naming the seed imports structure. Read, not assumed: a record. & \lf{Seed}: \lf{absolute\_class\_is\_a\_point}, \lf{naming\_the\_seed\_imports} \\
-\bottomrule
-\end{tabular}
+{\Large\textbf{An Ontological Proof of Becoming}}\\[2pt]
+{\small in the manner of G\"odel's ontological proof (1970)}
 \end{center}
+\vspace{2pt}
 
-What remains at the bottom is Step~1, and it is not a premise under the criterion, because its denial is not coherently assertable: to token ``no distinction is drawn'' as opposed to its denial is to draw one. The denial is unsayable rather than false.
+\textbf{Primitive.} A \emph{law} is a map $m$ on a carrier. Write $\Fix m$ for ``$m$, read as
+an equation, has a solution'' ($\exists x.\ x=m\,x$), and $\Run m$ for ``$m$, read as a
+recursion, has a solution from every seed and none of them is stationary'' (for all $x$ the
+sequence $x,\,mx,\,m(mx),\dots$ is infinite and no term equals the next).
 
-Two objections deserve their answers here rather than in \S\ref{sec:objections}, because they concern the accounting itself.
+\textbf{Df.\,1.} $m$ is \emph{structureless} iff $m$ is definable from a bare two-valued
+distinction alone, naming neither value: equivalently, $m$ commutes with the exchange of the
+two values.
 
-\emph{Is zero even possible in principle?} One might suspect that a theorem forbids it --- that any position joining mathematics to an interpretation must retain at least one bridge row, so the count can be narrowed but never emptied. No such theorem exists, and the natural candidate for one is a disjunction whose left horn is live: each proposition either factors through the vocabulary or is undecided by it, and nothing forces the second horn. A proposition \emph{constant on the admissible class} factors through every vocabulary, including the vocabulary that sees nothing --- and by Step~7 every structureless proposition about the founding runs is constant on its class. The horn where premises live is empty (\lf{NoFloor.lean}: \lf{fork\_is\_not\_a\_floor}, \lf{constant\_is\_expressible\_everywhere}, \lf{structureless\_needs\_no\_bridge}).
+\textbf{Df.\,2.} A tokening is \emph{absolute} iff its mark admits no outside: no second locus,
+at the one time of the tokening, for its contrast to be realized in.
 
-\emph{Reject the criterion.} A reader may hold that ``at least one distinction is drawn'' is an assumption like any other. Then the count is one --- but it is then one for every position whatever, including ``there is nothing,'' which must be tokened to be held; and on that reading zero premises is not an unmet target but an incoherent one. The criterion used here is the only one under which the question has an answer, and it is not new: it is Aristotle's, against the denier of non-contradiction, who must say something in order to deny anything (\emph{Metaphysics} $\Gamma$.4) \cite{aristotle}. The honest boundary of the method is proved rather than gestured at: a retorsion never binds a claim with an outside to stand on, and each premise this argument formerly carried was such an outside (\lf{Tokening.lean}: \lf{the\_outside\_is\_the\_premise}).
+\textbf{Df.\,3.} $m$ is \emph{the ground} iff $m$ is structureless and non-trivial (not the
+identity).
 
-\paragraph{What it cost.} The superseded Grade~1 said: given R1--R4, anything that occurs grounds in the shape $x = \lnot x$ --- a claim about the demand chains of arbitrary existing things. Its replacements say: any absolute articulation is already that shape, and the chain closes into the clock whether or not it terminates. Neither reaches the grounding chains of arbitrary things. That reach is lost --- and what it cost to have was R1 and R2, hypotheses that claim a survey of the chain from outside, a survey the wider corpus's own theorems say nobody is in a position to conduct. Trading a claim about all chains for one that needs no survey is the right trade. It remains a trade, and it is stated rather than hidden.
+\textbf{Ax.\,1 (Arena).} A carrier admits a non-trivial structureless law only if it has
+exactly two values. \emph{[one value marks nothing; three or more collapse every
+relabeling-invariant law to the identity]}
 
-\section{Objections and Replies}\label{sec:objections}
+\textbf{Ax.\,2 (Uniqueness).} On two values the only structureless laws are the identity and
+the negation $\lnot$; the identity is satisfied by everything and so asserts nothing. Hence the
+ground, if it exists, is $\lnot$.
 
-\paragraph{1. Equivocation.} \emph{The argument relies on two distinct senses of the term "is": while no state is identical to its own negation, a process can still occur. The existence claim is embedded in the transition between these two senses.}
+\textbf{Ax.\,3 (Retorsion).} The tokening of ``no distinction is drawn,'' as against its own
+denial, itself draws one. The premise of Df.\,2 cannot be coherently refused — its negation is
+unsayable, not false.
 
-There is no ambiguity, as there is no natural-language bridge connecting the two interpretations. The two "senses" correspond to two formal frames of a single specification $f$: the object frame $x = f(x)$ and the process frame $x_{n+1} = f(x_n)$. The relationship between these frames is established as a theorem about $f$, formally proved in Lean without reliance on English-language inference (\lf{frames\_one\_fact}). The non-existence of the fixed point and the existence of the orbit constitute a single biconditional statement.
+\textbf{Ax.\,4 (No margin).} An absolute tokening (Df.\,2) has no outside at its own moment;
+if its contrast is realized at all, it is realized at another time.
 
-\paragraph{2. Triviality.} \emph{The statement $x = \lnot x$ represents a flip-flop, as it oscillates and lacks both a fixed point and a periodic orbit. Presenting this as an ontological argument adds no value.}
+\textbf{Th.\,1 (No being).} $\lnot\Fix(\lnot)$. \emph{[the two values are distinct and each
+fails its own negation; no state is identical to its own negation]}
 
-The minimality in this context is necessary (\S\ref{sec:argument}); employing more complex methods would introduce the very structure that the initial concept prohibits. The remaining concern is whether minimality implies superficiality, which is not the case. The mathematics is intentionally concise and fully transparent, mirroring the standard set by the diagonal core of the incompleteness theorems, which is similarly succinct. Minimality does not equate to triviality. The strength lies in the combination of results: the oscillating law is the \emph{unique} structureless law with substantive content (Step~3); its object frame is not only challenging but demonstrably empty (Step~4); its process frame is not only inhabited but uniquely so, and this is established constructively (Step~5); and these are unified as a single fact (Step~6), each axiom-free and individually verified. The apparent alternative, that a more expressive alphabet could circumvent the oscillation and restore a static solution, is not viable: for any alphabet whose structureless relabeling attains every value, this alternative fails, and specifying a value to prevent failure introduces structure (\lf{RichAlphabet.lean}: \lf{no\_rich\_separation}, \lf{escape\_closed}); the three-valued vacuum in particular is bought with a name (Step~2, \lf{Arena.lean}: \lf{escape\_costs\_a\_name}).
+\textbf{Th.\,2 (Becoming, uniquely).} $\Run(\lnot)$, and the orbit from every seed is the same
+period-two alternation, unique up to which value opens it. \emph{[write down $x,\lnot x,
+x,\lnot x,\dots$; uniqueness is induction on the step]}
 
-\paragraph{3. The load is in R3.} \emph{``Equating structurelessness with equivariance presupposes the conclusion within the definition itself, thereby embedding the outcome into the premises.}
+\textbf{Th.\,3 (Equivalence).} For the ground, $\lnot\Fix(\lnot)\leftrightarrow\Run(\lnot)$.
+\emph{[a fixed point is a one-state orbit that never moves; a stalled orbit is a fixed point:
+refusing to be and being unable to stop running are one hypothesis, read in two frames]}
 
-The identification is a theorem, closed from both directions, and nothing is left for a premise to carry. From one side, the class of laws definable solely from the distinction coincides exactly with the equivariant laws, and no constant belongs to it (\lf{structureless\_iff\_equivariant}, \lf{constants\_not\_defble}, both axiom-free). From the other, the worry that ``imports no structure'' might mean something equivariance missed is answered by exhibiting what such a law would have to be: on the bare distinction, a law that fails to commute with the relabeling is a constant --- it ignores its input and names a value, the maximally structured case rather than a structureless one (\lf{Articulation.lean}: \lf{non\_equivariant\_names}). There is no third thing for the phrase to mean. What earlier versions of this argument carried as premise R3 is the classification's own exhaustiveness, and structurelessness itself is not an assumption about a ground but the statement of the task: an absolute metaphysics is one that imports nothing, and on the bare distinction importing nothing \emph{is} definability from equality alone. R3 was the project's success condition, not a claim it makes.
+\textbf{Th.\,4 (Actuality).} Let a tokening deny that $\lnot$ runs. By Ax.\,3 it is tokened as
+against its own denial, hence is a tokening in the sense of Df.\,2, hence absolute; by Ax.\,4 its
+contrast is realized at another time; by Ax.\,1--2 the only realizable contrast on two values is
+$\lnot$ itself. So the tokened denial of Th.\,2 is, at two times, an instance of Th.\,2.
 
-\paragraph{4. Kant.} \emph{Existence does not function as a real predicate. Therefore, this argument cannot derive existence from a concept, since concepts are inherently incapable of producing existence.}
+\textbf{Corollary.} Necessarily, a becoming exists; by Th.\,1 no being answers to the ground
+concept; by Th.\,3 these are one theorem; and by Th.\,4 the
+becoming cannot be coherently denied without the denial itself being one of its ticks.
 
-The argument adheres to Kantian principles. Within this framework, existence is never treated as a predicate. The object-frame verdict constitutes a \emph{refutation}, demonstrating that a particular equation lacks a solution, and thus, no solution is claimed to possess the property of existence. In contrast, the process-frame verdict represents a \emph{construction}, wherein a trajectory is exhibited and shown to be unique. This approach aligns precisely with Kant's stipulation that existence is established not by unfolding a concept, but by exhibiting an object. The natural numbers exist, in the sense required by mathematics, because the successor function generates them; similarly, the clock exists in that same sense. Kant's critique targeted the inference from a concept's content to the reality of its object. Step~5 constructs the object.
+\vspace{4pt}
+\begin{center}\rule{0.4\textwidth}{0.3pt}\end{center}
+\vspace{2pt}
 
-\paragraph{5. Gaunilo.} \emph{Consider the parody argument: by applying the same logical form to the concept of a perfect island, one could similarly derive its existence. If this reasoning is valid, it demonstrates that the argument proves too much.}
-
-The theorem prevents the parody, which is a significant advantage of the formal version over Anselm's original argument. Anselm's reasoning was vulnerable to Gaunilo's critique because it lacked individuation of its central concept: “that than which nothing greater can be conceived” could be replaced with “island,” and the argument would proceed unchanged. Step 3 introduces a uniqueness clause, asserting that the founding specification is the only contentful structureless entity. Every alternative (such as an island or any entity with individuating features) necessarily imports structure, a property that can be explicitly verified (\lf{constants\_not\_structureless}; see the definability characterisation in \lf{Structureless.lean}). A perfect island merely designates an element, and this act of designation introduces structure. Consequently, any candidate importing structure is disqualified before Step 4. The concept in question is individuated through classification, thereby precluding substitution.
-
-\paragraph{6. No actuality.} \emph{There is no evidence presented here that demonstrates any actual process occurs. The clock represents a mathematical construct, and the physical world is not required to instantiate it.}
-
-At grade~0, the grading serves as a direct response rather than an evasion. The argument does not assert premise-free actuality --- premise-freedom and actuality are different achievements, and only the first is claimed without remainder. Section \S\ref{sec:actuality} specifies what each higher grade asserts and requires: a theorem about articulations and demand chains for grade 1, a tokening for the grade that achieves occurrence, and an interpretation of the kernel's computation for the enacted grade. Classical arguments similarly advanced through these steps, often implicitly, by embedding them within value-laden terminology. The distinction is not that this argument bridges the gap without justification. Instead, it explicitly delineates the gap and the associated requirements for each transition.
-
-\paragraph{7. Why call it ``ontological.''} \emph{Regardless of its merits, this does not constitute an ontological argument. The term has an established definition, and reversing the concept and the conclusion departs from it.}
-
-The definitional criterion of an ontological argument is that it derives an existence verdict a priori, solely from a concept, without reliance on empirical premises. This argument satisfies that criterion: the concept employed is presuppositionlessness, the derivation consists of theorems, and no empirical observation is involved. The argument does not invert the criteria themselves, but rather the traditional choices made within those criteria, substituting the emptiest concept for the fullest, a process of becoming for a state of being, and a graded actuality for an assumed one. These inversions constitute the central finding, rather than a departure from the genre. In fact, they arguably restore the genre to its most rigorous form, as the classical arguments encounter their greatest difficulty with Kant when treating existence as content to be unpacked, a difficulty this argument explicitly avoids.
-
-\paragraph{8. The retorsion proves too little.} \emph{Pragmatic self-refutation is not falsity. That the denial of a drawn distinction cannot be tokened does not show the denial false, so the argument's entry point establishes nothing about how things are, only about what can be said.}
-
-The argument agrees, and the objection restates Step~1's own tag rather than refuting it. The denial is claimed to be unsayable, not false; what is proved is a fact about tokening (\lf{no\_undrawn\_denial}), and the proposition itself receives no truth-value verdict from it. The substantive question is whether unsayability of the denial is enough to build on, and the answer given is structural: every further condition the argument needs (excluding something, being satisfied by something) is exhibited \emph{inside any act of denying it} (\lf{discrimination\_says\_and\_sat}), so an objector cannot occupy a position from which the conditions fail. The scope of this move is also proved rather than presumed, and it is deliberately narrow: a retorsion binds only a claim with no outside to stand on (\lf{the\_outside\_is\_the\_premise}). Transcendental arguments earn their bad reputation by applying such reasoning to claims that have an outside --- other minds, the external world --- where the objector can stand elsewhere. The claim here has claimed everything, which is the one case in which the reasoning binds, and the theorem says so.
-
-\section{Relation to the Literature}\label{sec:literature}
-
-The argument sits in two lineages, and its debt to each is different.
-
-\paragraph{The ontological lineage.} From Anselm's \emph{Proslogion} \cite{anselm}, through Gaunilo's reply \cite{gaunilo}, Aquinas's rejection \cite{aquinas}, Descartes' restatement \cite{descartes1641}, and Kant's diagnosis \cite{kant1781}, the philosophical tradition has argued from the concept of a maximally perfect being toward a necessary substance. Hegel occupies a distinct position within this lineage and is most closely aligned with the present argument in content; his contribution will be addressed in the following paragraph. The modal reconstruction continues through Hartshorne \cite{hartshorne1962}, Malcolm \cite{malcolm1960}, and Plantinga \cite{plantinga1974}, reaching its formal culmination in G\"odel's axiomatic version \cite{godel1995}, which was scrutinised by Sobel \cite{sobel1987} and subsequently mechanised by Benzm\"uller and Woltzenlogel Paleo. These authors confirmed the modal collapse and revealed the inconsistency of G\"odel's axioms \cite{benzmuller2014,benzmuller2016}. Oppenheimer and Zalta's prover-assisted simplification \cite{oppenheimerzalta2011} is part of this computational development, and Oppy's survey provides a comprehensive overview of the field \cite{oppy1995}. The present argument relates to this tradition by inverting, rather than refuting, its approach. It alters both the initial concept and the intended conclusion, reporting the results produced by a proof assistant when applied from an opposing perspective. While the mechanized G\"odel work validated an argument in support of a desired conclusion, the core of this study includes a refutation of the presuppositionless being, using the same methodological tools. It treats a graded, priced actuality as the genuine form of the critical step undertaken by each prior argument at its respective limit.
-
-\paragraph{Hegel.} The closest precedent in content is the opening of Hegel's Wissenschaft der Logik \cite{hegel}. In this work, pure being, wholly indeterminate and lacking any distinguishing property, is rendered indistinguishable from nothing. Being transitions into nothing and nothing into being, with the truth of this pair residing not in either state but in their movement, becoming. The present argument begins from the most indeterminate concept, demonstrates that it yields no stable being, and shows that it produces only passage. Hegel presents this passage as narrating the collapse of being into nothing and their resolution in becoming, a dialectical movement that the reader is expected to follow and accept. In contrast, the present argument replaces assertion with two theorems and a biconditional: indeterminacy, defined precisely as structurelessness, is shown to yield no being-instance (Step~4) and to yield a unique becoming-instance (Step~5). The transition between these outcomes is \lf{frames\_one\_fact} an equivalence. Even Hegel's third term now has a formal seat: read specifications as relations and \emph{nothing} --- the empty relation --- stands beside the candidate for the first time, excluded not by preference but because it says something and nothing satisfies it in any frame; it does not run (\lf{nothing\_is\_silent}).
-\paragraph{The process and formal lineage.} Process primacy, rooted in Heraclitus's concept of flux and extended in Whitehead's emphasis on process and creativity as fundamental \cite{whitehead1929}, represents an enduring philosophical theme. In contrast, the notion of the mark and its re-entry, as explored by Spencer-Brown \cite{spencerbrown1969} and further developed by Kauffman and Varela \cite{kauffmanvarela1980}, interprets self-containing distinction as the generator of oscillation and temporality. The principal formal mechanism is Lawvere's fixed-point theorem \cite{lawvere1969}, whose applicability to diagonal arguments was unified by Yanofsky \cite{yanofsky2003}. The concept of the split cogito originates from the performative interpretation of Descartes' inference \cite{hintikka1962}. The present argument contributes to this lineage by focusing specifically, as detailed in Section \ref{sec:diagonal}, not on process primacy or oscillating re-entry, but on deriving an existence verdict from the diagonal's refusal, incorporating the uniqueness clause, the biconditional, and the \lf{godel\_is\_clock} identification as the essential novel elements.
-
-\section{Claims}\label{sec:claims}
-
-\paragraph{Claimed.} The seven steps are presented according to their designated strengths. Steps 1 through 7 (Section~\ref{sec:argument}) are classified as \tagf, are axiom-free, and are assembled in \lf{Becoming.lean}: \lf{ontological\_argument} addresses the unsayability of the undrawn denial, the forcing of the arena, the uniqueness of the candidate, the non-existence of the static instance, the unique construction of the process, the equivalence of the latter two, and the invisibility of the seed. The graded actuality in Section~\ref{sec:actuality} is as follows: grade 1 is \tagf{} and premise-free, speaking of articulations and demand chains rather than of the world's inventory; grade 2 is \tagf{}, premise-free, but limited to occurrence; grade 3 is \tagf{} in its mathematical formulation, with the reflexive reading indicated by \tagi. The novelty described in Section~\ref{sec:diagonal} is presented precisely at the strength specified therein.
-
-\paragraph{The premise accounting.} There is none to give: no clause of the argument carries the verdict \tagp. The criterion under which that is claimed, the table of where each former premise went, the theorem that no lower bound forces the count above zero, and the price paid are all in \S\ref{sec:premises}. What the argument rests on instead of a first premise is the shape of any act that could carry one, and the honest boundary of that move is itself a theorem (\lf{the\_outside\_is\_the\_premise}).
-
-\paragraph{Refutation versus rejection.} To refute the core is to identify a kernel error, such as a second structureless law with content, a static solution to $x = \lnot x$, a second orbit originating from a seed, a failure of the biconditional, a bare three-valued carrier on which something structureless moves, or a structureless proposition separating the two seeds. Each represents a specific mathematical event and is a point where the argument cannot be challenged, since the kernel has verified its absence. In contrast, to reject the argument, now that no premise is on offer, is one of two moves, each with a stated price. One may reject the criterion of what a premise is; then every position whatever carries at least one premise, ``there is nothing'' included, and the comparison of counts still favours this argument. Or one may reject a marked interpretation, such as the reading of the kernel's check as an instantiation; each such reading is tagged \tagi{} and severable, with the mathematics standing without it. The argument aspires to the incompleteness standard, ensuring that any disagreement must explicitly state its grounds.
-
-\section{Conclusion}\label{sec:conclusion}
-
-When considered as an object, the presuppositionless candidate is rejected: $x = \lnot x$ lacks a static solution, and this rejection is established as a theorem. When considered as a process, however, it is uniquely affirmed by construction: the same specification, interpreted recursively, yields the two-tick clock. The rejection and affirmation are, in fact, a single result; the absence of a fixed point in the object frame and the perpetual motion in the process frame are shown to be equivalent. Thus, the minimal concept necessitates the existence of a process of becoming, while the static being-version is definitively excluded. And the derivation now assumes nothing on the way: the entry is a denial that cannot be tokened, the arena and the candidate and the seed are forced, and each premise earlier versions named has been discharged, dropped to the argument's advantage, or dissolved, under a stated criterion whose rejection is itself priced.
-
-The transition to actuality is explicit and proceeds as a ladder: a theorem that any absolute articulation is already the founding shape and that the grounding chain closes into the clock with or without a floor, bare occurrence reached with nothing beyond the tokening any objector supplies, and the interpretation that the kernel, in evaluating this argument, has completed its process. The underlying mechanism is a single theorem interpreted in contrast to its traditional context: the diagonal that separates being from any totality, when activated, initiates the process of becoming.
-
-\begin{thebibliography}{99}
-\setlength{\itemsep}{2pt}
-
-\bibitem{aristotle} Aristotle. \emph{Metaphysics}, Book $\Gamma$ (IV), chapter 4. c.~350 BCE. Trans.\ in \emph{The Complete Works of Aristotle}, Princeton University Press, 1984.
-
-\bibitem{anselm} Anselm of Canterbury. \emph{Proslogion}. c.~1077--78. Trans.\ in \emph{Anselm of Canterbury: The Major Works}, Oxford University Press, 1998.
-
-\bibitem{gaunilo} Gaunilo of Marmoutiers. \emph{Pro Insipiente} (On Behalf of the Fool). c.~1078. Trans.\ in \emph{Anselm of Canterbury: The Major Works}, Oxford University Press, 1998.
-
-\bibitem{aquinas} T.~Aquinas. \emph{Summa Theologiae}, Ia, q.~2, a.~1. c.~1265--74.
-
-\bibitem{descartes1641} R.~Descartes. \emph{Meditationes de prima philosophia}. Paris, 1641.
-
-\bibitem{kant1781} I.~Kant. \emph{Kritik der reinen Vernunft}. Riga, 1781; 2nd ed.\ 1787.
-
-\bibitem{hegel} G.~W.~F. Hegel. \emph{Wissenschaft der Logik}. N\"urnberg, 1812--16.
-
-\bibitem{malcolm1960} N.~Malcolm. Anselm's ontological arguments. \emph{The Philosophical Review} 69(1):41--62, 1960.
-
-\bibitem{hartshorne1962} C.~Hartshorne. \emph{The Logic of Perfection}. Open Court, La Salle, 1962.
-
-\bibitem{plantinga1974} A.~Plantinga. \emph{The Nature of Necessity}. Oxford University Press, 1974.
-
-\bibitem{godel1995} K.~G\"odel. Ontological proof. In \emph{Collected Works, Volume III: Unpublished Essays and Lectures}. Oxford University Press, 1995.
-
-\bibitem{sobel1987} J.~H. Sobel. G\"odel's ontological proof. In J.~J. Thomson (ed.), \emph{On Being and Saying: Essays for Richard Cartwright}. MIT Press, 1987.
-
-\bibitem{oppy1995} G.~Oppy. \emph{Ontological Arguments and Belief in God}. Cambridge University Press, 1995.
-
-\bibitem{oppenheimerzalta2011} P.~Oppenheimer and E.~Zalta. A computationally-discovered simplification of the ontological argument. \emph{Australasian Journal of Philosophy} 89(2):333--349, 2011.
-
-\bibitem{benzmuller2014} C.~Benzm\"uller and B.~Woltzenlogel Paleo. Automating G\"odel's ontological proof of God's existence with higher-order automated theorem provers. In \emph{ECAI 2014}, IOS Press, 2014.
-
-\bibitem{benzmuller2016} C.~Benzm\"uller and B.~Woltzenlogel Paleo. The inconsistency in G\"odel's ontological argument: a success story for AI in metaphysics. In \emph{IJCAI 2016}, 2016.
-
-\bibitem{spencerbrown1969} G.~Spencer-Brown. \emph{Laws of Form}. Allen \& Unwin, London, 1969.
-
-\bibitem{kauffmanvarela1980} L.~H. Kauffman and F.~J. Varela. Form dynamics. \emph{Journal of Social and Biological Structures} 3(2):171--206, 1980.
-
-\bibitem{lawvere1969} F.~W. Lawvere. Diagonal arguments and cartesian closed categories. In \emph{Category Theory, Homology Theory and their Applications II}, Lecture Notes in Mathematics 92, Springer, 1969.
-
-\bibitem{yanofsky2003} N.~S. Yanofsky. A universal approach to self-referential paradoxes, incompleteness and fixed points. \emph{Bulletin of Symbolic Logic} 9(3):362--386, 2003.
-
-\bibitem{whitehead1929} A.~N. Whitehead. \emph{Process and Reality}. Macmillan, New York, 1929.
-
-\bibitem{hintikka1962} J.~Hintikka. Cogito, ergo sum: inference or performance? \emph{The Philosophical Review} 71(1):3--32, 1962.
-
-\bibitem{demoura2021} L.~de~Moura and S.~Ullrich. The Lean 4 theorem prover and programming language. In \emph{Automated Deduction -- CADE 28}, LNCS 12699, Springer, 2021.
-
-\end{thebibliography}
+{\small\noindent
+All of the above is a named theorem or definition of a Lean~4 development
+that is axiom-free at its core (\lf{lean/Becoming.lean}, theorem
+\lf{Becoming.ontological\_argument}) ---  Ax.\,1--2 are theorems about relabeling-invariant maps on finite carriers
+(\lf{Arena.lean}, \lf{Structureless.lean}); Ax.\,3--4 are theorems about what a totalizing
+tokening can and cannot stand next to (\lf{Tokening.lean}, \lf{Event.lean}). Where G\"odel's
+proof needs the possibility of a maximally great being, this proof needs only that some
+distinction, once denied, was thereby drawn.}
 
 \end{document}

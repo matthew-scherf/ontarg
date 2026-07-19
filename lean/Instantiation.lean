@@ -1,73 +1,43 @@
 /-!
 # Instantiation
 
-Freedom is width. `Ledger.lean` prices the settling of free
-questions; this file locates what freedom is made of: distinct worlds
-in the admissible class, nothing else. Over a *generated* class — one
-world, given by evaluating a known law from a known seed — nothing is
-free, every proposition is forced or refuted, and every proposition
-is expressible in every vocabulary, including the vocabulary that
-sees nothing. The bridge results are width phenomena: bridges price
-reference, and reference is what generation replaces. A map that
-pictures a territory needs a correspondence; a map that runs its
-territory needs nothing. The god's-eye view of an instantiated world
-is not a better seat; it is a narrower class.
+`W` a class of admissible worlds. Over a *generated* class — one
+world, given by evaluating a known law from a known seed — nothing
+is free, every proposition is forced or refuted, and every
+proposition is expressible in every vocabulary.
 
-Main results:
-* `freedom_needs_width` — a free proposition yields two distinct
-  worlds: freedom is inhabited width.
-* `generated_no_freedom` — over a one-world class nothing is free.
-* `generated_dichotomy` — over a one-world class every proposition is
-  forced or refuted (classical).
-* `no_seam_when_generated` — over a one-world class every proposition
-  is expressible in every vocabulary: expressibility stops
-  discriminating, and settling never needs a new primitive.
-* `run_class_generated` — the class of runs of a known law from a
-  known seed is one world: instantiation is generation.
-* `map_is_territory` — the conjunction, over the run class.
-
-Lean 4, prelude only; no imports. Axiom footprint:
-`freedom_needs_width`, `generated_no_freedom`,
+Axiom footprint: `freedom_needs_width`, `generated_no_freedom`,
 `no_seam_when_generated` none; `run_class_generated` within
-`[Quot.sound]` (subtype extensionality); `generated_dichotomy` and
-`map_is_territory` within `[propext, Classical.choice, Quot.sound]`
-(the dichotomy's case split).
+`[Quot.sound]`; `generated_dichotomy` and `map_is_territory` within
+`[propext, Classical.choice, Quot.sound]`.
 -/
 
 namespace Instantiation
 
 variable {W : Type u} {Obs : Type v}
 
-/-- True in every admissible world (`Ledger.Forced`). -/
 def Forced (P : W → Prop) : Prop := ∀ w, P w
 
-/-- False in every admissible world (`Ledger.Refuted`). -/
 def Refuted (P : W → Prop) : Prop := ∀ w, ¬ P w
 
-/-- Both values occur (`Ledger.Free`). -/
 def Free (P : W → Prop) : Prop := (∃ w, P w) ∧ (∃ w, ¬ P w)
 
-/-- Expressibility, as in `Ledger.lean`. -/
 def Expressible (v : W → Obs) (P : W → Prop) : Prop :=
   ∃ q : Obs → Prop, ∀ w, P w ↔ q (v w)
 
-/-- Freedom is inhabited width: a free proposition yields two
-    distinct worlds. There is nothing else it could be made of. -/
+/-- A free proposition yields two distinct worlds. -/
 theorem freedom_needs_width (P : W → Prop) (h : Free P) :
     ∃ w₁ w₂ : W, w₁ ≠ w₂ := by
   match h with
   | ⟨⟨w₁, h₁⟩, ⟨w₂, h₂⟩⟩ =>
     exact ⟨w₁, w₂, fun he => h₂ (he ▸ h₁)⟩
 
-/-- Over a one-world class nothing is free. -/
 theorem generated_no_freedom (point : ∀ w w' : W, w = w')
     (P : W → Prop) : ¬ Free P := by
   intro h
   match freedom_needs_width P h with
   | ⟨w₁, w₂, hne⟩ => exact hne (point w₁ w₂)
 
-/-- Over a one-world class every proposition is forced or refuted:
-    the trichotomy loses its third case. -/
 theorem generated_dichotomy (w₀ : W) (point : ∀ w : W, w = w₀)
     (P : W → Prop) : Forced P ∨ Refuted P := by
   cases Classical.em (P w₀) with
@@ -76,37 +46,26 @@ theorem generated_dichotomy (w₀ : W) (point : ∀ w : W, w = w₀)
   | inr hn =>
       exact Or.inr (by intro w hw; rw [point w] at hw; exact hn hw)
 
-/-- Over a one-world class every proposition is expressible in every
-    vocabulary — including the vocabulary that sees nothing. The
-    bridge results are width phenomena: where the class is a point,
-    settling needs no new primitive because nothing is left to
-    settle. -/
 theorem no_seam_when_generated (w₀ : W) (point : ∀ w : W, w = w₀)
     (v : W → Obs) (P : W → Prop) : Expressible v P := by
   refine ⟨fun _ => P w₀, ?_⟩
   intro w
   rw [point w]
 
-/- ---------- instantiation: the run class ---------- -/
-
 variable {A : Type u}
 
-/-- The run of a law from a seed. -/
 def run (f : A → A) (s : A) : Nat → A
   | 0 => s
   | n + 1 => f (run f s n)
 
-/-- The worlds compatible with a known law and a known seed. -/
+/-- Worlds compatible with a known law and a known seed. -/
 def RunClass (f : A → A) (s : A) : Type u :=
   {g : Nat → A // g 0 = s ∧ ∀ n, g (n + 1) = f (g n)}
 
-/-- The canonical inhabitant: the run itself. -/
 def canonical (f : A → A) (s : A) : RunClass f s :=
   ⟨run f s, rfl, fun _ => rfl⟩
 
-/-- The run class is one world: whoever holds the law and the seed
-    holds a class of width one. Instantiation is generation, and a
-    generated map does not picture its territory — it runs it. -/
+/-- The run class is one world. -/
 theorem run_class_generated (f : A → A) (s : A) :
     ∀ w w' : RunClass f s, w = w' := by
   intro w w'
@@ -116,11 +75,6 @@ theorem run_class_generated (f : A → A) (s : A) :
   | zero => rw [w.2.1, w'.2.1]
   | succ n ih => rw [w.2.2 n, w'.2.2 n, ih]
 
-/-- Map = territory, assembled: over the class generated by a known
-    law and seed, nothing is free, everything is expressible in every
-    vocabulary, and every proposition is forced or refuted. The
-    god's-eye view is the width of this class, not the quality of any
-    seat. -/
 theorem map_is_territory (f : A → A) (s : A) :
     (∀ P : RunClass f s → Prop, ¬ Free P)
     ∧ (∀ (v : RunClass f s → Obs) (P : RunClass f s → Prop),
@@ -136,7 +90,6 @@ theorem map_is_territory (f : A → A) (s : A) :
 
 end Instantiation
 
-/- audit -/
 #print axioms Instantiation.freedom_needs_width
 #print axioms Instantiation.generated_no_freedom
 #print axioms Instantiation.generated_dichotomy
