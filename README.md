@@ -1,105 +1,123 @@
-# An Ontological Proof of Becoming
+# Ontology of Becoming
 
-> machine-checked and constructed with no axioms
+> the formal core is a set of Lean 4 theorems with no axioms; the
+> regimentation, the empirical discharge, and the one premise per
+> realized step are stated in prose
 
-[![DOI](https://zenodo.org/badge/1302552048.svg)](https://doi.org/10.5281/zenodo.21449017) 
+[![DOI](https://zenodo.org/badge/1302552048.svg)](https://doi.org/10.5281/zenodo.21449017)
 
-An ontological argument derives an existence verdict from a concept
-alone, a priori. The classical ones start from a
-maximally perfect being and reach for a necessary substance. This one
-starts from the emptiest, the concept of presuppositionlessness, and
-reaches a becoming rather than a being. 
+An ontological argument analyzes a concept and derives an existence
+verdict. The concept here is the bare capacity of a medium to mark one
+proposition differently from another. The verdict has two parts with
+different price tags: the structure of a two-state alternation, derived
+as verified conditionals, and its realization in succession, which
+costs a stated premise, proved independent.
 
 ## Argument
 
-**Primitive.** A *law* is a map `m` on a carrier. Write `Fix m` for "`m`,
-read as an equation, has a solution" (∃x. x = mx), and `Run m` for "`m`,
-read as a recursion, has a solution from every seed and none of them
-is stationary" (for all x the sequence x, mx, m(mx), … is infinite and
-no term equals the next).
-<!--  -->
-**Df. 1.** `m` is *structureless* iff `m` is definable from a bare
-two-valued distinction alone, naming neither value: equivalently, `m`
-commutes with the exchange of the two values.
+**Primitive.** A *law* is a map `m` on a carrier. `Fix m`: the equation
+`x = m x` has a solution. `Run m`: the recursion is solved from every
+seed and every term of every solution differs from its successor.
 
-**Df. 2.** A tokening is *absolute* iff its mark admits no outside: no
-second locus, at the one time of the tokening, for its contrast to be
-realized in.
+**Df.** `m` is *structureless* iff `m` commutes with every relabeling of
+its carrier's values; on two values, with the exchange. On the
+two-valued carrier this reading of "definable from a bare distinction"
+coincides with definability, and the coincidence is a theorem.
 
-**Df. 3.** `m` is *the ground* iff `m` is structureless and
-non-trivial (not the identity).
+**L1 (Arena, proved).** A carrier with decidable equality admits a
+structureless law beyond the identity only when it has exactly two
+values. *(one value admits one
+map; three or more force the identity; a moved point and its image
+exhaust the carrier)*
 
-**Ax. 1 (Arena).** A carrier admits a non-trivial structureless law
-only if it has exactly two values. *(one value marks nothing; three or
-more collapse every relabeling-invariant law to the identity)*
+**L2 (Uniqueness, proved).** On two values the structureless laws are
+the identity and negation; the identity holds of everything and singles
+out nothing. A structureless law that excludes anything is `¬`.
 
-**Ax. 2 (Uniqueness).** On two values the only structureless laws are
-the identity and the negation ¬; the identity is satisfied by
-everything and so asserts nothing. Hence the ground, if it exists,
-is ¬.
+**L3 (Retorsion, proved).** A tokening that marks "no distinction is
+drawn" differently from its denial draws one. A discriminated tokening
+of the denial makes the denial false.
 
-**Ax. 3 (Retorsion).** The tokening of "no distinction is drawn," as
-against its own denial, itself draws one. The premise of Df. 2 cannot
-be coherently refused — its negation is unsayable, not false.
+**Th. 1 (No being).** `¬Fix(¬)`: each value differs from its own
+negation, and `X = ¬X` has no solution.
 
-**Ax. 4 (No margin).** An absolute tokening (Df. 2) has no outside at
-its own moment; if its contrast is realized at all, it is realized at
-another time.
+**Th. 2 (Alternation).** `Run(¬)`; the orbit from each seed is the
+period-two alternation, unique given the seed, and the two orbits are
+relabelings of each other.
 
-**Th. 1 (No being).** ¬Fix(¬). *(the two values are distinct and each
-fails its own negation; no state is identical to its own negation)*
+**Th. 3 (Equivalence).** `¬Fix(¬) ↔ Run(¬)`. *(the two sides quantify
+over the same instances; each direction is instantiation)*
 
-**Th. 2 (Becoming, uniquely).** Run(¬), and the orbit from every seed
-is the same period-two alternation, unique up to which value opens
-it. *(write down x, ¬x, x, ¬x, …; uniqueness is induction on the
-step)*
+**Th. 4 (Discrimination).** A tokening that marks the denial of
+occurrence differently from its assertion witnesses occurrence, and the
+two tokens are distinct. On two values, "one negation apart" restates
+"distinct," so occurrence is the theorem's whole yield.
 
-**Th. 3 (Equivalence).** For the ground, ¬Fix(¬) ↔ Run(¬). *(a fixed
-point is a one-state orbit that never moves; a stalled orbit is a
-fixed point: refusing to be and being unable to stop running are one
-hypothesis, read in two frames)*
+**P (Succession: the premise).** The tokening of the denial and the
+tokening of the assertion stand in succession. One instance per
+realized step; the full run costs an infinite family of instances over
+pairwise-distinct loci, and the orientation of the chain is part of
+the premise. `P` is independent
+of Th. 1–4: a still structure and a running one share one underlying
+world and all tokening facts, with `P` false throughout one and true
+throughout the other.
 
-**Th. 4 (Actuality).** Let a tokening deny that ¬ runs. By Ax. 3 it is
-tokened as against its own denial, hence is a tokening in the sense of
-Df. 2, hence absolute; by Ax. 4 its contrast is realized at another
-time; by Ax. 1–2 the only realizable contrast on two values is ¬
-itself. So the tokened denial of Th. 2 is, at two times, an instance
-of Th. 2.
+**Th. 5 (Actuality, from P).** Given discrimination and `P`, the
+successor's value is the negation of its predecessor's: one realized
+step of the alternation. A chain of instances realizes the run.
 
-**Corollary.** Necessarily, a becoming exists; by Th. 1 no being
-answers to the ground concept; by Th. 3 these are one theorem; and by
-Th. 4 the becoming cannot be coherently denied without the denial
-itself being one of its ticks.
+**Th. 6 (Obstruction).** Regiment claims as properties of
+succession-free worlds. A claim true wherever its denial is
+discriminated holds at still worlds that discriminate it; given any
+such still world, the entailment from the claim to running fails.
+Temporal realization rests on `P`, and, given such a world, an
+undeniable substitute for `P` is unavailable.
+
+**Corollary.** The alternation exists and is unique up to relabeling of
+its seed, and nothing static answers to the ground concept (Th. 1–3). A
+discriminated denial witnesses occurrence (Th. 4). Given `P`, each such
+denial realizes a step of the alternation (Th. 5), and `P` is the exact
+price of the temporal reading (Th. 6).
 
 ---
 
-All of the above is a named theorem or definition of
-`lean/Becoming.lean`, assembled in the single theorem
-`Becoming.ontological_argument`. The "axioms" are labels of the
-exposition only; each is proved in the file — Ax. 1–2 as theorems
-about relabeling-invariant maps (`bare_one_is_mute`,
-`bare_three_is_mute`, `one_candidate`), Ax. 3–4 as theorems about what
-a tokening must exhibit (`retorsion`, `denial_ticks_the_clock`).
+L1–L3 and Th. 1–4 are named theorems of `lean/Becoming.lean`, assembled
+in `Becoming.ontological_argument`: L1 as `bare_one_is_mute`,
+`bare_three_is_mute`, `two_at_most`, `two_speaks`; L2 as
+`one_candidate`, `constants_not_structureless`; L3 as `retorsion`,
+`no_undrawn_denial`; Th. 1 as `no_static_instance`, `no_being`; Th. 2
+as `becoming_exists`, `becoming_unique`, `two_tick_clock`,
+`seed_is_relabel`; Th. 3 as `refusal_is_running`; Th. 4 as
+`event_retorsion`, `discrimination`.
+Th. 5–6 and `P` live in `lean/Obstruction.lean`: `P` as the definition
+`Successive`, hypothesized and never asserted; Th. 5 as
+`actuality_tick`, `chain_runs`; Th. 6 as `obstruction`,
+`no_undeniable_bridge`; independence as `premise_independent` and
+`chain_premise_independent`.
 
 ## Contents
 
 | Path | What it is |
 |---|---|
-| `paper/argument.tex` | *An Ontological Proof of Becoming* — the argument above, typeset on one page |
-| `paper/becoming.tex` | *Becoming Without Premises* — the full exposition: informal walkthrough, formal development, literature positioning, mechanization notes |
-| `lean/Becoming.lean` | The entire formal development in one standalone Lean 4 file ,  prelude only, no imports, no dependencies |
+| `paper/becoming.tex` | *Ontology of Becoming*: the full paper: regimentation, formal development, scope, obstruction, literature, verification notes |
+| `paper/argument.tex` | *Ontology of Becoming*: the argument on one page |
+| `lean/Becoming.lean` | The conditional core: standalone Lean 4, prelude only, no imports |
+| `lean/Obstruction.lean` | The obstruction, the premise, its independence, and rigidity: same discipline |
 | `lean-toolchain` | The pinned toolchain (`leanprover/lean4:v4.31.0`) |
 
-## Checking the proof
+## Checking the proofs
 
-The file is self-contained and checks with plain `lean`:
+Both files are self-contained and check with plain `lean`:
 
 ```sh
 lean lean/Becoming.lean
+lean lean/Obstruction.lean
 ```
 
-The file ends with a `#print axioms` audit of every main result,
-`ontological_argument` included. Each prints "does not depend on any
-axioms": the development declares no axiom of its own and uses none of
-Lean's three standard ones (`propext`, `Classical.choice`,
-`Quot.sound`).
+Each file ends with a `#print axioms` audit of its main results, 30
+lines in the first file and 17 in the second. Every line prints "does
+not depend on any axioms": the development declares no axiom and uses
+none of Lean's three standard ones (`propext`, `Classical.choice`,
+`Quot.sound`). The material is finite case analysis
+and induction over decidable types, for which the empty footprint is
+the expected outcome; the audit records it.

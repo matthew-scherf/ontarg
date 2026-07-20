@@ -1,22 +1,16 @@
 /-!
 # Becoming
 
-The ontological argument of becoming, assembled in one theorem:
-`ontological_argument`.
 -/
 
 namespace Becoming
 
-/- link 1: the distinction is drawn -/
+
 
 /-- Two states of `M` differ. -/
 def Draws (M : Type) : Prop := ∃ a b : M, a ≠ b
 
-theorem subsingleton_tokens_nothing {M : Type} (h : ∀ a b : M, a = b)
-    (t : Prop → M) : ∀ P Q : Prop, t P = t Q :=
-  fun P Q => h (t P) (t Q)
 
-/-- A medium marking `¬ Draws M` differently from `Draws M` draws a distinction. -/
 theorem retorsion {M : Type} (t : Prop → M)
     (h : t (¬ Draws M) ≠ t (Draws M)) : Draws M :=
   ⟨t (¬ Draws M), t (Draws M), h⟩
@@ -25,7 +19,7 @@ theorem no_undrawn_denial {M : Type} (t : Prop → M) :
     ¬ (t (¬ Draws M) ≠ t (Draws M) ∧ ¬ Draws M) :=
   fun ⟨hd, hn⟩ => hn (retorsion t hd)
 
-/- link 2: the arena is two -/
+
 
 /-- Transposition of two values. -/
 def transp {V : Type u} [DecidableEq V] (a b : V) : V → V :=
@@ -64,16 +58,28 @@ theorem bare_one_is_mute {V : Type u} (f : V → V)
     (h1 : ∀ x y : V, x = y) : ∀ x, f x = x :=
   fun x => h1 (f x) x
 
-/-- On `Bool`, negation is equivariant and fixed-point-free. -/
+theorem two_at_most {V : Type u} [DecidableEq V] (f : V → V)
+    (hequiv : Equivariant f) {x : V} (hfx : f x ≠ x) :
+    ∀ z : V, z = x ∨ z = f x := by
+  intro z
+  by_cases hzx : z = x
+  · exact Or.inl hzx
+  · by_cases hzf : z = f x
+    · exact Or.inr hzf
+    · have hxfix : transp (f x) z x = x :=
+        transp_fixes (fun h => hfx h.symm) (fun h => hzx h.symm)
+      have h := hequiv (f x) z x
+      rw [hxfix, transp_left] at h
+      exact absurd h.symm hzf
+
+
 theorem two_speaks :
     Equivariant (fun x : Bool => !x) ∧ (∀ x : Bool, !x ≠ x) := by
   constructor
   · intro a b x; cases a <;> cases b <;> cases x <;> rfl
   · intro x; cases x <;> decide
 
-/- link 3: the candidate -/
 
-/-- `g` commutes with negation. -/
 def Structureless (g : Bool → Bool) : Prop := ∀ b, g (!b) = !(g b)
 
 /-- A structureless `g : Bool → Bool` is `id` or `not`. -/
@@ -108,9 +114,8 @@ theorem constants_not_structureless (c : Bool) :
 
 theorem id_says_nothing : ∀ b : Bool, id b = b := fun _ => rfl
 
-/- link 3, relational: no structureless spec singles out a state -/
+theorem id_structureless : Structureless (fun b => b) := fun _ => rfl
 
-/-- Relations on `Bool` generated from equality by negation, conjunction, disjunction. -/
 inductive Defble : (Bool → Bool → Prop) → Prop where
   | eq : Defble (fun a b => a = b)
   | neg {R} : Defble R → Defble (fun a b => ¬ R a b)
@@ -145,6 +150,42 @@ theorem diagonal_uniform {R : Bool → Bool → Prop} (h : Defble R) :
   · exact defble_invariant h false false
   · exact defble_invariant h true true
   · exact Iff.rfl
+
+theorem invariant_binary_classified (f : Bool → Bool → Bool)
+    (hinv : ∀ a b, f (!a) (!b) = f a b) :
+    (∀ a b, f a b = (a == b)) ∨ (∀ a b, f a b = (a != b))
+    ∨ (∀ a b, f a b = true) ∨ (∀ a b, f a b = false) := by
+  have hff : f false false = f true true := hinv true true
+  have hft : f false true = f true false := hinv true false
+  cases htt : f true true <;> cases htf : f true false
+  · right; right; right
+    intro a b
+    cases a <;> cases b
+    · exact hff.trans htt
+    · exact hft.trans htf
+    · exact htf
+    · exact htt
+  · right; left
+    intro a b
+    cases a <;> cases b
+    · exact hff.trans htt
+    · exact hft.trans htf
+    · exact htf
+    · exact htt
+  · left
+    intro a b
+    cases a <;> cases b
+    · exact hff.trans htt
+    · exact hft.trans htf
+    · exact htf
+    · exact htt
+  · right; right; left
+    intro a b
+    cases a <;> cases b
+    · exact hff.trans htt
+    · exact hft.trans htf
+    · exact htf
+    · exact htt
 
 /- no necessary being -/
 
@@ -191,7 +232,7 @@ theorem two_tick_clock (seed : Bool) :
   | true  => rfl
   | false => rfl
 
-/- link 4: so it runs, and the law is negation -/
+/- link 4:  -/
 
 theorem no_fixpoint : ∀ x : Bool, x ≠ !x := by
   intro x; cases x <;> decide
@@ -277,10 +318,6 @@ theorem absolute_law {R : Bool → Bool → Prop}
   · intro hab he; exact hdiag a (he ▸ hab)
   · intro hab; exact (ne_eq_not a b hab) ▸ hoff a
 
-/-- `Defble`, `Articulates` `R`: its law is negation, its object frame is
-    empty, its process frame is inhabited, and its run is unique given a seed.
-    The general route to actuality: holds for any such `R`, independently of
-    the concrete tokening argument in `denial_ticks_the_clock` below. -/
 theorem absolute_articulation {R : Bool → Bool → Prop}
     (hD : Defble R) (hA : Articulates R) :
     (∀ a b, R a b ↔ a ≠ b)
@@ -303,7 +340,7 @@ theorem absolute_is_inhabited :
   intro n
   exact clock_runs true n
 
-/- link 5: one fact, two frames -/
+/- link 5: -/
 
 theorem refusal_is_running (f : S → S) :
     (∀ x, f x ≠ x) ↔ ∀ seed n, orbit f seed (n + 1) ≠ orbit f seed n := by
@@ -313,7 +350,7 @@ theorem refusal_is_running (f : S → S) :
   · intro h x
     exact h x 0
 
-/- link 6: the seed is a label, not a premise -/
+/- link 6: -/
 
 /-- Relabelling a run: negate every value. -/
 def relabel (s : Nat → Bool) : Nat → Bool := fun n => !(s n)
@@ -329,37 +366,28 @@ theorem seed_is_relabel :
     rfl
 
 
-/- the token -/
+/- link 7: discrimination -/
 
-theorem denial_self_refutes {A : Type} (a : A) : ¬ ¬ (∃ x : A, x = a) :=
-  fun h => h ⟨a, rfl⟩
-
-/- link 7: the tokening is an event -/
-
-/-- The configuration of `h` differs at two times. -/
+/-- `h` takes different values at two loci of `T`. -/
 def Occurs {T : Type} (h : T → Bool) : Prop := ∃ t₁ t₂ : T, h t₁ ≠ h t₂
 
 theorem event_retorsion {T : Type} (h : T → Bool) (tok : Prop → T)
     (hd : h (tok (¬ Occurs h)) ≠ h (tok (Occurs h))) : Occurs h :=
   ⟨tok (¬ Occurs h), tok (Occurs h), hd⟩
 
-/-- The concrete route to actuality: the tokening of the denial that `h`
-    runs is itself a tick of it. Independent of `absolute_articulation`
-    above: this argues the specific case directly, without `Defble` or
-    `Articulates`. -/
-theorem denial_ticks_the_clock {T : Type} (h : T → Bool)
+theorem discrimination {T : Type} (h : T → Bool)
     (tok : Prop → T)
     (hd : h (tok (¬ Occurs h)) ≠ h (tok (Occurs h))) :
     Occurs h
     ∧ tok (¬ Occurs h) ≠ tok (Occurs h)
-    ∧ h (tok (Occurs h)) = orbit not (h (tok (¬ Occurs h))) 1 :=
+    ∧ h (tok (Occurs h)) = !(h (tok (¬ Occurs h))) :=
   ⟨event_retorsion h tok hd,
    fun he => hd (congrArg h he),
    ne_eq_not _ _ hd⟩
 
 /- the conjunction -/
 
-/-- The ontological argument of becoming, with no premise at any link. -/
+/-- formal core: one conjunction of conditionals. -/
 theorem ontological_argument :
     -- 1. the distinction is drawn
     (∀ (M : Type) (t : Prop → M), t (¬ Draws M) ≠ t (Draws M) → Draws M)
@@ -393,14 +421,14 @@ theorem ontological_argument :
     -- 5. the refusal is the running
     ∧ ((∀ b : Bool, not b ≠ b) ↔
         ∀ seed n, orbit not seed (n + 1) ≠ orbit not seed n)
-    -- 6. the seed is a label, not a premise
+    -- 6. the seed is a label
     ∧ (∀ n, orbit not false n = relabel (orbit not true) n)
-    -- 7. the tokening is an event
+    -- 7. discrimination
     ∧ (∀ (T : Type) (h : T → Bool) (tok : Prop → T),
         h (tok (¬ Occurs h)) ≠ h (tok (Occurs h)) →
         Occurs h
         ∧ tok (¬ Occurs h) ≠ tok (Occurs h)
-        ∧ h (tok (Occurs h)) = orbit not (h (tok (¬ Occurs h))) 1) :=
+        ∧ h (tok (Occurs h)) = !(h (tok (¬ Occurs h)))) :=
   ⟨fun _ t h => retorsion t h,
    fun _ f h1 => bare_one_is_mute f h1,
    fun _ _ f he h3 => bare_three_is_mute f he h3,
@@ -418,7 +446,7 @@ theorem ontological_argument :
       two_tick_clock seed⟩,
    refusal_is_running not,
    seed_is_relabel,
-   fun _ h tok hd => denial_ticks_the_clock h tok hd⟩
+   fun _ h tok hd => discrimination h tok hd⟩
 
 end Becoming
 
@@ -426,23 +454,29 @@ end Becoming
 #print axioms Becoming.no_undrawn_denial
 #print axioms Becoming.bare_one_is_mute
 #print axioms Becoming.bare_three_is_mute
+#print axioms Becoming.two_at_most
 #print axioms Becoming.two_speaks
 #print axioms Becoming.one_candidate
 #print axioms Becoming.constants_not_structureless
 #print axioms Becoming.id_says_nothing
+#print axioms Becoming.id_structureless
 #print axioms Becoming.diagonal_uniform
+#print axioms Becoming.invariant_binary_classified
 #print axioms Becoming.no_static_instance
 #print axioms Becoming.no_being
+#print axioms Becoming.no_fixpoint
+#print axioms Becoming.ne_eq_not
 #print axioms Becoming.becoming_exists
 #print axioms Becoming.becoming_unique
 #print axioms Becoming.two_tick_clock
+#print axioms Becoming.clock_runs
+#print axioms Becoming.run_unique
 #print axioms Becoming.says_kills_the_object
 #print axioms Becoming.absolute_law
 #print axioms Becoming.absolute_articulation
 #print axioms Becoming.absolute_is_inhabited
 #print axioms Becoming.refusal_is_running
 #print axioms Becoming.seed_is_relabel
-#print axioms Becoming.denial_self_refutes
 #print axioms Becoming.event_retorsion
-#print axioms Becoming.denial_ticks_the_clock
+#print axioms Becoming.discrimination
 #print axioms Becoming.ontological_argument
