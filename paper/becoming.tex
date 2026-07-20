@@ -9,82 +9,375 @@
 \usepackage{enumitem}
 \usepackage[hidelinks]{hyperref}
 \usepackage{parskip}
-\pagestyle{empty}
-\setlength{\parskip}{4pt}
+\usepackage{booktabs}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{remark}[theorem]{Remark}
 
 \newcommand{\Fix}{\mathrm{Fix}}
 \newcommand{\Run}{\mathrm{Run}}
+\newcommand{\Draws}{\mathrm{Draws}}
+\newcommand{\Says}{\mathrm{Says}}
+\newcommand{\Sat}{\mathrm{Sat}}
+\newcommand{\Occurs}{\mathrm{Occurs}}
 \newcommand{\lf}[1]{\texttt{#1}}
+\newcommand{\B}{\mathbb{B}}
+
+\title{Becoming Without Premises}
+\date{}
 
 \begin{document}
+\maketitle
+\vspace{-2.5em}
+
+\begin{abstract}
+A distinction, once tokened in any medium capable of marking it, cannot be coherently denied: the mark used for the denial already exhibits the distinction it denies. This paper develops that observation into a closed argument that a two valued ``ground'' law exists, that the law is negation, that no state answers reflexively to a relation which excludes a state of itself, and that the resulting process, an unending alternation, cannot be denied without the denial itself constituting one more step of it. The argument requires no posited premise: each claim ordinarily taken as a starting point is instead derived from the bare fact that some medium marks one proposition differently from another. The conclusion reached is not that a necessary being exists, but that no static being answers to the ground concept, and that what is necessary in its place is a process, unique up to which value opens it, closed under its own denial. The paper states the argument informally, then gives it in full formal detail, situates it against the ontological argument tradition, retorsion and transcendental arguments, diagonalization results in mathematical logic, and the literature on becoming, and reports that the entire development has been checked in the Lean 4 proof assistant without invoking any axiom, including Lean's own axioms of propositional extensionality, choice, and quotient soundness.
+\end{abstract}
+
+\section{Introduction}
+
+The ontological argument, in its classical forms, tries to derive the existence of a necessary being from the analysis of a concept alone. Anselm's being than which nothing greater can be conceived, Descartes' supremely perfect being, and G\"odel's being with every positive property, all proceed by showing that existence is built into or entailed by the concept under analysis \cite{anselm,descartes,godel1995}. This paper develops an argument with the same overall shape: a concept is analyzed, nothing empirical is assumed, and a necessary conclusion is drawn. The concept and the conclusion are both different from the classical case. The concept analyzed here is not a maximally perfect being but the bare requirement that some medium be capable of marking one proposition differently from another. The conclusion is not that a necessary being exists, but that no static being answers to a certain ground concept, and that what does necessarily exist in its place is a process: an unending alternation between two states, unique up to which one comes first, such that denying it runs is itself, on examination, one more step of the running.
+
+The argument proceeds in a fixed sequence of moves, sketched informally in Section~\ref{sec:shape} and given in full formal detail in Section~\ref{sec:formal}. No move in the sequence is assumed as a premise; each is derived from what precedes it, down to the first, which is derived from the bare possibility of a medium marking a distinction at all. Section~\ref{sec:scope} discusses the scope of the result and some ways it can be misread. Section~\ref{sec:related} situates the argument against the ontological argument tradition, retorsion and transcendental arguments, diagonalization results in mathematical logic, and the philosophical literature on becoming. Section~\ref{sec:mech} reports that the argument has been checked, end to end, in a proof assistant.
+
+\section{The Shape of the Argument}
+\label{sec:shape}
+
+Before the formal statement, it helps to see the shape of the argument without the notation.
+
+Start with a medium: anything at all that can hold two different marks. If a medium can mark ``no distinction is drawn here'' differently from ``a distinction is drawn here,'' it has, by that act, drawn a distinction. The denial that any distinction can be drawn is available only as an unmarked position; the moment it is marked off in favor of one reading or another, the position denied is exhibited. This is the retorsion move, and it costs nothing beyond the assumption that some medium is being used to mark something.
+
+Once a distinction exists, ask what a law on that medium could be, if the law is not allowed to privilege one value over another: a structureless law, one that uses only the bare fact that values are distinct, not any further fact about which value is which. On a single value there is nothing to do; the identity is the only law available. On three or more values, no non-trivial structureless law exists either: any move such a law makes at one point can be relabeled onto any other point, which forces the law to fix everything. Two values are the exception. On two values, and only on two values, a structureless law can do something other than sit still, and that law is negation. The identity is also structureless, but it holds of everything and so distinguishes nothing; negation is the only structureless law that says something.
+
+Now ask what it would be for a certain kind of self-referential relation, one built up from bare equality by negation, conjunction, and disjunction, to hold of a value read against itself, while also excluding some value read against itself. If it excludes anything, it excludes everything uniformly, which is where the argument takes on the shape of a diagonal argument, the shape behind Cantor's theorem and G\"odel's incompleteness proof. So no value can satisfy the relation as a static object. The relation can still be satisfied, not by any one value, but by an infinite sequence, each term related to the next. Once the object reading is closed off, that is the only reading left, and working it through forces the relation to be exactly disagreement, its satisfying sequence to be the negation alternation, and that sequence to be unique given where it starts.
+
+Put together: no value is identical to its own negation, so nothing static answers to the ground concept. What does answer to it is a process, the negation alternation, which exists, is unique up to its starting value, and cannot stop, since no state is also the next state. Denying that this process runs is not a way of stepping outside it. Tokening the denial is itself an event, marked differently from tokening the process's continuation, and by the retorsion move again, its value is simply the next step of the process it denies.
+
+\section{Formal Development}
+\label{sec:formal}
+
+\subsection{Preliminaries}
+
+A \emph{carrier} is a type $V$. A \emph{law} on $V$ is a function $f : V \to V$. For $a \neq b$ in $V$, the \emph{transposition} $\tau_{ab} : V \to V$ sends $a$ to $b$, $b$ to $a$, and fixes every other point.
+
+\begin{definition}[Equivariance]
+$f : V \to V$ is \emph{equivariant} if it commutes with every transposition of $V$: $f(\tau_{ab}(x)) = \tau_{ab}(f(x))$ for all $a, b, x \in V$.
+\end{definition}
+
+Since the transpositions generate the full symmetric group on $V$, equivariance under every transposition is the same as commuting with every relabeling of $V$. A law that uses nothing beyond the bare distinctness of its carrier's elements, and no further fact about which particular elements they are, must be equivariant in this sense: relabeling changes which token stands for which element and nothing else, so a law blind to that choice must commute with it.
+
+\begin{proposition}[One value is mute]
+If $V$ has exactly one element, every law on $V$ is the identity.
+\end{proposition}
+
+\begin{proof}
+Only one function $V \to V$ exists.
+\end{proof}
+
+\begin{proposition}[Three or more values force triviality]
+\label{prop:three}
+If $V$ has at least three elements and $f : V \to V$ is equivariant, then $f(x) = x$ for every $x$.
+\end{proposition}
+
+\begin{proof}
+Suppose $f(x) \neq x$ for some $x$. Since $|V| \geq 3$, choose $z$ with $z \neq x$ and $z \neq f(x)$. The transposition $\tau_{f(x), z}$ fixes $x$, because $x \neq f(x)$ and $x \neq z$. Equivariance gives
+\[
+f(x) = f(\tau_{f(x),z}(x)) = \tau_{f(x),z}(f(x)) = z,
+\]
+using $\tau_{f(x),z}(x) = x$ and $\tau_{f(x),z}(f(x)) = z$. This contradicts $z \neq f(x)$. So $f(x) = x$ for every $x$.
+\end{proof}
+
+\begin{proposition}[Two values can move]
+\label{prop:two}
+Let $\B = \{\top, \bot\}$. Negation $\lnot : \B \to \B$ is equivariant, and $\lnot x \neq x$ for both $x$.
+\end{proposition}
+
+\begin{proof}
+Direct check on the two elements of $\B$.
+\end{proof}
+
+\begin{corollary}[The arena]
+\label{cor:arena}
+A carrier admits a non-trivial equivariant law only if it has exactly two elements.
+\end{corollary}
+
+Propositions~\ref{prop:three} and \ref{prop:two} give Corollary~\ref{cor:arena} directly: below two elements there is nothing to move, at or above three elements everything is forced to sit still, and at exactly two elements movement is possible. From here the carrier is fixed at $\B$.
+
+\begin{definition}[Structureless law on $\B$]
+$g : \B \to \B$ is \emph{structureless} if $g(\lnot b) = \lnot g(b)$ for every $b$.
+\end{definition}
+
+On $\B$ the only nontrivial transposition is the swap of the two elements, which is negation itself, so this notion of structureless is equivariance specialized to $V = \B$.
+
+\begin{proposition}[Uniqueness of the law]
+\label{prop:candidate}
+A structureless $g : \B \to \B$ satisfies $g = \mathrm{id}$ or $g = \lnot$.
+\end{proposition}
+
+\begin{proof}
+Case on $g(\top)$. If $g(\top) = \top$, structurelessness gives $g(\bot) = \lnot g(\top) = \bot$, so $g = \mathrm{id}$. If $g(\top) = \bot$, then $g(\bot) = \lnot g(\top) = \top$, so $g = \lnot$.
+\end{proof}
+
+\begin{proposition}[The identity says nothing]
+\label{prop:idmute}
+Constant maps on $\B$ are not structureless. The identity is structureless, and is satisfied by every element of $\B$.
+\end{proposition}
+
+Propositions~\ref{prop:candidate} and \ref{prop:idmute} together give the second half of the ground concept: the only structureless law on the two-valued arena that distinguishes anything at all is negation.
+
+\subsection{Retorsion and the Drawing of the Distinction}
+
+\begin{definition}[Draws]
+A medium $M$ \emph{draws a distinction}, written $\Draws(M)$, if there exist $a \neq b$ in $M$.
+\end{definition}
+
+\begin{proposition}[Retorsion]
+\label{prop:retorsion}
+Let $M$ be a medium and $t : \mathrm{Prop} \to M$ a tokening of propositions into $M$. If
+\[
+t(\lnot \Draws(M)) \neq t(\Draws(M)),
+\]
+then $\Draws(M)$.
+\end{proposition}
+
+\begin{proof}
+The two values $t(\lnot \Draws(M))$ and $t(\Draws(M))$ are themselves a witness of two distinct elements of $M$.
+\end{proof}
+
+\begin{corollary}
+\label{cor:noundrawn}
+It is not the case that $t$ marks the denial of $\Draws(M)$ differently from its assertion while $\lnot \Draws(M)$ also holds.
+\end{corollary}
+
+Corollary~\ref{cor:noundrawn} is why the drawing of a distinction needs no independent premise. Anyone using a medium to mark the claim ``no distinction is drawn'' as a live alternative to its denial has, in that act of marking, already drawn one.
+
+\subsection{Definable Relations and a Diagonal Lemma}
+
+\begin{definition}[Definable relations]
+The class of \emph{definable} relations on $\B$ is generated from equality by negation, conjunction, and disjunction: equality is definable, and if $R$ and $S$ are definable then so are $\lnot R$, $R \wedge S$, and $R \vee S$, applied pointwise.
+\end{definition}
+
+\begin{lemma}[Diagonal invariance]
+\label{lem:diaginv}
+If $R$ is definable, then $R(a,b) \leftrightarrow R(\lnot a, \lnot b)$ for all $a, b \in \B$.
+\end{lemma}
+
+\begin{proof}
+Induction on the generation of $R$. Equality is invariant under jointly negating both arguments. Negation, conjunction, and disjunction each preserve invariance, since each is built pointwise from relations that already have it.
+\end{proof}
+
+\begin{lemma}[Diagonal uniformity]
+\label{lem:diaguniform}
+If $R$ is definable, then $R(a,a) \leftrightarrow R(b,b)$ for all $a, b \in \B$.
+\end{lemma}
+
+\begin{proof}
+There are two elements, so it suffices to check $a = b$, which is trivial, and $\{a,b\} = \{\top,\bot\}$, which follows from Lemma~\ref{lem:diaginv}.
+\end{proof}
+
+Lemma~\ref{lem:diaguniform} is the diagonal step: a definable relation cannot hold reflexively of one value while failing reflexively of another. It either holds of every value read against itself, or of none.
+
+\subsection{No Object Answers to an Articulate Relation}
+
+\begin{definition}
+For a relation $R$ on $\B$: $R$ \emph{excludes} $x$ if $\lnot R(x,x)$. $R$ \emph{says} something, $\Says(R)$, if it excludes some value. $R$ is \emph{objectually satisfied} if some value satisfies it reflexively, $\exists x.\, R(x,x)$. $R$ is \emph{processually satisfied} if there is a sequence $s : \mathbb{N} \to \B$ with $R(s(n), s(n+1))$ for every $n$. $R$ is \emph{satisfied}, $\Sat(R)$, if it is satisfied either way. $R$ \emph{articulates} if $\Says(R)$ and $\Sat(R)$.
+\end{definition}
+
+\begin{proposition}[No reflexive object]
+\label{prop:kills}
+If $R$ is definable and $\Says(R)$, then $R$ is not objectually satisfied.
+\end{proposition}
+
+\begin{proof}
+Let $x$ be excluded by $R$, so $\lnot R(x,x)$, and suppose toward contradiction that $R(y,y)$ for some $y$. Lemma~\ref{lem:diaguniform} gives $R(x,x) \leftrightarrow R(y,y)$, so $R(x,x)$, contradicting $\lnot R(x,x)$.
+\end{proof}
+
+Proposition~\ref{prop:kills} is a diagonal argument in the style of Cantor and G\"odel, restricted to definable relations on two values: a relation that would exclude something reflexively cannot also be uniformly satisfied reflexively. What is distinctive about the present setting is what happens once the object reading is closed off. Satisfaction is not thereby impossible; it moves to the process reading.
+
+\begin{theorem}[The law of an articulate relation]
+\label{thm:law}
+If $R$ is definable and articulates, then:
+\begin{enumerate}[label=(\alph*)]
+\item $R(a,b) \leftrightarrow a \neq b$ for all $a,b \in \B$;
+\item $R$ is not objectually satisfied;
+\item some sequence $s : \mathbb{N} \to \B$ satisfies $R(s(n),s(n+1))$ for every $n$;
+\item any sequence satisfying $R$ step by step is determined by its first term: if $R(t(n),t(n+1))$ holds for all $n$, then $t(n) = t(0)$ for even $n$ and $t(n) = \lnot t(0)$ for odd $n$.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+By Proposition~\ref{prop:kills}, $\Says(R)$ rules out objectual satisfaction, so $\Sat(R)$ must hold processually: there is $s$ with $R(s(n),s(n+1))$ for all $n$. In particular $R(s(0),s(1))$. If $s(0) = s(1)$ this is a reflexive instance, contradicting Proposition~\ref{prop:kills}, so $s(0) \neq s(1)$; on two values this means $\{s(0),s(1)\} = \{\top,\bot\}$. By Lemma~\ref{lem:diaginv}, the truth of $R$ on this pair transfers to both orderings of the two values, giving $R(a,\lnot a)$ for every $a$. Together with the exclusion of every reflexive pair, this gives (a). Part (b) restates Proposition~\ref{prop:kills}. Part (c) is witnessed by the orbit of $\lnot$ from either seed. Part (d) is induction on $n$, using (a) at each step to force $t(n+1) = \lnot t(n)$.
+\end{proof}
+
+\subsection{No Being}
+
+\begin{theorem}[No being]
+\label{thm:nobeing}
+$\lnot x \neq x$ for every $x \in \B$, and for every proposition $X$ the equation $X = \lnot X$ has no solution.
+\end{theorem}
+
+\begin{proof}
+The first claim is Proposition~\ref{prop:two}. For the second, $X = \lnot X$ gives $X \leftrightarrow \lnot X$, from which both $X$ and $\lnot X$ follow, which is absurd.
+\end{proof}
+
+No state, at either level, is identical to its own negation. Nothing static answers to the ground concept fixed by Corollary~\ref{cor:arena} and Propositions~\ref{prop:candidate} and \ref{prop:idmute}.
+
+\subsection{Becoming, Uniquely}
+
+\begin{definition}[Orbit]
+For a law $f$ and seed $x_0$, the \emph{orbit} of $f$ from $x_0$ is the sequence $x_0, x_1, x_2, \dots$ with $x_{n+1} = f(x_n)$.
+\end{definition}
+
+\begin{theorem}[Becoming]
+\label{thm:becoming}
+For every seed $x_0 \in \B$, the orbit of $\lnot$ from $x_0$ solves the recursion $x_{n+1} = \lnot x_n$; it is the unique sequence with initial value $x_0$ that does so; and it has period exactly two. Consequently,
+\[
+(\forall x.\, \lnot x \neq x) \iff \bigl(\forall\, \text{seed } n.\ \text{orbit}(n+1) \neq \text{orbit}(n)\bigr):
+\]
+the claim that the ground admits no static solution and the claim that it runs forever without repeating a step are one fact, read in two frames.
+\end{theorem}
+
+\begin{proof}
+Existence and the recursion are immediate from the definition of the orbit. Uniqueness is induction on $n$. Period two follows from $\lnot \lnot x = x$. The displayed equivalence holds because a fixed point of $f$ is exactly a one-term orbit that repeats, and an orbit that repeats a term is exactly a fixed point reached at that term; each direction of the biconditional instantiates the other.
+\end{proof}
+
+\subsection{Actuality: the Denial as a Tick}
+
+\begin{definition}[Occurs]
+For $h : T \to \B$, $h$ \emph{occurs}, $\Occurs(h)$, if $\exists t_1, t_2 \in T.\ h(t_1) \neq h(t_2)$.
+\end{definition}
+
+\begin{theorem}[Actuality]
+\label{thm:actuality}
+Let $\mathrm{tok} : \mathrm{Prop} \to T$ token propositions into $T$, and let $h : T \to \B$. If
+\[
+h(\mathrm{tok}(\lnot \Occurs(h))) \neq h(\mathrm{tok}(\Occurs(h))),
+\]
+then $\Occurs(h)$; the two tokenings $\mathrm{tok}(\lnot \Occurs(h))$ and $\mathrm{tok}(\Occurs(h))$ are themselves distinct; and
+\[
+h(\mathrm{tok}(\Occurs(h))) = \lnot\, h(\mathrm{tok}(\lnot \Occurs(h))).
+\]
+\end{theorem}
+
+\begin{proof}
+The first claim is Proposition~\ref{prop:retorsion} applied to $h$ and $\mathrm{tok}$. The second follows because equal tokenings would give equal $h$-values, contrary to hypothesis. The third is Theorem~\ref{thm:nobeing}: two distinct values in $\B$ differ by exactly one negation.
+\end{proof}
+
+Theorem~\ref{thm:actuality} closes the loop opened in Section~\ref{sec:shape}. A tokening of the claim that some configuration does not occur, marked differently from a tokening of the claim that it does, is not a way of standing outside the alternation described in Theorem~\ref{thm:becoming}. It is a value in that alternation, one step from the value it is denied against.
+
+\subsection{The Main Theorem}
+
+\begin{theorem}[Synthesis]
+\label{thm:main}
+The conjunction of Corollary~\ref{cor:arena}, Propositions~\ref{prop:candidate}, \ref{prop:idmute}, \ref{prop:retorsion}, Lemma~\ref{lem:diaguniform}, and Theorems~\ref{thm:law}, \ref{thm:nobeing}, \ref{thm:becoming}, \ref{thm:actuality} holds, with no premise beyond the existence of a medium and a tokening function marking a proposition differently from its negation.
+\end{theorem}
+
+Theorem~\ref{thm:main} is stated as a single closed conjunction in the formal development described in Section~\ref{sec:mech}. Given only that some medium is capable of marking a proposition differently from its negation, the arena is two valued, the ground law is negation, no object satisfies an articulate relation reflexively, no state answers to the ground concept, a process does, it is unique up to its seed, and denying that it runs is itself one more step of it.
+
+\section{Scope and Interpretation}
+\label{sec:scope}
+
+The necessity established here is structural: given that a medium marks one proposition differently from another, the rest follows by derivation, with no further premise added along the way.
+
+The word ``becoming'' names, in this paper, a specific mathematical object: an orbit of a law with no fixed point. Theorem~\ref{thm:actuality} is stated as a conditional over an arbitrary domain $T$ of tokening loci, but its antecedent is not merely satisfiable somewhere. It is satisfied here. The denial that the process runs, and the assertion that it does, have just been tokened distinctly, as two different sentences in this paragraph, each meant to be read as marking a different claim from the other. That tokening is a value of some $h$ at two loci of some $T$, and the two values differ, since the sentences are written to say different things. Theorem~\ref{thm:actuality} applies to this instance directly: $h$ occurs, the two tokenings are distinct, and the value at the tokening of the assertion is the negation of the value at the tokening of the denial.
+
+The standing objection to arguments of retorsive form, noted in Section~\ref{sec:related}, is that showing a denial incoherent for whoever attempts it does not by itself show the denial false in general; it shows only that the denier cannot occupy the position denied while marking it as distinct from its opposite. Theorem~\ref{thm:actuality} holds in every world in which the denial is tokened this way, and the actual world is one such world, because the denial has just been tokened in it, in the writing and reading of this paragraph. The conclusion is accordingly a claim about this world: the process is running in it, and a denial of that, wherever it is written down as a live alternative to its opposite, is one further step of the same process.
+
+\section{Related Work}
+\label{sec:related}
+
+\subsection{Ontological arguments}
+
+Anselm's argument in the \emph{Proslogion} \cite{anselm}, Descartes' fifth Meditation \cite{descartes}, and G\"odel's modal argument \cite{godel1995}, later set out in possible-worlds terms by Plantinga \cite{plantinga1974}, all derive necessary existence from the analysis of a concept, with no empirical premise. The argument given here shares that overall strategy and departs from it in both the concept analyzed and the conclusion drawn. The concept is not a maximally perfect or positive being but the bare capacity of a medium to mark a distinction; the conclusion is not that a being of that kind exists, but that no static being answers to the resulting ground concept, and that a process does. The argument also needs no modal apparatus: it uses no possible worlds, no accessibility relation, and no axiom of the S5 family, of the kind central to G\"odel's and Plantinga's versions. It is carried out in ordinary, in fact constructive, logic over simple types with decidable equality.
+
+Kant's objection to the ontological argument, that existence is not a real predicate and cannot be packed into a concept's definition \cite{kant1781}, targets arguments that move from a concept's content to that concept's instantiation. The present argument does not proceed by attributing existence to a concept. Theorem~\ref{thm:becoming} is a claim that a particular recursion has a solution from every seed, a mathematical existence claim about a function, and Theorem~\ref{thm:main} conjoins that claim with the others. Oppy's survey of the ontological argument tradition \cite{oppy1995} catalogues a wide range of instances of this same overall strategy and the standing objections to each; the present argument is a further instance of the strategy, aimed at a different target.
+
+\subsection{Retorsion and transcendental arguments}
+
+Aristotle's defense of the principle of non-contradiction in \emph{Metaphysics} IV proceeds by showing that anyone who denies the principle must, in the act of asserting the denial meaningfully, already presuppose it \cite{aristotle}. Apel's and Habermas's work on discourse ethics develops a structurally similar move: certain norms of argument cannot be denied within argument without a performative contradiction, since arguing at all already presupposes them \cite{apel1980,habermas1990}. Proposition~\ref{prop:retorsion} and Theorem~\ref{thm:actuality} follow the same pattern, restricted to a much narrower claim: an argument that draws its force from what any act of marking a denial must itself already exhibit, rather than from an assumed principle. The objection standing against this family of arguments, that undeniability need not entail truth, is addressed directly in Section~\ref{sec:scope}.
+
+\subsection{Diagonalization and self-reference}
+
+Cantor's proof that no set is in bijection with its power set \cite{cantor1891}, G\"odel's construction of a self-referential sentence undecidable in a sufficiently strong formal system \cite{godel1931}, Tarski's proof that no sufficiently expressive consistent language contains its own truth predicate \cite{tarski1936}, and L\"ob's theorem \cite{lob1955} share a common shape: a predicate or relation that would have to exclude a state of itself, on pain of contradiction, if it held of that state uniformly. Proposition~\ref{prop:kills} is an instance of this shape, restricted to definable relations on two values. What follows it, in Theorem~\ref{thm:law}, is not itself a new diagonal result. It is the observation that once the object reading is closed off by the diagonal argument, an infinite alternation absorbs exactly the satisfaction that the object reading could not accommodate.
+
+\subsection{Becoming}
+
+Heraclitus's fragments on flux \cite{heraclitus}, Hegel's transition from Being through Nothing to Becoming at the opening of the \emph{Science of Logic} \cite{hegel1812}, and Whitehead's process philosophy \cite{whitehead1929} all take becoming, rather than static being, to be ontologically basic. Hegel's route to that conclusion is dialectical: pure Being and pure Nothing, each taken as wholly indeterminate, turn out to be indistinguishable in content, and their truth is said to lie only in the movement between them. The argument given here reaches a formally analogous conclusion, that no static candidate holds still and that what remains is an alternation, by a different route: a combinatorial fact about the size of a carrier, a small algebra of definable relations, a diagonal argument, and a fixed-point computation, each step checked in ordinary logic. The relation between the two routes is one of substantive resonance; Hegel's text is not a premise used anywhere above, and nothing above is offered as a formal reconstruction of the \emph{Science of Logic}.
+
+\section{Mechanization}
+\label{sec:mech}
+
+Every definition, proposition, and theorem given in Section~\ref{sec:formal} is a named declaration in a single Lean~4 file \cite{demoura2021}, checked by the Lean kernel with no \lf{sorry} and no \lf{axiom} declaration anywhere in the file. Lean's own three standard axioms, propositional extensionality, choice, and quotient soundness, ordinarily taken for granted in most nontrivial developments, are also absent: running \lf{\#print axioms} on the top-level theorem, and on every declaration feeding it, reports a dependency on none of them.
+
+The correspondence between the labels used above and the Lean declarations is direct.
 
 \begin{center}
-{\Large\textbf{An Ontological Proof of Becoming}}\\[2pt]
-{\small in the manner of G\"odel's ontological proof (1970)}
+\footnotesize
+\begin{tabular}{@{}p{4.3cm}p{9.7cm}@{}}
+\toprule
+Here & Lean \\
+\midrule
+Corollary~\ref{cor:arena} & \lf{bare\_one\_is\_mute}, \lf{bare\_three\_is\_mute}, \lf{two\_speaks} \\
+Propositions~\ref{prop:candidate}, \ref{prop:idmute} & \lf{one\_candidate}, \lf{constants\_not\_structureless}, \lf{id\_says\_nothing} \\
+Proposition~\ref{prop:retorsion} & \lf{retorsion} \\
+Corollary~\ref{cor:noundrawn} & \lf{no\_undrawn\_denial} \\
+Lemmas~\ref{lem:diaginv}, \ref{lem:diaguniform} & \lf{defble\_invariant}, \lf{diagonal\_uniform} \\
+Proposition~\ref{prop:kills} & \lf{says\_kills\_the\_object} \\
+Theorem~\ref{thm:law} & \lf{absolute\_law}, \lf{absolute\_articulation} \\
+Theorem~\ref{thm:nobeing} & \lf{no\_static\_instance}, \lf{no\_being} \\
+Theorem~\ref{thm:becoming} & \lf{becoming\_exists}, \lf{becoming\_unique}, \lf{two\_tick\_clock}, \lf{refusal\_is\_running} \\
+Theorem~\ref{thm:actuality} & \lf{event\_retorsion}, \lf{denial\_ticks\_the\_clock} \\
+Theorem~\ref{thm:main} & \lf{ontological\_argument} \\
+\bottomrule
+\end{tabular}
 \end{center}
-\vspace{2pt}
 
-\textbf{Primitive.} A \emph{law} is a map $m$ on a carrier. Write $\Fix m$ for ``$m$, read as
-an equation, has a solution'' ($\exists x.\ x=m\,x$), and $\Run m$ for ``$m$, read as a
-recursion, has a solution from every seed and none of them is stationary'' (for all $x$ the
-sequence $x,\,mx,\,m(mx),\dots$ is infinite and no term equals the next).
+The file is available at \href{https://github.com/matthew-scherf/ontarg/blob/main/lean/Becoming.lean}{\lf{github.com/matthew-scherf/ontarg}}.
 
-\textbf{Df.\,1.} $m$ is \emph{structureless} iff $m$ is definable from a bare two-valued
-distinction alone, naming neither value: equivalently, $m$ commutes with the exchange of the
-two values.
+\section{Conclusion}
 
-\textbf{Df.\,2.} A tokening is \emph{absolute} iff its mark admits no outside: no second locus,
-at the one time of the tokening, for its contrast to be realized in.
+The argument given here starts from nothing beyond the bare possibility of marking a distinction, and ends with the claim that a two-state process, not a static being, is what is necessary. Each step between those two points is a derivation, the conclusion holds of the actual world by the same tokening that raises it as a question, and the whole chain has been checked mechanically. What remains is the further philosophical question of how the formal notion of becoming recovered here bears on the metaphysics of time, consciousness, and physical process.
 
-\textbf{Df.\,3.} $m$ is \emph{the ground} iff $m$ is structureless and non-trivial (not the
-identity).
+\begin{thebibliography}{99}
 
-\textbf{Ax.\,1 (Arena).} A carrier admits a non-trivial structureless law only if it has
-exactly two values. \emph{[one value marks nothing; three or more collapse every
-relabeling-invariant law to the identity]}
+\bibitem{anselm} Anselm of Canterbury, \emph{Proslogion}, c.\ 1078.
 
-\textbf{Ax.\,2 (Uniqueness).} On two values the only structureless laws are the identity and
-the negation $\lnot$; the identity is satisfied by everything and so asserts nothing. Hence the
-ground, if it exists, is $\lnot$.
+\bibitem{apel1980} K.-O.\ Apel, \emph{Towards a Transformation of Philosophy}, Routledge \& Kegan Paul, 1980.
 
-\textbf{Ax.\,3 (Retorsion).} The tokening of ``no distinction is drawn,'' as against its own
-denial, itself draws one. The premise of Df.\,2 cannot be coherently refused — its negation is
-unsayable, not false.
+\bibitem{aristotle} Aristotle, \emph{Metaphysics}, Book IV.
 
-\textbf{Ax.\,4 (No margin).} An absolute tokening (Df.\,2) has no outside at its own moment;
-if its contrast is realized at all, it is realized at another time.
+\bibitem{cantor1891} G.\ Cantor, ``\"Uber eine elementare Frage der Mannigfaltigkeitslehre,'' \emph{Jahresbericht der Deutschen Mathematiker-Vereinigung}, 1891.
 
-\textbf{Th.\,1 (No being).} $\lnot\Fix(\lnot)$. \emph{[the two values are distinct and each
-fails its own negation; no state is identical to its own negation]}
+\bibitem{demoura2021} L.\ de Moura and S.\ Ullrich, ``The Lean 4 Theorem Prover and Programming Language,'' in \emph{Automated Deduction -- CADE 28}, Springer, 2021.
 
-\textbf{Th.\,2 (Becoming, uniquely).} $\Run(\lnot)$, and the orbit from every seed is the same
-period-two alternation, unique up to which value opens it. \emph{[write down $x,\lnot x,
-x,\lnot x,\dots$; uniqueness is induction on the step]}
+\bibitem{descartes} R.\ Descartes, \emph{Meditations on First Philosophy}, Meditation V, 1641.
 
-\textbf{Th.\,3 (Equivalence).} For the ground, $\lnot\Fix(\lnot)\leftrightarrow\Run(\lnot)$.
-\emph{[a fixed point is a one-state orbit that never moves; a stalled orbit is a fixed point:
-refusing to be and being unable to stop running are one hypothesis, read in two frames]}
+\bibitem{godel1931} K.\ G\"odel, ``\"Uber formal unentscheidbare S\"atze der Principia Mathematica und verwandter Systeme I,'' \emph{Monatshefte f\"ur Mathematik und Physik}, 1931.
 
-\textbf{Th.\,4 (Actuality).} Let a tokening deny that $\lnot$ runs. By Ax.\,3 it is tokened as
-against its own denial, hence is a tokening in the sense of Df.\,2, hence absolute; by Ax.\,4 its
-contrast is realized at another time; by Ax.\,1--2 the only realizable contrast on two values is
-$\lnot$ itself. So the tokened denial of Th.\,2 is, at two times, an instance of Th.\,2.
+\bibitem{godel1995} K.\ G\"odel, ``Ontological Proof,'' in \emph{Collected Works, Vol.\ III}, ed.\ S.\ Feferman et al., Oxford University Press, 1995.
 
-\textbf{Corollary.} Necessarily, a becoming exists; by Th.\,1 no being answers to the ground
-concept; by Th.\,3 these are one theorem; and by Th.\,4 the
-becoming cannot be coherently denied without the denial itself being one of its ticks.
+\bibitem{habermas1990} J.\ Habermas, \emph{Moral Consciousness and Communicative Action}, MIT Press, 1990.
 
-\vspace{4pt}
-\begin{center}\rule{0.4\textwidth}{0.3pt}\end{center}
-\vspace{2pt}
+\bibitem{hegel1812} G.\ W.\ F.\ Hegel, \emph{Science of Logic}, 1812--1816.
 
-{\small\noindent
-All of the above is a named theorem or definition of a Lean~4 development
-that is axiom-free at its core (\lf{lean/Becoming.lean}, theorem
-\lf{Becoming.ontological\_argument}) ---  Ax.\,1--2 are theorems about relabeling-invariant maps on finite carriers
-(\lf{Arena.lean}, \lf{Structureless.lean}); Ax.\,3--4 are theorems about what a totalizing
-tokening can and cannot stand next to (\lf{Tokening.lean}, \lf{Event.lean}). Where G\"odel's
-proof needs the possibility of a maximally great being, this proof needs only that some
-distinction, once denied, was thereby drawn.}
+\bibitem{heraclitus} Heraclitus, fragments, in H.\ Diels and W.\ Kranz, \emph{Die Fragmente der Vorsokratiker}.
+
+\bibitem{kant1781} I.\ Kant, \emph{Critique of Pure Reason}, A592/B620, 1781.
+
+\bibitem{lob1955} M.\ H.\ L\"ob, ``Solution of a Problem of Leon Henkin,'' \emph{Journal of Symbolic Logic}, 1955.
+
+\bibitem{oppy1995} G.\ Oppy, \emph{Ontological Arguments and Belief in God}, Cambridge University Press, 1995.
+
+\bibitem{plantinga1974} A.\ Plantinga, \emph{The Nature of Necessity}, Oxford University Press, 1974.
+
+\bibitem{tarski1936} A.\ Tarski, ``The Concept of Truth in Formalized Languages,'' 1933, trans.\ in \emph{Logic, Semantics, Metamathematics}, 1956.
+
+\bibitem{whitehead1929} A.\ N.\ Whitehead, \emph{Process and Reality}, Macmillan, 1929.
+
+\end{thebibliography}
 
 \end{document}
