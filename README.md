@@ -1,20 +1,19 @@
 # An Ontological Proof of Becoming
 
-*constructed with no axioms*
+> machine-checked and constructed with no axioms
 
-One argument, machine-checked, with no premise at any link. An
-ontological argument derives an existence verdict from a concept
-alone, a priori. The classical ones start from the fullest concept — a
-maximally perfect being — and reach for a necessary substance. This one
-starts from the emptiest, the concept of *presuppositionlessness*, and
+An ontological argument derives an existence verdict from a concept
+alone, a priori. The classical ones start from a
+maximally perfect being and reach for a necessary substance. This one
+starts from the emptiest, the concept of presuppositionlessness, and
 reaches a becoming rather than a being. The whole development is one
 self-contained, axiom-free Lean 4 file,
 [`lean/Becoming.lean`](lean/Becoming.lean). The one-page statement is
-[`paper/becoming.tex`](paper/becoming.tex), reproduced below; the full
+[`paper/argument.tex`](paper/argument.tex), reproduced below; the full
 exposition is
-[`paper/becoming-without-premises.tex`](paper/becoming-without-premises.tex).
+[`paper/becoming.tex`](paper/becoming.tex).
 
-## The argument
+## Argument
 
 **Primitive.** A *law* is a map `m` on a carrier. Write `Fix m` for "`m`,
 read as an equation, has a solution" (∃x. x = mx), and `Run m` for "`m`,
@@ -83,18 +82,15 @@ All of the above is a named theorem or definition of
 exposition only; each is proved in the file — Ax. 1–2 as theorems
 about relabeling-invariant maps (`bare_one_is_mute`,
 `bare_three_is_mute`, `one_candidate`), Ax. 3–4 as theorems about what
-a tokening must exhibit (`retorsion`, `denial_ticks_the_clock`) — so
-nothing is posited at any link. Where Gödel's proof needs the
-possibility of a maximally great being, this proof needs only that
-some distinction, once denied, was thereby drawn.
+a tokening must exhibit (`retorsion`, `denial_ticks_the_clock`).
 
 ## Contents
 
 | Path | What it is |
 |---|---|
-| `paper/becoming.tex` | *An Ontological Proof of Becoming* — the argument above, typeset on one page |
-| `paper/becoming-without-premises.tex` | *Becoming Without Premises* — the full exposition: informal walkthrough, formal development, literature positioning, mechanization notes |
-| `lean/Becoming.lean` | The entire formal development in one standalone Lean 4 file — prelude only, no imports, no dependencies |
+| `paper/argument.tex` | *An Ontological Proof of Becoming* — the argument above, typeset on one page |
+| `paper/becoming.tex` | *Becoming Without Premises* — the full exposition: informal walkthrough, formal development, literature positioning, mechanization notes |
+| `lean/Becoming.lean` | The entire formal development in one standalone Lean 4 file ,  prelude only, no imports, no dependencies |
 | `lean-toolchain` | The pinned toolchain (`leanprover/lean4:v4.31.0`) |
 
 ## Checking the proof
