@@ -2,6 +2,8 @@
 
 > machine-checked and constructed with no axioms
 
+[![DOI](https://zenodo.org/badge/1302552048.svg)](https://doi.org/10.5281/zenodo.21449017) 
+
 An ontological argument derives an existence verdict from a concept
 alone, a priori. The classical ones start from a
 maximally perfect being and reach for a necessary substance. This one
