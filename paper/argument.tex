@@ -4,13 +4,13 @@
 \usepackage[utf8]{inputenc}
 \usepackage{mathpazo}
 \usepackage{microtype}
-\usepackage[margin=1in,a4paper]{geometry}
+\usepackage[margin=0.9in,a4paper]{geometry}
 \usepackage{amsmath,amssymb,amsthm}
 \usepackage{enumitem}
 \usepackage[hidelinks]{hyperref}
 \usepackage{parskip}
 \pagestyle{empty}
-\setlength{\parskip}{4pt}
+\setlength{\parskip}{3pt}
 
 \newcommand{\Fix}{\mathrm{Fix}}
 \newcommand{\Run}{\mathrm{Run}}
@@ -19,67 +19,77 @@
 \begin{document}
 
 \begin{center}
-{\Large\textbf{An Ontological Proof of Becoming}}\\[2pt]
-{\small constructed with no axioms}
+{\Large\textbf{Ontology of Becoming}}\\[2pt]
+{\small the argument on one page; the formal core is verified in Lean, the premise is stated}
 \end{center}
 \vspace{2pt}
 
 \textbf{Primitive.} A \emph{law} is a map $m$ on a carrier. Write $\Fix m$ for ``$m$, read as
 an equation, has a solution'' ($\exists x.\ x=m\,x$), and $\Run m$ for ``$m$, read as a
-recursion, has a solution from every seed and none of them is stationary'' (for all $x$ the
-sequence $x,\,mx,\,m(mx),\dots$ is infinite and no term equals the next).
+recursion, is solved from every seed and every term of every solution differs from its
+successor.''
 
-\textbf{Df.\,1.} $m$ is \emph{structureless} iff $m$ is definable from a bare two-valued
-distinction alone, naming neither value: equivalently, $m$ commutes with the exchange of the
-two values.
+\textbf{Df.} $m$ is \emph{structureless} iff $m$ commutes with every relabeling of its
+carrier's values. On two values: $m$ commutes with the exchange. On the two-valued
+carrier this reading coincides with definability, itself a theorem.
 
-\textbf{Df.\,2.} A tokening is \emph{absolute} iff its mark admits no outside: no second locus,
-at the one time of the tokening, for its contrast to be realized in.
+\textbf{L1 (Arena, proved).} A carrier with decidable equality admits a structureless law
+beyond the identity only when it has exactly two values. \emph{[one value admits one map; on three or more,
+relabeling forces the identity; a moved point and its image exhaust the carrier]}
 
-\textbf{Df.\,3.} $m$ is \emph{the ground} iff $m$ is structureless and non-trivial (not the
-identity).
+\textbf{L2 (Uniqueness, proved).} On two values the structureless laws are the identity and
+negation. The identity holds of everything and singles out nothing; a structureless law
+that excludes anything is $\lnot$.
 
-\textbf{Ax.\,1 (Arena).} A carrier admits a non-trivial structureless law only if it has
-exactly two values. \emph{[one value marks nothing; three or more collapse every
-relabeling-invariant law to the identity]}
+\textbf{L3 (Retorsion, proved).} A tokening that marks ``no distinction is drawn''
+differently from its denial draws one. A discriminated tokening of the denial makes the
+denial false.
 
-\textbf{Ax.\,2 (Uniqueness).} On two values the only structureless laws are the identity and
-the negation $\lnot$; the identity is satisfied by everything and so asserts nothing. Hence the
-ground, if it exists, is $\lnot$.
+\textbf{Th.\,1 (No being).} $\lnot\Fix(\lnot)$: each value differs from its own negation,
+and $X = \lnot X$ has no solution.
 
-\textbf{Ax.\,3 (Retorsion).} The tokening of ``no distinction is drawn,'' as against its own
-denial, itself draws one. The premise of Df.\,2 cannot be coherently refused — its negation is
-unsayable, not false.
+\textbf{Th.\,2 (Alternation).} $\Run(\lnot)$; the orbit from each seed is the period-two
+alternation, unique given the seed, and the two orbits are relabelings of each other.
 
-\textbf{Ax.\,4 (No margin).} An absolute tokening (Df.\,2) has no outside at its own moment;
-if its contrast is realized at all, it is realized at another time.
+\textbf{Th.\,3 (Equivalence).} $\lnot\Fix(\lnot)\leftrightarrow\Run(\lnot)$. \emph{[the two
+sides quantify over the same instances; each direction is instantiation]}
 
-\textbf{Th.\,1 (No being).} $\lnot\Fix(\lnot)$. \emph{[the two values are distinct and each
-fails its own negation; no state is identical to its own negation]}
+\textbf{Th.\,4 (Discrimination).} A tokening that marks the denial of occurrence
+differently from its assertion witnesses occurrence, and the two tokens are distinct. On
+two values, ``one negation apart'' and ``distinct'' coincide, so this is the theorem's
+whole yield.
 
-\textbf{Th.\,2 (Becoming, uniquely).} $\Run(\lnot)$, and the orbit from every seed is the same
-period-two alternation, unique up to which value opens it. \emph{[write down $x,\lnot x,
-x,\lnot x,\dots$; uniqueness is induction on the step]}
+\textbf{P (Succession: the premise).} The tokening of the denial and the tokening of the
+assertion stand in succession. One instance per realized step; the full run costs an
+infinite family of instances over pairwise-distinct loci, and the orientation of the chain
+is part of the premise.
+$P$ is independent of Th.\,1--4: a still structure and a running one share one underlying
+world and all tokening facts, with $P$ false throughout one and true throughout the other.
 
-\textbf{Th.\,3 (Equivalence).} For the ground, $\lnot\Fix(\lnot)\leftrightarrow\Run(\lnot)$.
-\emph{[a fixed point is a one-state orbit that never moves; a stalled orbit is a fixed point:
-refusing to be and being unable to stop running are one hypothesis, read in two frames]}
+\textbf{Th.\,5 (Actuality, from P).} Given discrimination and $P$, the successor's value is
+the negation of its predecessor's: one realized step of the alternation. A chain of
+instances realizes the run.
 
-\textbf{Th.\,4 (Actuality).} Let a tokening deny that $\lnot$ runs. By Ax.\,3 it is tokened as
-against its own denial, hence is a tokening in the sense of Df.\,2, hence absolute; by Ax.\,4 its
-contrast is realized at another time; by Ax.\,1--2 the only realizable contrast on two values is
-$\lnot$ itself. So the tokened denial of Th.\,2 is, at two times, an instance of Th.\,2.
+\textbf{Th.\,6 (Obstruction).} Regiment claims as properties of succession-free worlds. A
+claim true wherever its denial is discriminated holds at still worlds that discriminate
+it; given any such still world, the entailment from the claim to running fails. Temporal
+realization rests on $P$, and, given such a world, an undeniable substitute for $P$ is
+unavailable.
 
-\textbf{Corollary.} Necessarily, a becoming exists; by Th.\,1 no being answers to the ground
-concept; by Th.\,3 these are one theorem; and by Th.\,4 the
-becoming cannot be coherently denied without the denial itself being one of its ticks.
+\textbf{Corollary.} The alternation exists and is unique up to relabeling of its seed, and
+nothing static answers to the ground concept (Th.\,1--3). A discriminated denial witnesses
+occurrence (Th.\,4). Given $P$, each such denial realizes a step of the alternation
+(Th.\,5), and $P$ is the exact price of the temporal reading (Th.\,6).
 
 \vspace{4pt}
 \begin{center}\rule{0.4\textwidth}{0.3pt}\end{center}
 \vspace{2pt}
 
 {\small\noindent
-All of the above is a named theorem or definition of a Lean~4 development
-that is axiom-free and available at 
-\href{https://github.com/matthew-scherf/ontarg/blob/main/lean/Becoming.lean}{\lf{GitHub}}.}
+Ledger: verified conditionals; five stated identifications (ground as law, structureless
+as equivariant, groundhood as exclusion, satisfaction as objectual or processual, claims
+as world-level); one empirical discharge; the premise schema $P$.\\[2pt]
+L1--L3 and Th.\,1--4 are named theorems of \lf{lean/Becoming.lean}; Th.\,5--6, $P$, and the
+independence of $P$ and of the chain hypothesis are in \lf{lean/Obstruction.lean}. Both
+files are Lean~4, prelude only, with no imports and no axioms, standard ones included.}
 \end{document}
