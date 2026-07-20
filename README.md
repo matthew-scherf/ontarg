@@ -8,12 +8,7 @@ An ontological argument derives an existence verdict from a concept
 alone, a priori. The classical ones start from a
 maximally perfect being and reach for a necessary substance. This one
 starts from the emptiest, the concept of presuppositionlessness, and
-reaches a becoming rather than a being. The whole development is one
-self-contained, axiom-free Lean 4 file,
-[`lean/Becoming.lean`](lean/Becoming.lean). The one-page statement is
-[`paper/argument.tex`](paper/argument.tex), reproduced below; the full
-exposition is
-[`paper/becoming.tex`](paper/becoming.tex).
+reaches a becoming rather than a being. 
 
 ## Argument
 
