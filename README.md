@@ -1,16 +1,18 @@
 # An Ontological Proof of Becoming
 
-*in the manner of Gödel's ontological proof (1970)*
+*constructed with no axioms*
 
 One argument, machine-checked, with no premise at any link. An
 ontological argument derives an existence verdict from a concept
 alone, a priori. The classical ones start from the fullest concept — a
 maximally perfect being — and reach for a necessary substance. This one
 starts from the emptiest, the concept of *presuppositionlessness*, and
-reaches a becoming rather than a being. The core is assembled,
-axiom-free, in [`lean/Becoming.lean`](lean/Becoming.lean); the full
-statement is [`paper/becoming.tex`](paper/becoming.tex), reproduced
-below.
+reaches a becoming rather than a being. The whole development is one
+self-contained, axiom-free Lean 4 file,
+[`lean/Becoming.lean`](lean/Becoming.lean). The one-page statement is
+[`paper/becoming.tex`](paper/becoming.tex), reproduced below; the full
+exposition is
+[`paper/becoming-without-premises.tex`](paper/becoming-without-premises.tex).
 
 ## The argument
 
@@ -75,36 +77,36 @@ itself being one of its ticks.
 
 ---
 
-All of the above is a named theorem or definition of a Lean 4
-development that is axiom-free at its core (`lean/Becoming.lean`,
-theorem `Becoming.ontological_argument`) — Ax. 1–2 are theorems about
-relabeling-invariant maps on finite carriers (`Arena.lean`,
-`Structureless.lean`); Ax. 3–4 are theorems about what a totalizing
-tokening can and cannot stand next to (`Tokening.lean`, `Event.lean`).
-Where Gödel's proof needs the possibility of a maximally great being,
-this proof needs only that some distinction, once denied, was thereby
-drawn.
+All of the above is a named theorem or definition of
+`lean/Becoming.lean`, assembled in the single theorem
+`Becoming.ontological_argument`. The "axioms" are labels of the
+exposition only; each is proved in the file — Ax. 1–2 as theorems
+about relabeling-invariant maps (`bare_one_is_mute`,
+`bare_three_is_mute`, `one_candidate`), Ax. 3–4 as theorems about what
+a tokening must exhibit (`retorsion`, `denial_ticks_the_clock`) — so
+nothing is posited at any link. Where Gödel's proof needs the
+possibility of a maximally great being, this proof needs only that
+some distinction, once denied, was thereby drawn.
 
 ## Contents
 
 | Path | What it is |
 |---|---|
-| `paper/becoming.tex` | *An Ontological Proof of Becoming* — the argument above, typeset |
-| `lean/` | Twenty-five standalone Lean 4 proof files — prelude only, no imports, no dependencies. `Becoming.lean` assembles the argument; the other twenty-four are the corpus results it cites |
+| `paper/becoming.tex` | *An Ontological Proof of Becoming* — the argument above, typeset on one page |
+| `paper/becoming-without-premises.tex` | *Becoming Without Premises* — the full exposition: informal walkthrough, formal development, literature positioning, mechanization notes |
+| `lean/Becoming.lean` | The entire formal development in one standalone Lean 4 file — prelude only, no imports, no dependencies |
 | `lean-toolchain` | The pinned toolchain (`leanprover/lean4:v4.31.0`) |
 
-## Checking the proofs
+## Checking the proof
 
-Each file is self-contained and checks with plain `lean`:
+The file is self-contained and checks with plain `lean`:
 
 ```sh
-lean lean/Becoming.lean                             # the assembled argument
-for f in lean/*.lean; do lean "$f" || break; done   # every file
+lean lean/Becoming.lean
 ```
 
-Every file ends with `#print axioms` for its main results.
-`Becoming.lean`'s assembled theorem `ontological_argument` is
-axiom-free — its audit prints "does not depend on any axioms". No file
-in the set goes beyond the classical envelope
-`[propext, Classical.choice, Quot.sound]`.
-
+The file ends with a `#print axioms` audit of every main result,
+`ontological_argument` included. Each prints "does not depend on any
+axioms": the development declares no axiom of its own and uses none of
+Lean's three standard ones (`propext`, `Classical.choice`,
+`Quot.sound`).

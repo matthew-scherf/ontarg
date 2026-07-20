@@ -278,7 +278,9 @@ theorem absolute_law {R : Bool → Bool → Prop}
   · intro hab; exact (ne_eq_not a b hab) ▸ hoff a
 
 /-- `Defble`, `Articulates` `R`: its law is negation, its object frame is
-    empty, its process frame is inhabited, and its run is unique given a seed. -/
+    empty, its process frame is inhabited, and its run is unique given a seed.
+    The general route to actuality: holds for any such `R`, independently of
+    the concrete tokening argument in `denial_ticks_the_clock` below. -/
 theorem absolute_articulation {R : Bool → Bool → Prop}
     (hD : Defble R) (hA : Articulates R) :
     (∀ a b, R a b ↔ a ≠ b)
@@ -301,7 +303,7 @@ theorem absolute_is_inhabited :
   intro n
   exact clock_runs true n
 
-/- one fact, two frames -/
+/- link 5: one fact, two frames -/
 
 theorem refusal_is_running (f : S → S) :
     (∀ x, f x ≠ x) ↔ ∀ seed n, orbit f seed (n + 1) ≠ orbit f seed n := by
@@ -311,7 +313,7 @@ theorem refusal_is_running (f : S → S) :
   · intro h x
     exact h x 0
 
-/- link 5: the seed is a label, not a premise -/
+/- link 6: the seed is a label, not a premise -/
 
 /-- Relabelling a run: negate every value. -/
 def relabel (s : Nat → Bool) : Nat → Bool := fun n => !(s n)
@@ -326,18 +328,6 @@ theorem seed_is_relabel :
     rw [ih]
     rfl
 
-/-- `P` survives relabeling. -/
-def StructurelessProp (P : (Nat → Bool) → Prop) : Prop :=
-  ∀ s, P s ↔ P (relabel s)
-
-theorem seed_is_invisible {P : (Nat → Bool) → Prop}
-    (hP : StructurelessProp P) :
-    P (orbit not true) ↔ P (orbit not false) := by
-  have h : (orbit not false) = relabel (orbit not true) := by
-    funext n; exact seed_is_relabel n
-  constructor
-  · intro hp; rw [h]; exact (hP (orbit not true)).mp hp
-  · intro hp; rw [h] at hp; exact (hP (orbit not true)).mpr hp
 
 /- the token -/
 
@@ -353,6 +343,10 @@ theorem event_retorsion {T : Type} (h : T → Bool) (tok : Prop → T)
     (hd : h (tok (¬ Occurs h)) ≠ h (tok (Occurs h))) : Occurs h :=
   ⟨tok (¬ Occurs h), tok (Occurs h), hd⟩
 
+/-- The concrete route to actuality: the tokening of the denial that `h`
+    runs is itself a tick of it. Independent of `absolute_articulation`
+    above: this argues the specific case directly, without `Defble` or
+    `Articulates`. -/
 theorem denial_ticks_the_clock {T : Type} (h : T → Bool)
     (tok : Prop → T)
     (hd : h (tok (¬ Occurs h)) ≠ h (tok (Occurs h))) :
@@ -387,6 +381,10 @@ theorem ontological_argument :
         ∧ (∃ s : Nat → Bool, ∀ n, R (s n) (s (n + 1)))
         ∧ (∀ t : Nat → Bool, (∀ n, R (t n) (t (n + 1))) →
             ∀ n, t n = orbit not (t 0) n))
+    -- no necessary being: nothing static answers to the ground
+    ∧ (∀ b : Bool, not b ≠ b)
+    ∧ (∀ X : Prop, X = ¬ X → False)
+    -- necessary becoming: the run exists, is unique, has period two
     ∧ (∀ seed : Bool,
         (Solves not (orbit not seed) ∧ orbit not seed 0 = seed)
         ∧ (∀ x, Solves not x → x 0 = seed →
@@ -412,6 +410,8 @@ theorem ontological_argument :
    id_says_nothing,
    fun _ hD => diagonal_uniform hD,
    fun _ hD hA => absolute_articulation hD hA,
+   no_static_instance,
+   no_being,
    fun seed =>
      ⟨becoming_exists not seed,
       fun x hx h0 => becoming_unique not x hx seed h0,
@@ -442,7 +442,6 @@ end Becoming
 #print axioms Becoming.absolute_is_inhabited
 #print axioms Becoming.refusal_is_running
 #print axioms Becoming.seed_is_relabel
-#print axioms Becoming.seed_is_invisible
 #print axioms Becoming.denial_self_refutes
 #print axioms Becoming.event_retorsion
 #print axioms Becoming.denial_ticks_the_clock
