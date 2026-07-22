@@ -59,7 +59,7 @@ The second part deals with time, while all earlier results can be met by a stati
  
 
 Retorsive arguments have a well-known problem: even if no one can deny them, that does not guarantee they are true about the world \cite{stroud1968}. This section proves a stronger version of that problem as a theorem for this case, and then shows that the argument’s premise sits right at the boundary set by the theorem, using an independence proof in the model-theoretic style. The same theorem also formalizes a nineteenth-century objection to Hegel’s derivation of becoming (Section~\ref{sec:related}).
-\section{The Argument}
+\section{Argument}
 \label{sec:shape}
 
 Once you have a distinction, consider what kind of rule could apply to the medium if it only uses the fact that the values are different. If there is only one value, the only possible rule is to leave it unchanged. With three or more values, any rule that ignores labels must leave everything as it is. Two values are different: in this case, a rule that does not care about labels can still change things, and that rule is negation. The identity rule applies to everything and does not highlight anything; negation is the only simple rule that can exclude something.
@@ -108,14 +108,14 @@ The \emph{ground} is a structureless law that goes beyond identity. This idea co
 \subsection{Satisfaction is objectual or processual}
 
 Section~\ref{sec:formal} defines satisfaction of a relation as a choice: either a value satisfies it directly, or a sequence satisfies it step by step. This choice sets the options for comparison: a state compared to itself, and a sequence compared stepwise. Other options are possible, such as satisfaction by a pair or by a set.  Theorem~\ref{thm:law} gives its result for relations that fit within this framework. 
-\subsection{What retorsion is}
+\subsection{Retorsion}
 \label{sec:retorsionclass}
 
 The retorsion step is a formal point about cardinality. If a function $t : \mathrm{Prop} \to M$ takes two different values, it shows there are two distinct elements in $M$, no matter which two propositions you use. When we use $\lnot\Draws(M)$ and $\Draws(M)$ as the propositions, the example becomes more pointed, because the fact being shown is the one being denied. In Mackie's terms, this is called pragmatic self-refutation \cite{mackie1964,castagnoli2010}: the denial is true in some cases, but false whenever it is used in a specific way, which is what Corollary~\ref{cor:noundrawn} shows. Hintikka's view of the cogito as a performance is the closest classical example \cite{hintikka1962}. Kaplan's distinction between validity in every context and necessity highlights the gap that Section~\ref{sec:obstruction} makes precise: a claim can be true whenever it is used, but still be contingent \cite{kaplan1989}.
-\section{Formal Development}
+\section{Formalisation}
 \label{sec:formal}
 
-\subsection{The arena}
+\subsection{Arena}
 
 \begin{proposition}[One value is mute]
 \label{prop:one}
@@ -269,7 +269,7 @@ $\lnot x \neq x$ for every $x \in \B$, and $X = \lnot X$ has no propositional so
 Case check; and $X \leftrightarrow \lnot X$ yields both $X$ and $\lnot X$.
 \end{proof}
 
-\subsection{The alternation}
+\subsection{Alternation}
 
 \begin{definition}[Orbit]
 The orbit of $f$ from $x_0$ is the sequence with $x_{n+1} = f(x_n)$.
@@ -337,7 +337,7 @@ The two sentences are meant to express different ideas, and any way of classifyi
 The result of the discharge is precise. In this case, the world has two different marks based on the chosen classification. Remark~\ref{rem:deflation} applies here: for two values, being 'one negation apart' is the same as being 'distinct.'
 
 Every theorem so far is satisfied by a static configuration. Take $T$ to be the marks on a printed page and $h$ any separating classification; the hypothesis and conclusions of Theorem~\ref{thm:discrimination} hold for that motionless instance. The formal alternation is likewise an $\omega$-indexed sequence of values, a tenselessly specifiable object. Realisation in temporal succession is a further matter which will be taken up in the next section.
-\section{The Obstruction and Premise}
+\section{Obstruction and Premise}
 \label{sec:obstruction}
 
 \subsection{Worlds and claims}
@@ -372,7 +372,7 @@ Given a still tensed world that discriminates the denial of $A$, an undeniable $
 \end{corollary}
 
 The corollary’s hypothesis is handled in the same way as in Section~\ref{sec:scope}: the printed page, seen as a fixed set of marks, represents a world where denials can be distinguished. The process is schematic, like $P$: the page must show both the denial and assertion for each candidate $A$, one pair for each, covering all candidates the proponent mentions. Therefore, an axiom that could close the gap would need to be both undeniable and capable of connecting the two, but these qualities cannot coexist on the page.
-\subsection{The regimentation}
+\subsection{Regimentation}
 \label{sec:regimentdefense}
 
 According to the performative view, a tokening is an act, acts are events, and the facts that retorsion secures are tensed \cite{apel1980,hintikka1962}. This proposal formally assigns claims to tensed worlds. However, if the tensed-level discrimination relies only on the world components, the obstruction argument repeats at the tensed level: a static world whose world part distinguishes the denial produces the claim, and the lack of change prevents progress; this version is called \lf{obstruction\_tensed}. If the notion instead uses the succession component, then having a discriminating act assumes a succession fact, so tensed content appears along with succession, valued as $P$ is. Either way, the situation remains the same. This dilemma supports the regimentation, and the obstruction shows where undeniability can exist, given that tokening facts are limited to the world triple. Kaplan's idea of the contingency of the context-valid marks the same boundary in different terms \cite{kaplan1989}.
@@ -459,11 +459,23 @@ Proposition~\ref{prop:rigidity} & \lf{no\_half\_tick}, \lf{no\_interpolation}, \
 
 Declaration names \lf{two\_tick\_clock}, \lf{clock\_runs}, and \lf{refusal\_is\_running} are mnemonics; their statements are atemporal facts about the orbit. \lf{transp} is defined on all pairs, degenerate ones giving the identity, and the extra equivariance instances are vacuous. The audits comprise 30 lines in the first file and 17 in the second.
 
-The files accompany the paper as \lf{lean/Becoming.lean} and \lf{lean/Obstruction.lean}, with the toolchain pinned; an anonymized archive is supplied for review.
+The files accompany the paper as \lf{lean/Becoming.lean} and \lf{lean/Obstruction.lean}, with the toolchain pinned.
 
 \section{Conclusion}
 
-If a God is posited, he is not one, but becoming one. 
+A medium that marks the denial of a distinction differently from its
+assertion has already drawn one. From that capacity alone, the
+development recovers the two-valued arena, the uniqueness of negation
+as the structureless ground, the absence of any fixed point, and the
+period-two alternation that is the only satisfaction the ground
+admits. The obstruction theorem shows that undeniability and temporal import
+cannot be combined in a single claim, so realisation in time is
+purchased tick by tick, one instance of the deniable premise $P$ per
+step, with the values of any realisation fixed rigidly by theorem once
+its existence is granted. The division of labour is the paper's
+result: structure is theorem; movement is premise. An ontological
+argument conducted at this level of parsimony delivers not a being but
+a becoming.
 
 \begin{thebibliography}{99}
 
