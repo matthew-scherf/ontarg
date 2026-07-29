@@ -33,8 +33,9 @@ conditional core.
 
 | Path | Description |
 |---|---|
-| `paper/becoming.tex` | Full paper |
-| `paper/argument.tex` | One-page argument |
+| `paper/undeniability.tex` | Limit paper: discrimination reaches occurrence, not succession |
+| `paper/becoming.tex` | Longer companion: structural development and OA framing |
+| `paper/argument.tex` | One-page argument summary |
 | `lean/Becoming.lean` | Conditional core |
 | `lean/Obstruction.lean` | Premise, obstruction, orientation, rigidity |
 | `lean-toolchain` | `leanprover/lean4:v4.31.0` |
