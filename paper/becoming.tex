@@ -10,6 +10,7 @@
 \usepackage[hidelinks]{hyperref}
 \usepackage{parskip}
 \usepackage{booktabs}
+\usepackage{longtable}
 
 \newtheorem{theorem}{Theorem}[section]
 \newtheorem{proposition}[theorem]{Proposition}
@@ -35,91 +36,129 @@
 \vspace{-2.5em}
 
 \begin{abstract}
-If a medium marks 'no distinction is drawn' differently from its denial, then it has already made a distinction. This paper develops this idea in four steps. First, a law that remains unchanged under any relabeling of its carrier only moves a point when the carrier has two values. In that case, the only such law besides the identity is negation. When seen as an equation, negation has no solution. When seen as a recursion, it produces a unique period-two alternation from any starting point. If a tokening can distinguish between the denial of an occurrence and its confirmation, it also confirms the occurrence itself. Each of these results holds for static configurations. The final section considers the temporal perspective: when claims are treated as properties of worlds without succession, a claim that is true wherever its denial is distinguished will also be true in worlds that distinguish it. This means that temporal realisation depends on a premise, with one instance for each realised step, which is stated and proved separately from the main development. Instantiating in the world requires one empirical input (a discriminating tokening) provided by the page. The obstruction theorem formally matches Stroud's limit on transcendental arguments and Trendelenburg's objection to Hegel. The main formal results are checked in Lean 4 without using any axioms. The interpretive steps that link these results to the idea of becoming are explained and justified in the text.\end{abstract}
+A medium that marks ``no distinction is drawn'' differently from its denial has drawn one. Four results follow. A law that commutes with every relabeling of its carrier moves a point exactly when the carrier holds two values, and the weaker demand, commutation with the relabelings that fix one marked value, returns the same arena. On two values the structureless laws are the identity and Boolean complement, and complement is the only one that excludes anything. Complement has no fixed point, and its orbit from either seed is the unique period-two alternation. A tokening that reads the denial of occurrence differently from the assertion witnesses occurrence. Each result holds of static configurations. Section~\ref{sec:obstruction} regiments claims as properties of succession-free worlds and proves the obstruction: if a claim holds at every world that discriminates its denial, and if the claim entails running, then no still world discriminates the denial of that claim. A still world that does discriminate is exhibited by ostension, and the canonicity observation of Section~\ref{sec:scope} places such a witness outside the system. Temporal realization therefore rests on a premise $P$, one oriented instance per realized step. $P$ is assumed here, and its independence of the claim language is proved. Orientation is invariantly inexpressible: on loci with decidable equality every relabeling-invariant succession is symmetric, which locates the directional content of $P$ exactly. The formal results are verified in Lean~4 with an empty axiom footprint. Section~\ref{sec:intro} states the ledger; the interpretive steps are argued in the text.
+\end{abstract}
 
 \section{Introduction}
+\label{sec:intro}
 
-Classical ontological arguments examine a concept and reach a conclusion about existence based on reasoning alone \cite{anselm,descartes,godel1995}. Here, the concept is simply a medium’s ability to distinguish one proposition from another. The conclusion has two parts, each with its own implications.
+Classical ontological arguments analyze a concept and reach a verdict about existence by reasoning alone \cite{anselm,descartes,godel1995}. The concept analyzed here is the bare capacity of a medium to mark one proposition differently from another. The verdict has two parts with separate prices: the structure of a two-state alternation, obtained as verified conditionals, and its realization in succession, which costs a stated premise of proved independence.
 
+Throughout, \emph{becoming} names the alternation and its realization in succession. Readers who reserve the word for passage in the A-theorist's sense should read the term as restricted here; Section~\ref{sec:premise} marks the further gap.
 
+Spencer-Brown's \emph{Laws of Form} opens by asking the reader to draw a distinction, and its eleventh chapter resolves an equation with no solution by admitting an oscillating value, which he presents as the entry of time \cite{spencerbrown1969}. The arc of this paper is that arc. Three things surround it here. The two-valued arena and the uniqueness of complement are theorems with stated hypotheses. The formal core is verified. The temporal step is priced by an obstruction theorem and by an independence result, so the cost of reading the alternation as succession is exhibited and counted. Section~\ref{sec:lof} states the relation in detail.
 
-The first part is structural and does not rely on any assumptions. It consists of a set of proven conditionals. On any medium, a rule that depends only on the difference between values remains unchanged if the labels are switched. This rule only changes a point on a two-valued medium, where the rule is negation. Negation does not have a fixed point, and its sequence from any starting value alternates between two states, which is unique except for how the values are labeled. If you mark the denial of these facts differently from their assertion, the marking itself provides an example.
+The first part of the argument is structural and assumes nothing. On any carrier, a law sensitive only to the difference between values commutes with relabeling. Such a law moves a point exactly when the carrier holds two values, and there it is Boolean complement. Marking one value weakens the demand, and the two-valued arena survives the weakening. Complement has no fixed point, and its orbit from any seed alternates with period two, uniquely given the seed. A reader who marks the denial of these facts differently from their assertion supplies an instance.
 
+The second part concerns time. Section~\ref{sec:obstruction} regiments claims as properties of succession-free worlds and shows that a claim true wherever its denial is discriminated holds also at still worlds that discriminate that denial. Still worlds carry no succession, so the temporal reading is unsecured. Realization over time rests on the premise $P$: the tokening of the denial and the tokening of the assertion stand in oriented succession. One instance yields one step; a chain of instances yields a run; the single instance and the chain are each independent of the claim language.
 
+Theorem~\ref{thm:obstruction} has an operative antecedent, a still world that actually discriminates. By the canonicity observation of Section~\ref{sec:scope}, no closed term of the system supplies one. Ostension supplies it, and the ledger counts the supply.
 
-The second part deals with time, while all earlier results can be met by a static setup. Section~\ref{sec:obstruction} shows that the difference is structural: when claims are treated as properties of worlds without succession, a claim that is true wherever its denial is recognised also holds in static worlds that recognise it. However, static worlds do not progress, so the time-based interpretation remains possible. Making this work over time depends on a premise, called $P$: the marking of the denial and the marking of the assertion happen one after the other. One instance of $P$ gives a single step; a series of instances creates a sequence; and both the single step and the sequence are shown to be independent of what was previously derived.
+\subsection*{Ledger}
 
-
-\begin{enumerate}[label=(\roman*),itemsep=1pt]
-\item \emph{Verified conditionals.} The formal results of Sections~\ref{sec:regiment}, \ref{sec:formal}, and~\ref{sec:obstruction}, checked in Lean~4 with an empty axiom footprint (Section~\ref{sec:mech}).
-\item \emph{Regimentation choices.} Five identifications connect the concept to the formalism: ground as law, structureless as equivariant, groundhood as exclusion, satisfaction as objectual or processual (Section~\ref{sec:regiment}), and claims as properties of succession-free worlds (Section~\ref{sec:regimentdefense}).
-\item \emph{Empirical fact.} The actual world contains a tokening that discriminates the relevant pair. Section~\ref{sec:scope} discharges this by ostension and counts it; the anti-bridge corollary of Section~\ref{sec:obstruction} repeats the discharge schematically, one tokened pair per candidate.
-\item \emph{Premise$P$}, with its orientation, the reading of the added relation as directed succession, and, for the full run, an infinite family of instances over pairwise-distinct loci. Section~\ref{sec:obstruction} prices it.
+\begin{enumerate}[label=(\arabic*),itemsep=1pt]
+\item \emph{Verified conditionals.} The formal results of Sections~\ref{sec:regiment}, \ref{sec:formal}, \ref{sec:obstruction} and~\ref{sec:dilemma}, with an empty axiom footprint (Section~\ref{sec:mech}).
+\item \emph{Five regimentation choices.} Ground as law, structureless as equivariant, groundhood as exclusion, satisfaction as objectual or processual, claims as properties of succession-free worlds.
+\item \emph{One empirical input.} The actual world contains a tokening that discriminates the pair, discharged once by ostension in Section~\ref{sec:scope}. This is the single discharge the argument makes. The discrimination at every step in item (4) is empirical too, and it is counted there with the premise.
+\item \emph{The premise $P$.} One oriented instance per realized step; the full run adds an infinite supply of pairwise-distinct loci and a discrimination at every step.
+\item \emph{A consistent constructive metalogic.}
 \end{enumerate}
- 
 
-Retorsive arguments have a well-known problem: even if no one can deny them, that does not guarantee they are true about the world \cite{stroud1968}. This section proves a stronger version of that problem as a theorem for this case, and then shows that the argument’s premise sits right at the boundary set by the theorem, using an independence proof in the model-theoretic style. The same theorem also formalizes a nineteenth-century objection to Hegel’s derivation of becoming (Section~\ref{sec:related}).
-\section{Argument}
-\label{sec:shape}
+Retorsive arguments face a standing objection: an argument that no one can deny may still report only on the deniers \cite{stroud1968}. Section~\ref{sec:obstruction} proves a form of that objection as a theorem for this case and locates the premise at the boundary the theorem sets, by a two-model exhibition. The same theorem is the formal analogue of a nineteenth-century objection to Hegel's derivation of becoming (Section~\ref{sec:hegel}).
 
-Once you have a distinction, consider what kind of rule could apply to the medium if it only uses the fact that the values are different. If there is only one value, the only possible rule is to leave it unchanged. With three or more values, any rule that ignores labels must leave everything as it is. Two values are different: in this case, a rule that does not care about labels can still change things, and that rule is negation. The identity rule applies to everything and does not highlight anything; negation is the only simple rule that can exclude something.
+\section{The argument in brief}
+\label{sec:brief}
 
+\textbf{Primitive.} A \emph{law} is a map $m$ on a carrier. Write $\Fix m$ for ``$m$, read as an equation, has a solution'' ($\exists x.\ x = m\,x$), and $\Run m$ for ``$m$, read as a recursion, is solved from every seed, and every term of every solution differs from its successor.''
 
+\textbf{Df.} $m$ is \emph{structureless} when $m$ commutes with every relabeling of its carrier's values. On two values this is commutation with the exchange, and on the two-valued carrier it coincides with definability from equality, itself a theorem.
 
-Negation does not have a fixed point, so nothing unchanging fits the basic idea. The sequence defined by $x_{n+1} = \lnot x_n$ can start from any value, and the result is always unique and alternates every two steps. If you create a relation based only on equality and it leaves out any case where something equals itself, it leaves out all such cases. If the relation is ever true, it is true for a sequence like this.
+\textbf{L1 (Arena).} A carrier with decidable equality admits a structureless law beyond the identity exactly when it holds two values. Marking one value leaves the relabelings that fix it, and the same equivalence holds under that weaker demand: a mark-respecting law moves the mark, or moves every value, exactly on two.
 
+\textbf{L2 (Uniqueness).} On two values the structureless laws are the identity and Boolean complement. The graph of the identity excludes nothing. A structureless law that excludes anything is complement.
 
+\textbf{L3 (Retorsion).} A tokening that marks ``no distinction is drawn'' differently from its denial draws one. The conjunction of a discriminated tokening of the denial with the denial is refuted.
 
-Finally, tokening the denial of all this in a way that is clearly different from its assertion, you show a difference: two marks, two values, separated by one negation. With two values, this just repeats that they are different. The marking shows that something happens, but whether the marks come one after another is a separate question that depends on the main idea.
+\textbf{Th.\,1 (No being).} $\lnot\Fix(\lnot)$: each value differs from its own complement, and $X \leftrightarrow \lnot X$ has no solution in $\mathrm{Prop}$.
+
+\textbf{Th.\,2 (Alternation).} $\Run(\lnot)$: the orbit from each seed is the period-two alternation, unique given the seed, and the two orbits are relabelings of each other.
+
+\textbf{Th.\,3 (Equivalence).} $\lnot\Fix(\lnot) \leftrightarrow \Run(\lnot)$, by instantiation in each direction.
+
+\textbf{Th.\,4 (Discrimination).} A tokening that marks the denial of occurrence differently from its assertion witnesses occurrence, and the two tokenings are distinct.
+
+\textbf{P (the premise).} The tokening of the denial and the tokening of the assertion stand in oriented succession. One instance per realized step; the full run adds an infinite supply of pairwise-distinct loci and a discrimination at every step. $P$ is independent of Th.\,1--4: two structures over one world satisfy the same claims, with $P$ failing throughout one and holding in the other.
+
+\textbf{Th.\,5 (Actuality, from P).} Given discrimination and one oriented instance, the two loci are distinct, the successor's value is the complement of its predecessor's, and the structure fails to be still. A chain of instances realizes the oriented run.
+
+\textbf{Th.\,6 (Obstruction).} Regiment claims as properties of succession-free worlds. A claim true wherever its denial is discriminated holds at still worlds that discriminate that denial; given any such still world, the entailment from the claim to running fails. Temporal realization rests on $P$, and, given such a world, an undeniable substitute for $P$ is unavailable.
+
+\textbf{Th.\,7 (Orientation).} On loci with decidable equality, every relabeling-invariant succession is symmetric, so no invariant succession holds of a pair while failing of the reverse pair. Direction is unavailable from invariance, and the directional content of $P$ is located there.
+
 \section{Regimentation}
 \label{sec:regiment}
 
-The concept under analysis is presuppositionlessness, or a ground that uses nothing beyond a bare distinction. This section defends the four choices that bring it into the formalism. 
+The concept under analysis is presuppositionlessness: a ground that uses nothing beyond a bare distinction.
 
 \subsection{The ground is a law}
 
-A \emph{carrier} is a type $V$; a \emph{law} on $V$ is a function $f : V \to V$. Choosing to interpret the ground as an operation is just one option. Other possibilities are to see it as a relation, a constant, or simply a set. A constant assigns a value, but this idea of naming is not allowed by the concept, as explained more formally below, where constant maps do not meet the requirement of structurelessness. The relational approach is discussed in Section~\ref{sec:formal} along with the operational one, and both approaches come together: the relation used there is disagreement, which is the graph of negation, and $\Fix$ and $\Run$ of a law match up with object-based and process-based satisfaction of its graph.
+A \emph{carrier} is a type $V$; a \emph{law} on $V$ is a function $f : V \to V$. For a law $m$, $\Fix m$ says the equation $x = m\,x$ has a solution, and $\Run m$ says the recursion $x_{n+1} = m\,x_n$ is solved from every seed with every term differing from its successor. The ground could be read as an operation, a relation, a constant, or a set. A constant assigns a value, and naming a value is beyond the concept: constant maps fail structurelessness (Proposition~\ref{prop:idmute}). The relational reading is treated alongside the operational one in Section~\ref{sec:formal}: the relation there is disagreement, the graph of complement, and $\Fix$ and $\Run$ of a law correspond to objectual and processual satisfaction of its graph.
+
 \subsection{Structureless means equivariant}
 
 For $a \neq b$ in $V$, the transposition $\tau_{ab}$ exchanges $a$ and $b$ and fixes the rest.
 
 \begin{definition}[Equivariance]
 \label{def:equiv}
-$f : V \to V$ is \emph{equivariant} if $f(\tau_{ab}(x)) = \tau_{ab}(f(x))$ for all $a, b, x \in V$.
+$f : V \to V$ is \emph{equivariant} when $f(\tau_{ab}(x)) = \tau_{ab}(f(x))$ for all $a, b, x \in V$.
 \end{definition}
 
-Transpositions form the finitary symmetric group, and the theorems below use transposition-equivariance directly. Here, equivariance means commuting with every finitary relabeling. If a law depends only on the distinctness of values, it must commute with relabeling, since relabeling only changes which token represents which value. The reverse idea, that invariance is enough for definability from distinction alone, is known as the permutation-invariance criterion for logical notions. This is a debated topic with its own literature \cite{tarski1986,sher1991,mcgee1996,feferman1999,bonnay2008,vanbenthem1989}. McGee's theorem matches invariant operations with those definable in $L_{\infty\infty}$, while Feferman's overgeneration objection highlights the difference between invariance and innocence.
+Transpositions generate the finitary symmetric group, and the theorems below use transposition-equivariance directly. A law sensitive only to the distinctness of values commutes with relabeling, since relabeling changes only which token carries which value. The converse direction, that invariance suffices for definability from distinction alone, is the permutation-invariance criterion for logical notions, stated as a biconditional: an operation counts as logical exactly when it is invariant under the permutations of the domain \cite{tarski1986,sher1991}. That criterion has been sharpened and it is contested \cite{mcgee1996,feferman1999}. McGee matches invariant operations with those definable in $L_{\infty\infty}$, which is a result about the criterion; Feferman's overgeneration objection separates invariance from innocence.
 
-For the two-valued carrier, the two interpretations are provably the same.
+Tarski's criterion concerns all permutations acting on the full type hierarchy. Definition~\ref{def:equiv} asks for commutation with transpositions of a single carrier. This is a specialization of the criterion, and a non-standard one, adopted because the carrier is the only structure in play.
+
+For the two-valued carrier the two readings provably agree.
 
 \begin{proposition}[Coincidence on two values]
 \label{prop:coincide}
-On $\B$: the structureless unary laws are the identity and negation, whose graphs are equality and disagreement, both definable (Definition~\ref{def:defble}); and a Boolean-valued binary relation invariant under joint negation is extensionally equality, disagreement, the full relation, or the empty one.
+On $\B$: equivariance and structurelessness are equivalent (\lf{equivariant\_iff\_structureless}); the structureless unary laws are the identity and complement, whose graphs are equality and disagreement, both definable (Definition~\ref{def:defble}); every definable relation is extensionally equality, disagreement, the full relation, or the empty one; and these four are exactly the extensions of the Boolean-valued binary functions invariant under joint complement.
 \end{proposition}
 
 \begin{proof}
-Unary: Proposition~\ref{prop:candidate}, with the graphs read off. Binary: fix $f(\top,\top)$ and $f(\top,\bot)$; invariance determines $f(\bot,\bot)$ and $f(\bot,\top)$, and the four cases give the four relations; verified as \lf{invariant\_binary\_classified}. Identifying the four with the \lf{Defble} extensions is immediate: equality, its negation, their disjunction, their conjunction.
+The first claim is a case analysis on the two transpositions of $\B$. Unary: Proposition~\ref{prop:candidate}, with the graphs read off. The classification of definable relations is \lf{defble\_classified}, by induction with the decidability of definable relations. The classification of invariant Boolean-valued functions is \lf{invariant\_binary\_classified}. The two classifications are matched in both directions by \lf{invariant\_extends\_defble} and \lf{defble\_extends\_invariant}.
 \end{proof}
 
-The equivalence between invariance and definability is used only on $\B$, where it is a proven theorem. For carriers of any size, the development relies solely on the necessity direction, which is undisputed. This leads to one restriction for everything that follows: the formalisation of equivariance and the arena result are both stated for carriers with decidable equality.
+The equivalence of invariance with definability is used only on $\B$, where Proposition~\ref{prop:coincide} proves it. For carriers of arbitrary size the development uses the necessity direction alone, which is uncontested. One restriction follows for everything below: equivariance and the arena result are stated for carriers with decidable equality.
+
+Definition~\ref{def:equiv} asks for commutation with every transposition, and a drawn distinction singles out a value. An objector may grant the distinction and withhold the full group on that ground, since the symmetries surviving a mark are the ones that fix it. Section~\ref{sec:mark} answers under the smaller demand.
+
 \subsection{Groundhood requires exclusion}
 
-The \emph{ground} is a structureless law that goes beyond identity. This idea comes from the most fundamental level: the concept under discussion concerns the ability to distinguish one proposition \emph{from} another. Under identity, nothing is distinguished from anything else, so a ground that fits this concept must exclude something. The classical phrase for this is \emph{omnis determinatio est negatio} \cite{spinoza1674}. A Parmenidean ground that does not distinguish anything is still possible, but only if we give up the concept. This condition is made formal as $\Says$ in Section~\ref{sec:formal}.
+The \emph{ground} is a structureless law that goes beyond the identity. The requirement comes from the concept: what is at issue is the capacity to mark one proposition \emph{differently from} another. Under the identity nothing is marked off from anything, and the graph of the identity excludes nothing (\lf{id\_graph\_says\_nothing}), so a ground answering to the concept must exclude. Hegel's formula for the point is \emph{omnis determinatio est negatio}; Spinoza's Letter 50 has \emph{determinatio negatio est} \cite{spinoza1674,hegel1832}. A Parmenidean ground that excludes nothing remains available at the cost of the concept. The condition is formalized as $\Says$ in Section~\ref{sec:formal}.
+
 \subsection{Satisfaction is objectual or processual}
 
-Section~\ref{sec:formal} defines satisfaction of a relation as a choice: either a value satisfies it directly, or a sequence satisfies it step by step. This choice sets the options for comparison: a state compared to itself, and a sequence compared stepwise. Other options are possible, such as satisfaction by a pair or by a set.  Theorem~\ref{thm:law} gives its result for relations that fit within this framework. 
+Section~\ref{sec:formal} defines satisfaction of a relation by a choice: a value satisfies it read of itself, or a sequence satisfies it step by step. The choice sets the field of comparison at a state compared with itself and a sequence compared stepwise. Other choices exist, satisfaction by a pair or by a set among them. Theorem~\ref{thm:law} delivers its classification for relations inside this frame.
+
 \subsection{Retorsion}
 \label{sec:retorsionclass}
 
-The retorsion step is a formal point about cardinality. If a function $t : \mathrm{Prop} \to M$ takes two different values, it shows there are two distinct elements in $M$, no matter which two propositions you use. When we use $\lnot\Draws(M)$ and $\Draws(M)$ as the propositions, the example becomes more pointed, because the fact being shown is the one being denied. In Mackie's terms, this is called pragmatic self-refutation \cite{mackie1964,castagnoli2010}: the denial is true in some cases, but false whenever it is used in a specific way, which is what Corollary~\ref{cor:noundrawn} shows. Hintikka's view of the cogito as a performance is the closest classical example \cite{hintikka1962}. Kaplan's distinction between validity in every context and necessity highlights the gap that Section~\ref{sec:obstruction} makes precise: a claim can be true whenever it is used, but still be contingent \cite{kaplan1989}.
-\section{Formalisation}
+The retorsion step is a fact about cardinality. If $t : \mathrm{Prop} \to M$ takes two values, then $M$ holds two elements, whatever pair of propositions is used. Taking $\lnot\Draws(M)$ and $\Draws(M)$ as the pair aims that fact at the denial.
+
+Mackie's taxonomy of self-refutation has three kinds, absolute, operational, and pragmatic \cite{mackie1964}. The result here is of the absolute kind, called propositional in what follows: Corollary~\ref{cor:noundrawn} refutes a conjunction. Making the tokening fact an antecedent converts a pragmatic phenomenon into a propositional one, and that conversion is what the section contributes. Castagnoli argues against assimilating ancient self-refutation to the pragmatic model, and the conversion agrees with him \cite{castagnoli2010}. Hintikka's operative notion in reading the cogito is existential inconsistency, the impossibility of a sentence's being true as tokened by the one who tokens it \cite{hintikka1962}; Theorem~\ref{thm:discrimination} is its near analogue with the tokening made explicit. Plato's \emph{Theaetetus} turns Protagoras' measure doctrine against itself, the \emph{peritrope}, which antedates Aristotle's elenctic defense of non-contradiction \cite{plato,aristotle}; Burnyeat sets out what the ancient argument requires \cite{burnyeat1976}. Kaplan's separation of validity in every context from necessity marks the gap Section~\ref{sec:obstruction} makes precise: a sentence can be true whenever tokened and contingent \cite{kaplan1989}.
+
+\section{Formalization}
 \label{sec:formal}
+
+Two operations run through this section. Boolean complement, written $!$, acts on the carrier $\B$. Propositional negation, written $\lnot$, acts on $\mathrm{Prop}$. The Lean files keep them apart, and each result below says which is meant.
+
+Cardinalities are stated here and proved through constructive surrogates: ``exactly one element'' as $\forall x\,y,\ x = y$; ``at least three elements'' as a function returning, for any two values, a third distinct from both; ``exactly two elements'' as a pair $a \neq b$ with $\forall z,\ z = a \lor z = b$. Over types with decidable equality the surrogates agree with the cardinality statements, and the surrogates are what the proofs use.
 
 \subsection{Arena}
 
 \begin{proposition}[One value is mute]
 \label{prop:one}
-If $V$ has exactly one element, every law on $V$ is the identity.
+If every two elements of $V$ are equal, every law on $V$ is the identity.
 \end{proposition}
 
 \begin{proof}
@@ -128,7 +167,7 @@ Only one function $V \to V$ exists.
 
 \begin{proposition}[Three or more values force triviality]
 \label{prop:three}
-Let $V$ have decidable equality and at least three elements. Every equivariant $f : V \to V$ satisfies $f(x) = x$ for all $x$.
+Let $V$ have decidable equality, and suppose any two values admit a third distinct from both. Every equivariant $f : V \to V$ satisfies $f(x) = x$ for all $x$.
 \end{proposition}
 
 \begin{proof}
@@ -137,6 +176,15 @@ Suppose $f(x) \neq x$. Choose $z$ with $z \neq x$ and $z \neq f(x)$. The transpo
 f(x) = f(\tau_{f(x),z}(x)) = \tau_{f(x),z}(f(x)) = z,
 \]
 contradicting $z \neq f(x)$.
+\end{proof}
+
+\begin{proposition}[Three values are still]
+\label{prop:threestill}
+Let $V$ have decidable equality and hold three pairwise-distinct values $a$, $b$, $c$. Every equivariant law on $V$ is the identity.
+\end{proposition}
+
+\begin{proof}
+Two values exclude at most two of $a$, $b$, $c$, so a third survives; Proposition~\ref{prop:three} applies.
 \end{proof}
 
 \begin{proposition}[A moved point exhausts the carrier]
@@ -150,27 +198,91 @@ Suppose $z$ differs from both. As in Proposition~\ref{prop:three}, $\tau_{f(x),z
 
 \begin{proposition}[Two values can move]
 \label{prop:two}
-On $\B = \{\top,\bot\}$, negation is equivariant and $\lnot x \neq x$ for both $x$.
+Let $V$ have decidable equality and exactly two elements $a \neq b$. Then $\tau_{ab}$ is equivariant and moves both. On $\B$ it is complement, and $!x \neq x$ for both $x$.
 \end{proposition}
+
+\begin{proof}
+Every transposition of $V$ is $\tau_{ab}$ or the identity, and $\tau_{ab}$ commutes with both.
+\end{proof}
 
 \begin{corollary}[The arena]
 \label{cor:arena}
-A carrier with decidable equality admits a non-trivial equivariant law only if it has exactly two elements, and $\B$ admits one.
+A carrier with decidable equality admits an equivariant law beyond the identity if and only if it has exactly two elements.
 \end{corollary}
 
 \begin{proof}
-Propositions~\ref{prop:one}, \ref{prop:twoatmost}, and \ref{prop:two}.
+A moved point and its image differ and exhaust the carrier, by Proposition~\ref{prop:twoatmost}; conversely Proposition~\ref{prop:two}. Proposition~\ref{prop:one} strengthens the one-element case to arbitrary laws.
 \end{proof}
 
-From here the carrier is $\B$. On $\B$ the sole non-identity transposition is the swap of the two values, which is negation, so equivariance specialises as follows.
+\subsection{The mark}
+\label{sec:mark}
+
+A drawn distinction singles out a value, and the symmetries that survive it are the ones fixing that value. The arena result runs again under that weaker demand.
+
+\begin{definition}[Mark-respecting equivariance]
+\label{def:markequiv}
+Fix $m \in V$, the \emph{mark}. A law $f$ is \emph{mark-respecting} when $f(\tau_{ab}(x)) = \tau_{ab}(f(x))$ for all $x$ and all $a, b \neq m$.
+\end{definition}
+
+\begin{proposition}[Marking releases motion]
+\label{prop:markmoves}
+Let $V$ have decidable equality and let $x \neq m$. Some mark-respecting law moves $x$.
+\end{proposition}
+
+\begin{proof}
+The constant map to $m$ sends $x$ to $m \neq x$, and every transposition avoiding $m$ fixes $m$.
+\end{proof}
+
+The witness is a constant map, and Section~\ref{sec:regiment} disqualifies constant maps as grounds: they fail structurelessness (Proposition~\ref{prop:idmute}, \lf{constants\_not\_structureless}). Proposition~\ref{prop:markmoves} therefore records that Proposition~\ref{prop:three} states a property of the bare carrier, and it carries no weight in the argument. The weight sits on Theorem~\ref{thm:markedarena}, whose two equivalences quantify over all mark-respecting laws.
+
+\begin{proposition}[The mark as pivot]
+\label{prop:markpivot}
+Let $V$ have decidable equality, $f$ mark-respecting, and $f(m) \neq m$. Then every $z \in V$ equals $m$ or $f(m)$.
+\end{proposition}
+
+\begin{proof}
+Suppose $z$ differs from both. Then $\tau_{f(m),z}$ avoids the mark and fixes it, so mark-respecting equivariance forces $f(m) = z$ as in Proposition~\ref{prop:twoatmost}.
+\end{proof}
+
+\begin{corollary}[The mark is still]
+\label{cor:markstill}
+On a carrier where every value beside the mark admits another value distinct from it and from the mark, every mark-respecting law fixes the mark, and the orbit of the mark is constant.
+\end{corollary}
+
+\begin{proof}
+The hypothesis supplies a value differing from $m$ and from $f(m)$, so Proposition~\ref{prop:markpivot} gives $f(m) = m$; the orbit claim is induction.
+\end{proof}
+
+\begin{theorem}[The marked arena]
+\label{thm:markedarena}
+Let $V$ have decidable equality and carry a mark. Each of the following holds exactly when $V$ has two elements: some mark-respecting law moves the mark; some mark-respecting law moves every value.
+\end{theorem}
+
+\begin{proof}
+Proposition~\ref{prop:markpivot} gives the mark and its image as the whole carrier, and a law moving every value moves the mark. Conversely, on two values every transposition avoiding the mark is the identity, so the $\tau_{ab}$ of Proposition~\ref{prop:two} is mark-respecting and moves both values.
+\end{proof}
+
+The converse direction is worth stating plainly. On two values every transposition avoiding the mark is the identity, so mark-respecting equivariance is vacuous there: it constrains nothing. The equivalence is therefore carried by the forward direction, where the constraint bites, and the two-valued side of it is an existence claim about a carrier on which the condition is empty.
+
+\begin{proposition}[Sharpness]
+\label{prop:marksharp}
+On $\B$ with $\top$ marked, complement is mark-respecting and moves the mark.
+\end{proposition}
+
+Stillness of the mark begins at the third element. The arena is now reached twice, on the bare carrier by muteness and on the marked carrier by a still point. What the second route needs is a law that refuses every value, which is the condition on the left of the displayed equivalence in Theorem~\ref{thm:becoming} and the hypothesis classified by \lf{marked\_refuses\_iff\_two}. Theorem~\ref{thm:markedarena} supplies it.
+
+\subsection{The law}
+
+From here the carrier is $\B$. On $\B$ the sole non-identity transposition is the exchange of the two values, which is complement, and Proposition~\ref{prop:coincide} proves that equivariance and the following condition agree.
 
 \begin{definition}[Structureless law on $\B$]
-$g : \B \to \B$ is \emph{structureless} if $g(\lnot b) = \lnot g(b)$ for every $b$.
+\label{def:structureless}
+$g : \B \to \B$ is \emph{structureless} when $g(!b) = !g(b)$ for every $b$.
 \end{definition}
 
 \begin{proposition}[Uniqueness of the law]
 \label{prop:candidate}
-A structureless $g$ is $\mathrm{id}$ or $\lnot$.
+A structureless $g$ is $\mathrm{id}$ or complement.
 \end{proposition}
 
 \begin{proof}
@@ -179,15 +291,16 @@ Case on $g(\top)$; structurelessness determines $g(\bot)$.
 
 \begin{proposition}[The identity says nothing]
 \label{prop:idmute}
-Constant maps on $\B$ fail structurelessness: $g(\lnot\top) = c$ and $\lnot g(\top) = \lnot c$ differ. The identity is structureless and fixes every element.
+Constant maps on $\B$ fail structurelessness: $g(!\top) = c$ and $!g(\top) = !c$ differ. The identity is structureless, fixes every element, and its graph excludes nothing.
 \end{proposition}
 
-With Section~\ref{sec:regiment}'s exclusion condition, the ground, if anything is, is negation.
+With the exclusion condition of Section~\ref{sec:regiment}, the ground, if there is one, is complement.
 
 \subsection{Retorsion}
 
 \begin{definition}[Draws]
-A medium $M$ \emph{draws a distinction}, $\Draws(M)$, if there exist $a \neq b$ in $M$.
+\label{def:draws}
+A medium $M$ \emph{draws a distinction}, $\Draws(M)$, when there exist $a \neq b$ in $M$.
 \end{definition}
 
 \begin{proposition}[Retorsion]
@@ -201,10 +314,10 @@ The two token values witness the distinction.
 
 \begin{corollary}
 \label{cor:noundrawn}
-The conjunction of $t(\lnot\Draws(M)) \neq t(\Draws(M))$ with $\lnot\Draws(M)$ is contradictory: a discriminated tokening of the denial makes the denial false.
+The conjunction of $t(\lnot\Draws(M)) \neq t(\Draws(M))$ with $\lnot\Draws(M)$ is refuted: a discriminated tokening of the denial makes the denial false.
 \end{corollary}
 
-As Section~\ref{sec:retorsionclass} notes, Proposition~\ref{prop:retorsion} holds for any pair of propositions; its content is the cardinality of the medium. The self-referential instance directs that content at the denial itself.
+As Section~\ref{sec:retorsionclass} notes, Proposition~\ref{prop:retorsion} holds for any pair of propositions, and its content is the cardinality of the medium. The self-referential instance aims that content at the denial.
 
 \subsection{Definable relations}
 
@@ -213,10 +326,11 @@ As Section~\ref{sec:retorsionclass} notes, Proposition~\ref{prop:retorsion} hold
 The \emph{definable} relations on $\B$ are generated from equality by negation, conjunction, and disjunction, pointwise.
 \end{definition}
 
-Equality comes from the basic distinction, while the connectives allow for combinations. There are no constants in the base, since a constant relation refers to a value. Proposition~\ref{prop:coincide} shows that the grammar captures only the invariant relations.
+Equality is what the bare distinction supplies, and the connectives close it under combination. The base carries no constants, since a constant relation names a value. Proposition~\ref{prop:coincide} shows the grammar captures the invariant relations exactly.
+
 \begin{lemma}[Invariance]
 \label{lem:diaginv}
-Definable $R$ satisfies $R(a,b) \leftrightarrow R(\lnot a, \lnot b)$.
+Definable $R$ satisfies $R(a,b) \leftrightarrow R(!a, !b)$.
 \end{lemma}
 
 \begin{proof}
@@ -229,15 +343,14 @@ Definable $R$ satisfies $R(a,a) \leftrightarrow R(b,b)$.
 \end{lemma}
 
 \begin{proof}
-The joint swap maps the diagonal onto itself; Lemma~\ref{lem:diaginv} carries truth along the orbit.
+The joint exchange maps the diagonal onto itself; Lemma~\ref{lem:diaginv} carries truth along the orbit.
 \end{proof}
-
-This is a symmetry argument where an invariant relation is constant on the orbit of the diagonal. Its relationship to the fixed-point results is discussed in Section~\ref{sec:related}.
 
 \subsection{Articulate relations}
 
-\begin{definition}
-For a relation $R$ on $\B$: $R$ \emph{excludes} $x$ if $\lnot R(x,x)$; $\Says(R)$ if it excludes some value; $R$ is \emph{objectually satisfied} if $\exists x.\, R(x,x)$; \emph{processually satisfied} if some $s : \mathbb{N} \to \B$ has $R(s(n),s(n+1))$ for all $n$; $\Sat(R)$ if either; $R$ \emph{articulates} if $\Says(R)$ and $\Sat(R)$.
+\begin{definition}[Says, satisfaction, articulation]
+\label{def:articulate}
+For a relation $R$ on $\B$: $R$ \emph{excludes} $x$ when $\lnot R(x,x)$; $\Says(R)$ when it excludes some value; $R$ is \emph{objectually satisfied} when $\exists x.\, R(x,x)$, and \emph{processually satisfied} when some $s : \mathbb{N} \to \B$ has $R(s(n),s(n+1))$ for all $n$; $\Sat(R)$ when either holds; $R$ \emph{articulates} when $\Says(R)$ and $\Sat(R)$.
 \end{definition}
 
 \begin{proposition}[Exclusion closes the object frame]
@@ -255,47 +368,63 @@ Definable, articulate $R$ satisfies: (a) $R(a,b) \leftrightarrow a \neq b$; (b) 
 \end{theorem}
 
 \begin{proof}
-By Proposition~\ref{prop:kills}, satisfaction is processual; the first step gives $s(0) \neq s(1)$; invariance transfers $R$ across both orderings of the two values, giving (a); (c) is the orbit of $\lnot$; (d) is induction using (a).
+By Proposition~\ref{prop:kills}, satisfaction is processual; the first step gives $s(0) \neq s(1)$; invariance transfers $R$ across both orderings of the two values, giving (a); (c) is the orbit of complement; (d) is induction using (a).
 \end{proof}
 
 \subsection{No being}
 
 \begin{theorem}[No being]
 \label{thm:nobeing}
-$\lnot x \neq x$ for every $x \in \B$, and $X = \lnot X$ has no propositional solution.
+$X \leftrightarrow \lnot X$ has no solution in $\mathrm{Prop}$.
 \end{theorem}
 
 \begin{proof}
-Case check; and $X \leftrightarrow \lnot X$ yields both $X$ and $\lnot X$.
+From $X \leftrightarrow \lnot X$, the forward direction applied to a hypothetical $X$ gives $\lnot X$; the backward direction applied to $\lnot X$ gives $X$; these together give a contradiction. The derivation is direct and constructive, with no appeal to explosion.
 \end{proof}
+
+The biconditional is the statement the argument uses. The equality form $X = \lnot X$ follows from it (\lf{no\_being\_eq}); obtaining the equality hypothesis without propositional extensionality is out of reach, so the content sits in the biconditional.
+
+\begin{proposition}[No fixed point of complement]
+\label{prop:nofix}
+$!x \neq x$ for every $x \in \B$.
+\end{proposition}
+
+\begin{lemma}[Complement from difference]
+\label{lem:neeqnot}
+For $a, b \in \B$: if $a \neq b$ then $b = !a$.
+\end{lemma}
+
+Lemma~\ref{lem:neeqnot} is the two-valued fact that ``distinct'' and ``one complement apart'' coincide. It is used at every point where a discrimination is converted into a value.
 
 \subsection{Alternation}
 
 \begin{definition}[Orbit]
-The orbit of $f$ from $x_0$ is the sequence with $x_{n+1} = f(x_n)$.
+\label{def:orbit}
+The orbit of $f$ from $x_0$ is the sequence with $x_{n+1} = f(x_n)$; a sequence \emph{solves} $f$ when it satisfies that recursion.
 \end{definition}
 
 \begin{theorem}[Alternation]
 \label{thm:becoming}
-The orbit of $\lnot$ from either seed solves the recursion, is the unique solution with that initial value, has period two, and the two orbits are relabelings of each other. Moreover
+The orbit of complement from either seed solves the recursion, is the unique solution with that initial value, has period two, and the two orbits are relabelings of each other. Moreover
 \[
-(\forall x.\ \lnot x \neq x) \iff \bigl(\forall\, \text{seed } x_0,\ \forall n.\ \mathrm{orbit}_{\lnot}(x_0)(n{+}1) \neq \mathrm{orbit}_{\lnot}(x_0)(n)\bigr).
+(\forall x.\ !x \neq x) \iff \bigl(\forall\, \text{seed } x_0,\ \forall n.\ \mathrm{orbit}_{!}(x_0)(n{+}1) \neq \mathrm{orbit}_{!}(x_0)(n)\bigr).
 \]
 \end{theorem}
 
 \begin{proof}
-Existence is the definition; uniqueness the induction; period two is $\lnot\lnot x = x$; relabeling is induction. The displayed equivalence holds because the two sides quantify over the same instances: each direction is instantiation.
+Existence is the definition; uniqueness the induction; period two is $!!x = x$; relabeling is induction. The displayed equivalence holds because the two sides quantify over the same instances, and each direction is instantiation.
 \end{proof}
 
 \begin{remark}
-The equivalence is a requantification, and the absence of a fixed point and stepwise movement of every orbit are two descriptions of one hypothesis.
+The equivalence is a requantification. The absence of a fixed point and the stepwise movement of every orbit are two descriptions of one hypothesis.
 \end{remark}
 
 \subsection{Discrimination}
 \label{sec:discrimination}
 
 \begin{definition}[Occurs]
-For $h : T \to \B$: $\Occurs(h)$ if $h(t_1) \neq h(t_2)$ for some $t_1, t_2 \in T$.
+\label{def:occurs}
+For $h : T \to \B$: $\Occurs(h)$ when $h(t_1) \neq h(t_2)$ for some $t_1, t_2 \in T$.
 \end{definition}
 
 \begin{theorem}[Discrimination]
@@ -313,57 +442,91 @@ Proposition~\ref{prop:retorsion} for the first claim; equal tokenings would give
 
 \begin{remark}[Deflation]
 \label{rem:deflation}
-The verified statement also includes a third part: the two values differ by one negation. With only two values, this just means they are distinct, so every pair of different marks in any binary classification has this property. The term "tick" will be used in Section~\ref{sec:obstruction}, where it fits better because of the idea of succession.
+The verified statement carries a third conjunct: the two values differ by one complement. On two values that restates their distinctness (Lemma~\ref{lem:neeqnot}), so every pair of differing marks in any binary classification has the property. The word ``tick'' is reserved for Section~\ref{sec:obstruction}, where succession makes it apt.
 \end{remark}
 
 \subsection{Synthesis}
 
 \begin{theorem}[Synthesis]
 \label{thm:main}
-The conjunction of Corollary~\ref{cor:arena}, Propositions~\ref{prop:candidate}, \ref{prop:idmute}, \ref{prop:retorsion}, Lemma~\ref{lem:diaguniform}, and Theorems~\ref{thm:law}, \ref{thm:nobeing}, \ref{thm:becoming}, \ref{thm:discrimination} holds. Each conjunct is a conditional; detachment of any consequent for the actual world uses the empirical input of Section~\ref{sec:scope}.
+The conjunction of Corollaries~\ref{cor:arena}, \ref{cor:markstill}, Propositions~\ref{prop:one}, \ref{prop:three}, \ref{prop:two}, \ref{prop:candidate}, \ref{prop:idmute}, \ref{prop:retorsion}, \ref{prop:markmoves}, \ref{prop:marksharp}, \ref{prop:nofix}, Lemma~\ref{lem:diaguniform}, and Theorems~\ref{thm:law}, \ref{thm:markedarena}, \ref{thm:nobeing}, \ref{thm:becoming}, \ref{thm:discrimination} holds.
 \end{theorem}
+
+Theorem~\ref{thm:main} is a bookkeeping device, and \lf{ontological\_argument} is its Lean counterpart: one term whose type is the conjunction, assembled from the named results. Some conjuncts are conditionals and some are unconditional. Detaching the consequent of any conditional conjunct for the actual world uses the empirical input of Section~\ref{sec:scope}.
 
 \section{Scope}
 \label{sec:scope}
 
-Theorem~\ref{thm:discrimination} is a conditional over an arbitrary domain $T$. Its antecedent is an empirical matter, and this section discharges it by tokening the pair:
+Theorem~\ref{thm:discrimination} is a conditional over an arbitrary domain $T$. Its antecedent is empirical, and this section discharges it.
+
+\subsection{What the tokening is}
+\label{sec:tokenref}
+
+Fix the referent. $T$ is a type of \emph{loci}. A \emph{tokening} is the function $\mathrm{tok} : \mathrm{Prop} \to T$, and $\mathrm{tok}(A)$ is the locus at which $A$ is tokened. The reading $h : T \to \B$ classifies loci. Two instantiations of $T$ appear below, and each is named where it is used.
+
+\begin{itemize}[itemsep=1pt]
+\item \emph{Acts.} $T$ is the readings performed on this page, and $\mathrm{tok}(A)$ is the reading of $A$. This is the instantiation on which $P$ is priced, and the one on which the Moorean standing of $P$ is available: a reader who reads the denial and then the assertion has performed two readings in succession.
+\item \emph{Marks.} $T$ is the inscriptions on this page, and $\mathrm{tok}(A)$ is the inscription of $A$. This instantiation supplies the still world that Corollary~\ref{cor:nobridge} requires. The stillness is assigned: the world is equipped with the empty succession, which the framework permits for any world. A reader who holds that the inscriptions were made in succession and persist is describing a second tensed structure over the same world, and by Proposition~\ref{prop:freeze} the two satisfy the same claims.
+\end{itemize}
+
+The empirical discharge below is carried out on the act instantiation, so that the discharge and the premise concern the same loci. The mark instantiation enters as a formal witness in Section~\ref{sec:obstruction}. Moving between the two changes the world, and Section~\ref{sec:indep} records the resulting scope condition.
+
+$\mathrm{tok}$ is total, assigning a locus to every proposition. A page carries finitely many inscriptions and a reader performs finitely many readings, so totality is an idealization. The theorems use $\mathrm{tok}$ at two arguments, and any partial tokening defined at those two extends to a total one over an inhabited $T$, so the idealization costs nothing here.
+
+\subsection{The discharge}
+
+The pair tokened is:
 \begin{quote}
-Occurrence fails of every reading of this page.\\
-Occurrence holds of some reading of this page.
+Occurrence fails: every reading of this page classifies alike.\\
+Occurrence holds: two readings of this page classify differently.
 \end{quote}
-The two sentences are meant to express different ideas, and any way of classifying their marks gives an $h$ that makes the first part true. The discharge happens by showing and choosing a classifier, and this is a basic assumption: in reality, there is a medium, a token, and a way to tell them apart. In the argument, the first part remains open, as explained by the metatheory: a closed normal-form term of type $\mathrm{Prop} \to \mathrm{Bool}$ cannot use its propositional argument, so it stays constant, which is a well-known result from normalisation in the axiom-free calculus (for details, see \cite{carneiro2019}). Detachment takes place outside the system. This is a metatheorem and is cited as such.
+The two sentences express different propositions, and any classification $h$ that separates the reading of the first from the reading of the second satisfies the hypothesis of Theorem~\ref{thm:discrimination}. Classifications that fail to separate them do not. The discharge exhibits a medium, a tokening, and a separating classification, and this is an ostensive step: in the world there is a medium, a token, and a way to tell the two readings apart.
 
+Inside the system the antecedent stays open. A closed term of type $\mathrm{Prop} \to \mathrm{Bool}$ in normal form cannot use its propositional argument, so it is constant, which is the expected consequence of normalization in the axiom-free calculus. Carneiro's study of Lean's type theory is the reference for the system \cite{carneiro2019}; a canonicity proof for Lean~4's kernel as implemented is not part of that work, so the observation is offered as a metatheoretic expectation. Detachment takes place outside the system in any case, by the ostension above.
 
-The result of the discharge is precise. In this case, the world has two different marks based on the chosen classification. Remark~\ref{rem:deflation} applies here: for two values, being 'one negation apart' is the same as being 'distinct.'
+The result of the discharge is exact. The world holds two loci classified differently under the chosen $h$. Remark~\ref{rem:deflation} applies: on two values, ``one complement apart'' and ``distinct'' coincide.
 
-Every theorem so far is satisfied by a static configuration. Take $T$ to be the marks on a printed page and $h$ any separating classification; the hypothesis and conclusions of Theorem~\ref{thm:discrimination} hold for that motionless instance. The formal alternation is likewise an $\omega$-indexed sequence of values, a tenselessly specifiable object. Realisation in temporal succession is a further matter which will be taken up in the next section.
+Every theorem so far is satisfied by a static configuration. Take $T$ to be the marks on a printed page and $h$ any separating classification; the hypothesis and the conclusions of Theorem~\ref{thm:discrimination} hold for that motionless instance. The formal alternation is an $\omega$-indexed sequence of values, a tenselessly specifiable object. Realization in temporal succession is the subject of the next section.
+
 \section{Obstruction and Premise}
 \label{sec:obstruction}
 
 \subsection{Worlds and claims}
 
-A \emph{world} is a triple $W = (T, h, \mathrm{tok})$: loci, a two-valued reading, a tokening. A \emph{claim} is a property of worlds. $W$ \emph{discriminates the denial} of claim $A$ when $h(\mathrm{tok}(\lnot A(W))) \neq h(\mathrm{tok}(A(W)))$. $A$ is \emph{undeniable} when it holds at every world that discriminates its denial. The notion is inhabited: occurrence is undeniable, by Theorem~\ref{thm:discrimination} transposed to worlds.
+\begin{definition}[Worlds, claims, tensed worlds]
+\label{def:world}
+A \emph{world} is a triple $W = (T, h, \mathrm{tok})$: loci, a two-valued reading, a tokening. A \emph{claim} is a property of worlds. $W$ \emph{discriminates the denial} of a claim $A$ when $h(\mathrm{tok}(\lnot A(W))) \neq h(\mathrm{tok}(A(W)))$. $A$ is \emph{undeniable} when it holds at every world that discriminates its denial. A \emph{tensed world} adds a succession relation on the loci. It is \emph{still} when nothing succeeds anything, and it \emph{runs} when an infinite sequence of pairwise-distinct loci, each succeeding the last, carries alternating values.
+\end{definition}
 
-A \emph{tensed world} adds a succession relation on the loci. It is \emph{still} when nothing succeeds anything; it \emph{runs} when an infinite sequence of pairwise-distinct loci, each succeeding the last, carries alternating values. Distinctness of the loci belongs to the definition: a two-locus cycle satisfies the succession and alternation clauses alone, and counts as a run for nobody.
+Distinctness of the loci belongs to the definition of running: a two-locus cycle satisfies the succession and alternation clauses alone, and counts as a run for nobody.
+
+Occurrence is undeniable, by Theorem~\ref{thm:discrimination} transposed to worlds.
+
+\begin{proposition}[Calibration of undeniability]
+\label{prop:undeniableweak}
+The constant-true claim is undeniable, vacuously (\lf{undeniable\_trivial}).
+\end{proposition}
+
+Undeniability is therefore a weak property, and the notion earns its keep only on claims like occurrence whose content the discrimination hypothesis reaches.
 
 \subsection{Freeze and obstruction}
 
 \begin{proposition}[Freeze]
 \label{prop:freeze}
-Two tensed structures over one world satisfy exactly the same claims. Over any inhabited world, a still structure and a running-capable one coexist, and every claim holds at both or at neither.
+Two tensed structures over one world satisfy exactly the same claims. Over any inhabited world a still structure and a running-capable one coexist, and every claim holds at both or at neither.
 \end{proposition}
 
 \begin{proof}
-Claims are typed over worlds, so the invariance is definitional; the verified proof is reflexivity. For the second half, equip the world with the empty succession and with the total one.
+Claims are typed over worlds, so the invariance is definitional, and the verified proof is reflexivity. For the second half, equip the world with the empty succession and with the total one.
 \end{proof}
 
 \begin{theorem}[Obstruction]
 \label{thm:obstruction}
-Let $A$ be undeniable and entail running. Then every still tensed world fails to discriminate the denial of $A$.
+Let $A$ be undeniable and entail running. Then no still tensed world discriminates the denial of $A$.
 \end{theorem}
 
 \begin{proof}
-A still discriminating world would satisfy $A$, hence run, and stillness refutes running at the first step.
+A still world discriminating the denial of $A$ would satisfy $A$, hence run, and stillness refutes running at the first step.
 \end{proof}
 
 \begin{corollary}[No undeniable bridge]
@@ -371,137 +534,325 @@ A still discriminating world would satisfy $A$, hence run, and stillness refutes
 Given a still tensed world that discriminates the denial of $A$, an undeniable $A$ fails to entail running.
 \end{corollary}
 
-The corollary’s hypothesis is handled in the same way as in Section~\ref{sec:scope}: the printed page, seen as a fixed set of marks, represents a world where denials can be distinguished. The process is schematic, like $P$: the page must show both the denial and assertion for each candidate $A$, one pair for each, covering all candidates the proponent mentions. Therefore, an axiom that could close the gap would need to be both undeniable and capable of connecting the two, but these qualities cannot coexist on the page.
-\subsection{Regimentation}
-\label{sec:regimentdefense}
+Corollary~\ref{cor:nobridge} is a rebuttal procedure. A proponent offers a candidate axiom $A$ as an undeniable bridge to running. The page tokens the denial and the assertion of $A$, one pair per candidate, on the mark instantiation of Section~\ref{sec:tokenref}, where the loci stand in no succession; the corollary then refutes the bridge for that $A$. The procedure runs once per candidate and is contingent on the proponent's tokening each candidate. It closes the gap for no candidate that goes untokened. Those per-candidate tokenings are a cost of the rebuttal. The ledger of Section~\ref{sec:intro} prices the argument, and item (3) there covers the single tokening the argument itself requires.
 
-According to the performative view, a tokening is an act, acts are events, and the facts that retorsion secures are tensed \cite{apel1980,hintikka1962}. This proposal formally assigns claims to tensed worlds. However, if the tensed-level discrimination relies only on the world components, the obstruction argument repeats at the tensed level: a static world whose world part distinguishes the denial produces the claim, and the lack of change prevents progress; this version is called \lf{obstruction\_tensed}. If the notion instead uses the succession component, then having a discriminating act assumes a succession fact, so tensed content appears along with succession, valued as $P$ is. Either way, the situation remains the same. This dilemma supports the regimentation, and the obstruction shows where undeniability can exist, given that tokening facts are limited to the world triple. Kaplan's idea of the contingency of the context-valid marks the same boundary in different terms \cite{kaplan1989}.
 \subsection{The premise}
+\label{sec:premise}
 
 Let the premise be:
 \begin{quote}
-$P$: the tokening of the denial and the tokening of the assertion stand in succession.
+$P$: the tokening of the denial and the tokening of the assertion stand in oriented succession, the first succeeded by the second and the reverse failing.
 \end{quote}
-By Proposition~\ref{prop:freeze}, $P$'s denial is realized by a still structure over the very same world, so $P$ is deniable; by Corollary~\ref{cor:nobridge}, an undeniable replacement is unavailable. Its standing is Moorean \cite{moore1939}. Given one instance, one step of the alternation is realized in succession: the successor's value is the negation of its predecessor's, from the discrimination hypothesis, as \lf{actuality\_tick} proves. This premise-conditional result is the one the paper calls \emph{actuality}. An infinite chain of instances over pairwise-distinct loci, pairwise discriminated, realizes the run in the full tensed sense, and the formal $\mathit{Runs}$ requires exactly this: distinct loci, succession, alternation. The run therefore costs one instance of $P$ per step, and the count is the schema with its infinite family, stated as such.
+
+$P$ has two parts, and the formalism carries both. The ordering part is $\mathrm{Successive}$: the locus of the denial succeeds to the locus of the assertion. The orientation part adds the failure of the reverse. Section~\ref{sec:loci} shows why the second part must be stated: on loci with decidable equality an invariant succession is symmetric, so orientation is unavailable from invariance and has to be assumed.
+
+By Proposition~\ref{prop:freeze}, the denial of $P$ is realized by a still structure over the very same world, so $P$ is deniable, and by Corollary~\ref{cor:nobridge} an undeniable replacement is unavailable. Its standing is Moorean: a premise better supported than any argument that would unseat it \cite{moore1925}. The standing attaches to each realized instance, one reading succeeded by another. Both halves have it on the act instantiation. Two readings by one reader stand in one order, and a pair of readings each succeeding the other is beyond what a reader can report, so the orientation half is as far beyond dispute as the ordering half, and it is the half newly priced here. The run is priced as a schema with one instance per step, and the ledger records the totality as a commitment whose warrant is left open. Moorean warrant is not the kind of thing that distributes over an infinite family, and the ledger states the family separately for that reason.
+
+\begin{theorem}[Actuality, from $P$]
+\label{thm:actuality}
+Given the discrimination hypothesis and one oriented instance of $P$, the two loci are distinct, the value at the successor is the complement of the value at the predecessor, and the structure fails to be still.
+\end{theorem}
+
+\begin{proof}
+Distinctness follows from the discrimination hypothesis, and the value claim from Lemma~\ref{lem:neeqnot}. Stillness fails because the instance exhibits a succeeding pair. Orientation alone already forces distinctness (\lf{oriented\_needs\_distinct\_tokens}).
+\end{proof}
+
+\begin{theorem}[The chain]
+\label{thm:chain}
+A chain of oriented instances over pairwise-distinct loci, discriminated at every step, realizes an oriented run, hence a run, and refutes stillness.
+\end{theorem}
+
+The undirected forms of these two results unpack their hypotheses and are labeled as such: in \lf{actuality\_tick} the succession conjunct restates the hypothesis, and in \lf{chain\_runs} the succession and distinctness clauses are the hypotheses with the values converted by Lemma~\ref{lem:neeqnot}. The oriented forms \lf{oriented\_tick} and \lf{oriented\_chain\_runs} derive facts absent from their hypotheses, distinctness of the loci and the failure of stillness among them. The oriented forms are what Theorems~\ref{thm:actuality} and~\ref{thm:chain} state.
+
+One further disclosure belongs with them. The whole conclusion of \lf{oriented\_tick} follows from the ordering part of $P$: the proof uses the ordering conjunct of its hypothesis and leaves the orientation conjunct idle. Theorem~\ref{thm:actuality} is therefore available to a reader who grants the ordering part alone. Orientation does its work in two other places. It forces distinctness of the loci by itself, with the discrimination hypothesis dropped (\lf{oriented\_needs\_distinct\_tokens}), and it is required at the level of the run, where \lf{oriented\_chain\_runs} delivers $\mathrm{OrientedRuns}$ and the symmetric adjacency witness runs while failing it (\lf{adjacency\_not\_oriented}).
+
+\subsection{Independence and its scope}
+\label{sec:indep}
 
 \begin{proposition}[Independence]
 \label{prop:independence}
-Over one world carrying two distinctly read loci: the still structure satisfies every derived consequent of Theorem~\ref{thm:discrimination} wherever discrimination holds, and $P$ fails for every tokening; the running structure satisfies $P$ for every tokening and the succession half of the chain hypothesis for every sequence. The full chain hypothesis, distinct loci and discrimination included, is satisfied in a world with infinitely many loci (\lf{chain\_hypothesis\_realizable}). The single instance and the chain hypothesis are each underivable and irrefutable from the development.
+Over one world carrying two distinctly read loci: the still structure satisfies every consequent derived from Theorem~\ref{thm:discrimination} wherever discrimination holds, and $P$ fails there for every tokening; the running structure satisfies the ordering part of $P$ for every tokening. Every claim holds at both structures or at neither, so no claim entails $P$ and no claim refutes $P$. The same exhibition runs for the oriented premise over a world whose tokening separates the pair. The full chain hypothesis, distinct loci and stepwise discrimination included, is realized over a world with infinitely many loci, and in oriented form by successor on $\mathbb{N}$.
 \end{proposition}
 
 \begin{proof}
-Empty succession and total succession over the same two-locus world; Proposition~\ref{prop:freeze} gives that the structures share all tokening facts. The still witness has a constant tokening, so discrimination holds there only for hypothetical tokenings; the quantification is over all of them. For the full chain hypothesis, alternate a reading over $\mathbb{N}$ loci under total succession.
+Empty succession and total succession over the same two-locus world; Proposition~\ref{prop:freeze} gives that the two structures share all claims. The still witness has a constant tokening, so discrimination there holds for hypothetical tokenings, and the quantification is over all of them. For the oriented exhibition, take the succession that holds of the pair $(\bot,\top)$ alone. For the full chain hypothesis, alternate a reading over $\mathbb{N}$ loci under total succession.
 \end{proof}
 
-$P$, as formalized, puts denial before assertion. The alternation itself does not have a built-in direction, since predecessor values exist and are required (Proposition~\ref{prop:rigidity}), and extending backward is similar to extending forward. This means the chain’s direction is set by the premise and recorded with it. It is important to be precise when naming the refuser of $P$. The tensed world adds a relation that is always read as directed succession. Someone who rejects this entirely only keeps an undirected order among points, which is the C-theorist’s view \cite{farr2020}. The eternalist accepts tenseless succession \cite{sider2001}, so they accept $P$ when read without tense. In that view, a chain of instances shows variation along a tenseless order, and the idea of passage, as the A-theorist sees it, is a further step beyond what this paper covers \cite{williams1951,mctaggart1908}. So, there are two gaps: from structure to succession, which $P$ addresses, and from succession to passage, which remains open. In this paper, “becoming” refers to the alternation and its realization in succession. Readers who use “becoming” only for passage should adjust the term as needed.
+This is a two-model exhibition over a shared world, and the language it is relative to is named: claims, in the sense of Definition~\ref{def:world}. The Lean declarations state that exhibition and nothing stronger, and they are named for it: \lf{premise\_fails\_still}, \lf{premise\_holds\_running}, \lf{premise\_independent}, \lf{chain\_premise\_independent}. The last two clauses of the proposition are \lf{no\_claim\_settles\_premise} and \lf{oriented\_premise\_independent}, and the realizations are \lf{chain\_hypothesis\_realizable} and \lf{oriented\_witness\_runs}.
+
+Independence is relative to the world signature $(T, h, \mathrm{tok})$. Enrich the signature and the result can change. Mellor grounds temporal order in causal order, giving tenseless truth conditions for tensed tokens with tokening facts doing the work \cite{mellor1998}. If a world carries causal facts, and if causal order fixes temporal order, then succession supervenes on the enriched signature and $P$ becomes derivable there. This is the standing threat to the independence claim, and the paper owns it as a scope condition: independence holds relative to the tokening signature. The signature is chosen because it is what retorsion reaches. The retorsion step uses a tokening, a reading, and a difference of values, and nothing further; causal facts are content the retorsion step leaves unsecured, which is what Theorem~\ref{thm:obstruction} makes precise. A defender of Mellor's reduction can accept the entire development and locate the price in the causal facts.
+
+The choice of instantiation for $T$ is part of the signature in the same way. Section~\ref{sec:tokenref} prices $P$ on readings and takes the still witness from inscriptions, and each use is marked where it occurs.
+
+Putnam's relativistic argument bears on claims of frame-independent succession between spacelike-separated loci \cite{putnam1967}. The realized instances of $P$ are readings performed by one reader, which are timelike-related, so the frame-dependence Putnam exploits leaves them alone. A claim of frame-independent succession for arbitrary loci would need the argument answered, and the ledger claims no such thing.
+
+\subsection{Loci and succession}
+\label{sec:loci}
+
+Running is a condition on loci before it is a condition on succession. The definition asks for an infinite sequence of pairwise-distinct loci, so the count settles the matter at the bottom of the scale.
+
+\begin{proposition}[Two loci never run]
+\label{prop:loci}
+A tensed world with one locus, or with two, fails to run, whatever its succession relation.
+\end{proposition}
+
+\begin{proof}
+Three terms of a pairwise-distinct sequence have no room on two loci.
+\end{proof}
+
+The witnesses of Proposition~\ref{prop:independence} carry two loci, so the running structure there satisfies the ordering part of $P$ for every tokening and runs nowhere (\lf{running\_witness\_never\_runs}). The oriented witnesses of the same proposition carry two loci as well. \lf{orientedRunning} is built over $\B$, so \lf{two\_loci\_never\_run} applies to it and it runs nowhere either: it exhibits one oriented instance and no oriented run. The full chain hypothesis is realized over $\mathbb{N}$ loci for this reason, and the oriented run by successor on $\mathbb{N}$ (\lf{orientedWitness}). Section~\ref{sec:formal} fixes the values at two, and running fixes the loci at infinitely many; the two counts pull in opposite directions.
+
+Succession admits a treatment parallel to the one the ground received. Call a succession relation \emph{invariant} when it commutes with every relabeling of the loci, which is what Definition~\ref{def:equiv} asks of a unary law. The two notions are distinct: Definition~\ref{def:equiv} concerns a map on a carrier, and invariance here concerns a binary relation on loci. Their results are proved separately. The restriction recorded in Section~\ref{sec:regiment} for the carrier applies to the loci in the same way: a relabeling of loci is built from their equality, so the two results below are stated for types of loci with decidable equality.
+
+\begin{proposition}[Invariant succession]
+\label{prop:invsucc}
+Let the loci have decidable equality. An invariant succession takes one value on the diagonal and one off it, so four relations answer to the condition: empty, equality, disagreement, total. The off-diagonal half of the classification asks for two distinct loci, and on a single locus it is empty. Equality and the empty relation carry no run. One that excludes some locus and holds of some pair of distinct loci is disagreement.
+\end{proposition}
+
+\begin{proof}
+One transposition carries any diagonal pair to any other. Two carry any off-diagonal pair to any other, taking $x$ to $x'$ and then the image of $y$ to $y'$. The classification is \lf{invariant\_succ\_classified}, which carries the two distinct loci as a hypothesis. A succession inside equality forces $s(0) = s(1)$ against distinctness. The last claim is \lf{invariant\_says\_is\_ne}, proved for invariant succession over an arbitrary type of loci with decidable equality; it parallels Theorem~\ref{thm:law} and is proved independently of it.
+\end{proof}
+
+\begin{theorem}[Orientation is invariantly inexpressible]
+\label{thm:orientation}
+Let the loci have decidable equality. Every invariant succession on them is symmetric: it holds of an ordered pair exactly when it holds of the reverse pair. Hence no invariant succession holds of a pair while failing of its reverse, and no invariant succession carries an oriented run.
+\end{theorem}
+
+\begin{proof}
+For distinct $u,v$ the off-diagonal uniformity of Proposition~\ref{prop:invsucc} gives $R(u,v) \leftrightarrow R(v,u)$, and the diagonal case is trivial. An oriented run requires a step whose reverse fails.
+\end{proof}
+
+Theorem~\ref{thm:orientation} is where the two-part price is fixed. Invariance returns the shape of succession, four relations and no more, and returns nothing about direction. The witnesses make the point concrete. Symmetric adjacency on $\mathbb{N}$ loci runs, is nowhere still, and holds in both orientations at once (\lf{adjacency\_runs}, \lf{adjacency\_not\_oriented}); the total relation satisfies the ordering part of $P$ for every tokening and the oriented part for none (\lf{running\_witness\_not\_oriented}); successor on $\mathbb{N}$ carries the oriented run (\lf{oriented\_witness\_runs}). So the method returns the shape of succession, the premise supplies its instantiation, and a second clause of the premise supplies its direction.
+
+The reach of the orientation clause is worth stating exactly. $\mathrm{OrientedRuns}$ asks of each step that its reverse fail, which is a condition on single steps. A succession can meet it and carry a closed directed loop whose every edge is asymmetric, and transitivity can fail as well: successor on $\mathbb{N}$ with one edge added back from a later locus to an earlier one runs, is nowhere still, and satisfies the oriented run. So an oriented run is compatible with cycles in succession, and it leaves the global shape of succession open. What the clause secures is local irreversibility, one step at a time, and that is what $P$ prices.
+
+The taxonomy follows. A C-theorist keeps a betweenness ordering of events and denies that the ordering has a direction \cite{farr2020,mctaggart1908}. Such a reader grants the ordering part of $P$ and refuses the orientation part, and Theorem~\ref{thm:orientation} shows the refusal is safe from any invariance argument. Betweenness is ternary, and the succession relation here is binary, so symmetric adjacency serves as its proxy (\lf{adjacencyWitness}). The idealization is real, and the conclusion survives it: what the theorem protects is the refusal of direction, and the proxy carries that refusal. The eternalist accepts tenseless succession \cite{sider2001}, so accepts $P$ read without tense; on that reading a chain of instances exhibits variation along a tenseless order, and passage in the A-theorist's sense is a further step \cite{williams1951,mctaggart1908}. Two gaps therefore remain open: from structure to succession, which $P$ closes at a price, and from succession to passage, which stays open here. The empty succession relation is a formal device used in the freeze construction and is nobody's view of time.
+
 \subsection{Rigidity}
 
 \begin{proposition}[Rigidity]
 \label{prop:rigidity}
-At the level of values: (a) a token alternating with a tick and with its successor forces $x = \lnot x$, so a realized alternation admits no alternation-refining interpolation; (b) a predecessor value always exists and is forced, so any two candidate predecessors of a tick agree in value. With forward uniqueness (Theorem~\ref{thm:becoming}), one realized tick determines the values of every tick before and after it, a closure assembled in prose from \lf{becoming\_unique} and \lf{prior\_token\_determined}.
+At the level of values: (a) a locus alternating with a tick and with its successor forces $x = !x$, so a realized alternation admits no alternation-refining interpolation; (b) a predecessor value always exists and is forced, so any two candidate predecessors of a tick agree in value. With forward uniqueness (Theorem~\ref{thm:becoming}), one realized tick determines the values of every tick before and after it, a closure assembled in prose from \lf{becoming\_unique} and \lf{prior\_token\_determined}.
 \end{proposition}
 
 \begin{proof}
-(a) $h(u) = \lnot h(t)$ and $h(\mathrm{succ}(t)) = \lnot h(u)$ with $h(\mathrm{succ}(t)) = \lnot h(t)$ force $h(t) = \lnot h(t)$. (b) $\lnot h(t)$ is the unique candidate.
+(a) $h(u) = !h(t)$ and $h(\mathrm{succ}(t)) = !h(u)$ with $h(\mathrm{succ}(t)) = !h(t)$ force $h(t) = !h(t)$. (b) $!h(t)$ is the unique candidate.
 \end{proof}
 
-The division of labor is now complete in both directions. Existence of realized ticks is premise, instance by instance. The values of any realization are theorem, rigid throughout.
+The division of labor is complete in both directions. Existence of realized ticks is premise, instance by instance. The values of any realization are theorem, rigid throughout.
+
+\section{The regimentation dilemma}
+\label{sec:dilemma}
+
+Section~\ref{sec:obstruction} regiments claims as properties of succession-free worlds. That choice is the antecedent of the obstruction, and it is where the argument is contested. The performative objection runs: a tokening is an act, acts are events, and the facts retorsion secures are tensed \cite{apel1980,hintikka1962}. So claims should be assigned to tensed worlds.
+
+Grant the proposal. The discrimination notion at the tensed level then uses the world components or the succession component, and each horn is a theorem.
+
+\begin{theorem}[First horn]
+\label{thm:hornone}
+Suppose tensed-level discrimination depends on the world components alone. Let $A'$ hold at every tensed world whose world part discriminates, and let $A'$ entail running. Then no still tensed world discriminates.
+\end{theorem}
+
+\begin{proof}
+The obstruction argument repeats one level up; verified as \lf{obstruction\_tensed}.
+\end{proof}
+
+\begin{theorem}[Second horn]
+\label{thm:horntwo}
+Suppose tensed-level discrimination uses the succession component, so that a discriminating structure has its two tokenings standing in succession. Then discrimination is an instance of the premise's form (\lf{horn\_two\_is\_premise}), and any discrimination notion entailing a succession fact refutes stillness wherever it holds (\lf{horn\_two}).
+\end{theorem}
+
+\begin{proof}
+Unfolding the definition gives the first claim as an identity of statements. For the second, a succession fact contradicts stillness at the pair that witnesses it.
+\end{proof}
+
+The dilemma is now formal on both sides. On the first horn the obstruction survives the move to tensed worlds. On the second horn the tensed notion of discrimination carries a succession fact with it, so tensed content arrives together with succession and is priced exactly as $P$ is priced. Either way the accounting stands, and the regimentation of Section~\ref{sec:obstruction} is defended by the fact that its alternative reproduces the same charge.
+
+Kaplan's contingency of the context-valid marks the same boundary in other terms \cite{kaplan1989}.
 
 \section{Related Work}
 \label{sec:related}
 
 \subsection{Ontological arguments}
-Anselm, Descartes, and Gödel argue that necessary existence follows from a concept \cite{anselm,descartes,godel1995,plantinga1974}. Oppy reviews this type of argument \cite{oppy1995}. In this paper, I use a similar structure but change both terms: here, the concept is the ability to make a distinction, and what follows is alternation, not a fixed answer. Findlay’s ontological disproof is the closest formal ancestor to Theorem~\ref{thm:nobeing} \cite{findlay1948}, and Hartshorne developed an ontological argument within process metaphysics \cite{hartshorne1962}. Leibniz insisted on the possibility premise behind Anselm and Descartes \cite{leibniz1714}. My approach is to prove everything that can be proved and to clearly identify the one independent premise, following Leibniz’s demand with modern methods. Kant objected to arguments that include worldly existence in a concept \cite{kant1781}. My response is clear: the a priori part of this work gives mathematical existence, while real-world content comes in with the empirical step and with $P$. Theorem~\ref{thm:obstruction} shows, in this context, a version of Kant’s idea that every existential claim is synthetic. So, the obstruction supports Kant’s view.
+Anselm, Descartes, and Gödel argue from a concept to necessary existence \cite{anselm,descartes,godel1995}. Oppy surveys the family and its failures \cite{oppy1995}, and the collection he edits assembles the current state of the debate \cite{oppy2018}. The structure here is the same and both terms are changed: the concept is the capacity to make a distinction, and what follows is an alternation.
+
+Findlay's ontological disproof argues that the concept of a necessary being is incoherent, so that the very features that would make existence follow from the concept make the concept unavailable \cite{findlay1948}. Theorem~\ref{thm:nobeing} inherits one feature of that argument: a fixed point of the ground is what the concept would require, and the ground has none. Malcolm's reply reinstates the argument in a modal form and is the pivot from Findlay to Hartshorne \cite{malcolm1960}.
+
+Hartshorne's dipolar theism divides the divine into an abstract pole and a concrete pole \cite{hartshorne1962}. Divine existence sits at the abstract pole, is necessary, and is what his modal argument establishes; divine actuality, the concrete states, is contingent and varies with the world. The division of labor here has that shape. The structure of the alternation is necessary and proved, and its realization in succession is contingent and priced, so Hartshorne is an ally for most of the distance. The disagreement sits at the end of it. His argument still yields a necessary existent from the concept. The concept analyzed here has no fixed point (Theorem~\ref{thm:nobeing}), the a priori part of the development yields mathematical existence alone, and the step to realization is a premise with Moorean standing. Theorem~\ref{thm:obstruction} is the reason that step has to be a premise.
+
+Plantinga presents the modal ontological argument as establishing the rational acceptability of its conclusion \cite{plantinga1974}. Leibniz insisted on the possibility premise behind Anselm and Descartes \cite{leibniz1714}; the method here follows that demand, proving what can be proved and identifying the one premise that remains.
+
+Kant holds at A598/B626 that being is no real predicate: existence adds nothing to the concept of a thing \cite{kant1781}. The related thesis that every existential judgment is synthetic is a separate claim. Theorem~\ref{thm:obstruction} bears on the second: undeniability, a property available a priori, fails to reach temporal realization, so the existential content in question arrives with the empirical step and with $P$. The a priori part of the development yields mathematical existence alone.
+
+The title's strongest defense is retorsive. The empirical discharge of Section~\ref{sec:scope} secures itself: a discriminated tokening of the denial of occurrence makes the denial false (Corollary~\ref{cor:noundrawn}, Theorem~\ref{thm:discrimination}). The step from concept to existence is made by the tokening of the denial, which is why the argument keeps the name.
+
 \subsection{Verified ontological arguments}
-Oppenheimer and Zalta made Anselm's argument simpler by using an automated reasoner \cite{oppenheimerzalta2011}. Benzm\"uller and Woltzenlogel Paleo checked Gödel's proof with higher-order provers, confirming the modal collapse of the Scott variant \cite{benzmuller2014}, which philosophers have known about since Sobel \cite{sobel1987}. They later showed that Gödel's original axioms are inconsistent \cite{benzmuller2016}. Anderson's changes balance the strength of the axioms with the strength of the conclusions \cite{anderson1990}. These cases put existential content into the premises and let machines check the cost. In contrast, the current approach does not use any axioms and instead pays the price elsewhere: its existence claims are mathematical, and its real-world and time-related content is discussed in Sections~\ref{sec:scope} and~\ref{sec:obstruction}. Conditionalisation shifts where the content appears, but both ends of the trade-off keep the same amount of existential import.
+Oppenheimer and Zalta simplified Anselm's argument with an automated reasoner \cite{oppenheimerzalta2011}. Benzmüller and Woltzenlogel Paleo checked Gödel's proof with higher-order provers and confirmed the modal collapse of the Scott variant \cite{benzmuller2014}, known since Sobel \cite{sobel1987}, and later showed Gödel's original axioms inconsistent \cite{benzmuller2016}. Anderson's emendations trade axiom strength against conclusion strength \cite{anderson1990}. Those projects place existential content in the premises and let a machine check the cost. The development here declares no axiom, and its existential content sits in the empirical step and in $P$, as Sections~\ref{sec:scope} and~\ref{sec:obstruction} set out. Conditionalization relocates the content and leaves its amount to be settled by the ledger, which is why the ledger is stated once and counted.
+
 \subsection{Retorsion and transcendental arguments}
-Aristotle’s elenctic defence of non-contradiction is the earliest example of retorsion \cite{aristotle}. Apel and Habermas turn performative contradiction into a foundational approach \cite{apel1980,habermas1990}. Stroud argues that transcendental arguments only reveal facts about those who deny them, not about the world itself \cite{stroud1968}. Stern distinguishes between modest and ambitious versions of these arguments \cite{stern2000}, and Illies reviews the broader retorsive tradition \cite{illies2003}. This paper’s contribution is a theorem that proves the modest result that occurrence is shown wherever denial is identified, blocks tensed realisation, and marks the boundary with an independence proof. In the Letztbegründung debate, this view supports Albert over Apel for the temporal case \cite{albert1985}, using the dilemma in Section~\ref{sec:regimentdefense}. Strawson’s later naturalism, which focuses on what deniers must accept, is the informal basis for the premise’s Moorean status \cite{strawson1985}. Mackie, Hintikka, and Kaplan provide the classification used in Section~\ref{sec:retorsionclass} \cite{mackie1964,hintikka1962,kaplan1989}.
+Albert's Münchhausen trilemma sets out three ways an attempted final justification can end: infinite regress, circularity, or a break-off at a point chosen without further justification \cite{albert1985}. Apel and Kuhlmann answer with reflexive Letztbegründung, holding that the break-off is avoidable because the denial of certain premises is performatively self-defeating \cite{apel1980,kuhlmann1985}. Habermas keeps the discourse-ethical setting and declines the strong ultimate grounding, offering a weaker reconstructive program in its place \cite{habermas1990}.
+
+The structure here accepts the break-off horn and gives an account of the break. The conditionals are proved. The premise is exhibited, priced, and shown independent of the claim language. Its standing is Moorean. Theorem~\ref{thm:obstruction} supplies the reason the break is unavoidable for the temporal case: undeniability and temporal import are unavailable in one claim. So the acceptance is principled and local, and the trilemma's third horn is occupied deliberately.
+
+Stroud argues that transcendental arguments reach facts about what a denier must believe, leaving the world untouched \cite{stroud1968}. The relation of the present results to that limit is contravention followed by relocation. At world level the retorsion step derives an objective fact, occurrence, from a discrimination condition, which is what Stroud holds such arguments cannot do; for that one fact the limit is passed, and Proposition~\ref{prop:undeniableweak} calibrates how little the notion of undeniability delivers on its own. At the level of succession the limit returns, and Theorem~\ref{thm:obstruction} locates it exactly. Stern's distinction between modest and ambitious transcendental arguments places the result on the modest side for succession and on the ambitious side for occurrence \cite{stern2000}. Illies defends an ambitious transcendental argument in moral philosophy \cite{illies2003}, which places him among the targets of the obstruction.
+
+Moore's ``A Defence of Common Sense'' is the source for the standing of a premise more credible than the arguments against it \cite{moore1925}, and that standing is what $P$ is given, instance by instance. Strawson's later naturalism holds that skeptical doubts are idle, since the commitments they question are not up for choice \cite{strawson1985}; that is the informal support for treating a realized instance of $P$ as beyond dispute. Mackie, Hintikka, and Kaplan supply the classification used in Section~\ref{sec:retorsionclass} \cite{mackie1964,hintikka1962,kaplan1989}, and Castagnoli and Burnyeat the ancient material \cite{castagnoli2010,burnyeat1976}.
+
 \subsection{Laws of Form}
-Spencer-Brown starts by asking us to draw a distinction. In Chapter 11, he resolves an unsatisfied equation by introducing an oscillation, which he describes as the introduction of time \cite{spencerbrown1969}. Kauffman and Varela expand on this idea of oscillation \cite{kauffmanvarela1980,kauffman1987,varela1975}. Their framework anticipates the approach in this paper, including the focus on time, and I acknowledge these influences while pointing out important differences. Laws of Form takes its two-valued arithmetic as a given, while in this paper, the two-valued setting and the uniqueness of negation are proven results (Corollary~\ref{cor:arena}, Proposition~\ref{prop:candidate}). In Laws of Form, oscillation is introduced through a specific construction, but here it arises from classifying articulate relations (Theorem~\ref{thm:law}). The temporal interpretation is stated simply in their work, but in this paper, Theorem~\ref{thm:obstruction} shows that this interpretation cannot be derived from unquestionable principles and assigns it the value $P$.  
+\label{sec:lof}
+Spencer-Brown begins with an injunction to draw a distinction, and Chapter 11 resolves an equation with no solution by admitting an oscillating value, which he presents as the entry of time \cite{spencerbrown1969}. Section~\ref{sec:intro} states the debt. Four differences are worth setting out.
+
+Spencer-Brown presents the primary arithmetic as derived from the act of distinction. Whether that derivation succeeds is contested, and Cull and Frank set out the objections \cite{cullfrank1979}. Here the arena and the uniqueness of the law are theorems with stated hypotheses (Corollary~\ref{cor:arena}, Proposition~\ref{prop:candidate}), and Section~\ref{sec:mark} runs the arena result again under the weaker symmetry a mark leaves standing.
+
+Varela answers the oscillation with a third value, autonomous alongside marked and unmarked \cite{varela1975}. His calculus is marked, as Spencer-Brown's is, so the marked results of Section~\ref{sec:mark} are the ones that apply. On a marked carrier of three values every mark-respecting law fixes the mark, since each unmarked value has the other to meet the hypothesis of Corollary~\ref{cor:markstill}; and by Theorem~\ref{thm:markedarena} a mark-respecting law moves the mark, or moves every value, exactly on two. So no mark-respecting dynamics reaches a third state. Under the full equivariance of Section~\ref{sec:formal} a third value stills the carrier outright (Proposition~\ref{prop:threestill}, \lf{three\_values\_are\_still}). The disagreement is live and turns on the standing of the autonomous value: Varela introduces it with structure of its own, and the results here price that introduction.
+
+Kauffman reads the oscillation as an eigenform, a fixed point that exists as an infinite form \cite{kauffman1987,kauffmanvarela1980}. Theorem~\ref{thm:nobeing} denies a fixed point on the carrier used here. The disagreement is live and turns on whether the infinite form counts as a value of the carrier; on a two-valued carrier with decidable equality it does not.
+
+In \emph{Laws of Form} the oscillation is introduced by a construction. Here it arrives by classifying articulate relations (Theorem~\ref{thm:law}). The temporal reading is stated directly there; here Theorem~\ref{thm:obstruction} shows it is unavailable from undeniable premises and assigns it the price $P$.
+
 \subsection{Hegel and his critics}
-Hegel uses the term presuppositionlessness to describe the start of his Logic, where pure Being cannot stand on its own and turns into Becoming \cite{hegel1812}. Houlgate and Maker discuss what can come from such a beginning \cite{houlgate2006,maker1994}. In this paper, the main argument follows Hegel’s approach, but uses combinatorics instead of dialectic. The main challenge comes from Trendelenburg, who argued that pure thought cannot create movement and that dialectic borrows motion from intuition \cite{trendelenburg1840}. This idea is also found in Schelling’s claim that existence must go beyond negative philosophy \cite{schelling1994}, and in Kierkegaard’s criticism of movement in logic \cite{kierkegaard1846}. Here, this challenge is treated as a general rule for the field. The only extra assumption is what Schelling said the positive must add. With this approach, the paper shows that both sides contribute: structure comes without extra cost, but movement needs one new premise at each step. Some, like Priest and Ficara’s reading of Hegel, see the opening differently. They argue that being and nothing form a real contradiction, and they reject the explosion in Theorem~\ref{thm:nobeing} and the need for consistency \cite{priest2006,ficara2020}. This paper uses a constructive and consistent logic, and the earlier conclusions depend on that choice.
+\label{sec:hegel}
+The Logic begins with pure Being, which, having no determination, is Nothing. Neither term stands on its own, and their truth is Becoming, the movement in which each has already passed over into the other \cite{hegel1832}. Houlgate and Maker examine what a presuppositionless beginning can yield \cite{houlgate2006,maker1994}.
+
+The development here shares the ambition of that opening and replaces its method with combinatorics. Two structural objections follow from the replacement, and both are conceded.
+
+First, Boolean complement is abstract negation. Determinate negation, the engine of the Logic, is defined by contrast with exactly this operation: it carries the content of what it negates, and complement carries none. Proposition~\ref{prop:candidate} shows that on a two-valued carrier complement is the only structureless option, so the method has no room for the determinate kind.
+
+Second, the period-two orbit is, by Hegel's lights, the bad infinite: a repetition that renews the same opposition without closing it. Houlgate treats that stretch of the Logic directly. The Logic exists to supersede the alternation, and here the alternation is where the development stops. The title term is used throughout in the restricted sense fixed in Section~\ref{sec:intro}, the alternation together with its realization in succession; Hegel's sense of the word is the wider one, and the two are kept apart.
+
+The position taken is the critics'. A presuppositionless beginning, worked by combinatorics, yields the bad infinite together with a premise that has a price. Trendelenburg's charge is that the derivation of movement in the Logic borrows covertly from intuition \cite{trendelenburg1870}. Theorem~\ref{thm:obstruction} is a formal analogue whose antecedent is the regimentation of claims as succession-free: a claim language stipulated blind to succession entails no succession. The regimentation is where the real argument lies, and Section~\ref{sec:dilemma} defends it by showing that the tensed alternative reproduces the charge on either horn.
+
+Schelling's demand that positive philosophy add existence to what negative philosophy derives stands in the same relation to the premise \cite{schelling1994}. The affinity is close and the identification of $P$ with unvordenkliches Sein would need a bridge this paper leaves unbuilt. Kierkegaard's Interlude states the division exactly: coming into existence is a change in being with essence unchanged, and what is necessary cannot come to be \cite{kierkegaard1844}. His attack on movement in logic converges with Trendelenburg's, and the two diagnoses differ: Kierkegaard finds a confusion of logical with existential categories, and Trendelenburg finds a covert importation from Anschauung \cite{kierkegaard1846}.
+
+Priest reads the opening as a true contradiction and accepts dialetheism \cite{priest2006}. Ficara reads Hegel's Widerspruch as a moment in a theory of truth, with no dialetheia required \cite{ficara2020}, and Berto gives the dialectic an analytic reading as a semantic theory \cite{berto2007}. The development here is constructive and consistent. Theorem~\ref{thm:nobeing} derives the contradiction directly, with no ex falso step, so what a dialetheist would contest is non-contradiction itself. That choice of metalogic is item (5) of the ledger.
+
 \subsection{Temporal ontology}
-McTaggart separated the C-series (ordered but not directed) from the B- and A-series \cite{mctaggart1908}. The world versus tensed-world distinction is broader, since it adds a simple directed relation to an unordered base, and the C-theory rejects that relation entirely \cite{farr2020}. The formal alternation here is at-at variation, which Williams, Smart, and Gr\"unbaum contrast with the idea of passage \cite{williams1951,smart1949,grunbaum1967}. This is why Section~\ref{sec:obstruction} identifies a second gap. Broad and Prior highlight what someone who believes in real becoming would want beyond this \cite{broad1923,prior1959}. Gr\"unbaum argues that becoming starts with the act of tokening, which is almost the opposite of the current approach, where all content is stored in tokening facts and succession is treated separately. Mellor's token-reflexive approach is the closest formal match to the $\mathrm{tok}$/$h$ system: it gives tenseless truth conditions for tensed tokens, with tokening facts doing the main work \cite{mellor1998}. Proposition~\ref{prop:freeze} fits well with this. Fine's fragmentalism does not fit within the still/running distinction and shows a limit of the current framework \cite{fine2005}. Skow's work on the nature of becoming helps define the second gap \cite{skow2015}, and Putnam's relativistic argument is relevant to any claim about frame-independent succession \cite{putnam1967}. In the process tradition \cite{whitehead1929,rescher1996,heraclitus}, there is one clear point of contact: Proposition~\ref{prop:rigidity}(a), which excludes alternation-refining interpolation, is similar in scope to Whitehead's epochal theory of becoming.
-\subsection{Fixed points}
-The main idea behind this development is the fixed-point-freeness of an involution (Theorem~\ref{thm:nobeing}). Lawvere's fixed-point theorem brings together the classical diagonal arguments \cite{lawvere1969,cantor1891,godel1931}, and Yanofsky's survey gives an overview of the field \cite{yanofsky2003}. In Lawvere's contrapositive form, a fixed-point-free map leads to a diagonal result. Lemma~\ref{lem:diaguniform} is itself a symmetry argument involving two elements. The underlying mechanism is related to the classical results, which are mentioned for context.
+McTaggart separated the C-series, ordered and undirected, from the B- and A-series \cite{mctaggart1908}. The world and tensed-world distinction is broader, since it adds a bare binary relation to an unordered base. Farr's C-theory keeps the ordering of events and denies direction \cite{farr2020}, which Theorem~\ref{thm:orientation} shows to be a stable position: no invariance argument reaches direction.
+
+The formal alternation is at-at variation, which Williams and Smart contrast with passage \cite{williams1951,smart1949}, and that contrast is why Section~\ref{sec:obstruction} marks a second gap. Broad and Prior state what a believer in real becoming wants beyond variation \cite{broad1923,prior1959}. Grünbaum holds that becoming is mind-dependent, arising with conceptualized awareness of an event \cite{grunbaum1967}; that makes him the nearest neighbor here, since all content sits in tokening facts and succession is priced separately.
+
+Mellor's token-reflexive account is the closest formal match to the $\mathrm{tok}/h$ signature, giving tenseless truth conditions for tensed tokens with tokening facts carrying the load \cite{mellor1998}. Proposition~\ref{prop:freeze} sits well with it, and Section~\ref{sec:indep} states the scope condition his causal reduction imposes on the independence result. Fine's fragmentalism gives tensed facts without a global standpoint \cite{fine2005}; the still and running pair has no fragment structure, so the framework here has nothing to say to a fragmentalist, and the limitation is real. Skow argues that objective becoming takes the form of a moving spotlight \cite{skow2015}, which names the second gap precisely: the run is variation along a succession, and the spotlight is the further commitment. Putnam's argument from relativity is answered for the realized instances in Section~\ref{sec:indep} \cite{putnam1967}.
+
+One point of contact with the process tradition is exact. Proposition~\ref{prop:rigidity}(a) excludes alternation-refining interpolation, which is close in scope to Whitehead's epochal theory of becoming: an act of becoming is not itself divisible into earlier and later acts of the same kind \cite{whitehead1929}.
+
+\subsection{Diagonal arguments}
+Theorem~\ref{thm:nobeing} and Proposition~\ref{prop:nofix} state that an involution has no fixed point here. Lemma~\ref{lem:diaguniform} is a symmetry argument on two elements. Lawvere's fixed-point theorem organizes the classical diagonal arguments \cite{lawvere1969,cantor1891,godel1931}, and in its contrapositive form a fixed-point-free endomap blocks the point-surjections that would produce a diagonal. The relation here is one of family resemblance: the results above are proved directly by case analysis on two values, and no instance of Lawvere's theorem is used.
+
 \section{Verification}
 \label{sec:mech}
 
-Every labeled result of Sections~\ref{sec:regiment}, \ref{sec:formal}, and \ref{sec:obstruction} is a named declaration in one of two standalone Lean~4 files \cite{demoura2021}, prelude only, with no \lf{sorry}, no \lf{axiom}, and no \lf{import}. Each file ends with a \lf{\#print axioms} audit of its main results; every line reports independence from all axioms, Lean's standard three included. Two calibrations belong with that report. The development is constructive over types with decidable equality, and its proofs are finite case analysis and induction; for such material the empty axiom footprint is the expected outcome, and the audit records it. And the kernel checks the conditionals: the regimentation of Section~\ref{sec:regiment}, the empirical discharge of Section~\ref{sec:scope}, and the standing of $P$ are argued in prose, with Section~\ref{sec:scope}'s canonicity observation showing the discharge lives outside the system as a matter of metatheory.
+Every labeled result of Sections~\ref{sec:regiment}, \ref{sec:formal}, \ref{sec:obstruction} and~\ref{sec:dilemma}, definitions included, is a named declaration in one of two standalone Lean~4 files \cite{demoura2021}, prelude only, with no \lf{sorry}, no \lf{axiom}, and no \lf{import}. Each file ends with a \lf{\#print axioms} audit of its results; every line reports independence from all axioms, Lean's standard three included.
 
-\begin{center}
+Three calibrations belong with that report. The development is constructive over types with decidable equality, and its proofs are finite case analysis and induction; for such material the empty axiom footprint is the expected outcome, and the audit records it. The kernel checks the conditionals; the regimentation of Section~\ref{sec:regiment}, the empirical discharge of Section~\ref{sec:scope}, and the standing of $P$ are argued in prose, with the canonicity observation of Section~\ref{sec:scope} placing the discharge outside the system. And the two files are standalone, so shared material is duplicated deliberately: \lf{transp} with its lemmas and \lf{ne\_eq\_not} appear in both. Duplication is the price of dropping imports.
+
 \footnotesize
-\begin{tabular}{@{}p{4.6cm}p{9.4cm}@{}}
+\begin{longtable}{@{}p{4.4cm}p{9.6cm}@{}}
 \toprule
 Here & Lean \\
 \midrule
-Proposition~\ref{prop:coincide} & \lf{one\_candidate}, \lf{invariant\_binary\_classified} \\
-Corollary~\ref{cor:arena} & \lf{bare\_one\_is\_mute}, \lf{bare\_three\_is\_mute}, \lf{two\_at\_most}, \lf{two\_speaks} \\
-Propositions~\ref{prop:candidate}, \ref{prop:idmute} & \lf{one\_candidate}, \lf{constants\_not\_structureless}, \lf{id\_says\_nothing}, \lf{id\_structureless} \\
-Proposition~\ref{prop:retorsion}, Corollary~\ref{cor:noundrawn} & \lf{retorsion}, \lf{no\_undrawn\_denial} \\
-Lemmas~\ref{lem:diaginv}, \ref{lem:diaguniform} & \lf{defble\_invariant}, \lf{diagonal\_uniform} \\
+\endfirsthead
+\toprule
+Here & Lean \\
+\midrule
+\endhead
+\multicolumn{2}{@{}l}{\emph{\lf{lean/Becoming.lean}}} \\
+Definition~\ref{def:equiv} & \lf{Equivariant}, with \lf{transp}, \lf{transp\_left}, \lf{transp\_right}, \lf{transp\_fixes}, \lf{transp\_same} \\
+Proposition~\ref{prop:coincide} & \lf{equivariant\_iff\_structureless}, \lf{transp\_true\_false}, \lf{transp\_false\_true}, \lf{one\_candidate}, \lf{defble\_decidable}, \lf{defble\_classified}, \lf{invariant\_binary\_classified}, \lf{invariant\_extends\_defble}, \lf{defble\_extends\_invariant} \\
+Proposition~\ref{prop:one} & \lf{bare\_one\_is\_mute} \\
+Proposition~\ref{prop:three} & \lf{bare\_three\_is\_mute}, \lf{third\_value\_stills} \\
+Proposition~\ref{prop:threestill} & \lf{three\_gives\_third}, \lf{three\_values\_are\_still} \\
+Proposition~\ref{prop:twoatmost} & \lf{two\_at\_most} \\
+Proposition~\ref{prop:two} & \lf{two\_swaps}, \lf{two\_speaks} \\
+Corollary~\ref{cor:arena} & \lf{moves\_iff\_two} \\
+Definition~\ref{def:markequiv} & \lf{MarkedEquivariant} \\
+Proposition~\ref{prop:markmoves} & \lf{marked\_three\_moves} (constant-map witness) \\
+Proposition~\ref{prop:markpivot} & \lf{marked\_two\_at\_most} \\
+Corollary~\ref{cor:markstill} & \lf{mark\_is\_fixed}, \lf{mark\_orbit\_still} \\
+Theorem~\ref{thm:markedarena} & \lf{mark\_moves\_iff\_two}, \lf{marked\_refuses\_iff\_two}, with \lf{two\_swaps\_marked}, \lf{two\_off\_mark\_eq} \\
+Proposition~\ref{prop:marksharp} & \lf{two\_moves\_the\_mark} \\
+Definition~\ref{def:structureless} & \lf{Structureless} \\
+Proposition~\ref{prop:candidate} & \lf{one\_candidate} \\
+Proposition~\ref{prop:idmute} & \lf{constants\_not\_structureless}, \lf{id\_structureless}, \lf{id\_says\_nothing}, \lf{id\_graph\_says\_nothing} \\
+Definition~\ref{def:draws} & \lf{Draws} \\
+Proposition~\ref{prop:retorsion} & \lf{retorsion} \\
+Corollary~\ref{cor:noundrawn} & \lf{no\_undrawn\_denial} \\
+Definition~\ref{def:defble} & \lf{Defble} \\
+Lemma~\ref{lem:diaginv} & \lf{defble\_invariant} \\
+Lemma~\ref{lem:diaguniform} & \lf{diagonal\_uniform} \\
+Definition~\ref{def:articulate} & \lf{Excludes}, \lf{Says}, \lf{ObjSat}, \lf{ProcSat}, \lf{Sat}, \lf{Articulates} \\
 Proposition~\ref{prop:kills} & \lf{says\_kills\_the\_object} \\
 Theorem~\ref{thm:law} & \lf{absolute\_law}, \lf{absolute\_articulation}, \lf{absolute\_is\_inhabited} \\
-Theorem~\ref{thm:nobeing} & \lf{no\_static\_instance}, \lf{no\_being}, \lf{no\_fixpoint}, \lf{ne\_eq\_not} \\
-Theorem~\ref{thm:becoming} & \lf{becoming\_exists}, \lf{becoming\_unique}, \lf{two\_tick\_clock}, \lf{clock\_runs}, \lf{run\_unique}, \lf{refusal\_is\_running}, \lf{seed\_is\_relabel} \\
+Theorem~\ref{thm:nobeing} & \lf{no\_being}, \lf{no\_being\_eq} \\
+Proposition~\ref{prop:nofix} & \lf{no\_static\_instance}, \lf{no\_fixpoint} \\
+Lemma~\ref{lem:neeqnot} & \lf{ne\_eq\_not} \\
+Definition~\ref{def:orbit} & \lf{orbit}, \lf{Solves} \\
+Theorem~\ref{thm:becoming} & \lf{becoming\_exists}, \lf{becoming\_unique}, \lf{two\_tick\_clock}, \lf{clock\_runs}, \lf{run\_unique}, \lf{refusal\_is\_running}, \lf{seed\_is\_relabel}, \lf{relabel} \\
+Definition~\ref{def:occurs} & \lf{Occurs} \\
 Theorem~\ref{thm:discrimination} & \lf{event\_retorsion}, \lf{discrimination} \\
+Remark~\ref{rem:deflation} & third conjunct of \lf{discrimination} \\
 Theorem~\ref{thm:main} & \lf{ontological\_argument} \\
 \midrule
+\multicolumn{2}{@{}l}{\emph{\lf{lean/Obstruction.lean}}} \\
+Definition~\ref{def:world} & \lf{World}, \lf{Claim}, \lf{DiscriminatesDenial}, \lf{Undeniable}, \lf{TensedWorld}, \lf{Still}, \lf{Runs}, with \lf{occurs\_undeniable} \\
+Proposition~\ref{prop:undeniableweak} & \lf{undeniable\_trivial} \\
 Proposition~\ref{prop:freeze} & \lf{freeze}, \lf{two\_models} \\
-Theorem~\ref{thm:obstruction} & \lf{obstruction}, with \lf{still\_never\_runs}, \lf{occurs\_undeniable}; tensed typing as \lf{obstruction\_tensed} \\
+Theorem~\ref{thm:obstruction} & \lf{obstruction}, with \lf{still\_never\_runs} \\
 Corollary~\ref{cor:nobridge} & \lf{no\_undeniable\_bridge} \\
-$P$, actuality, the chain & \lf{Successive}, \lf{actuality\_tick}, \lf{chain\_runs} \\
-Proposition~\ref{prop:independence} & \lf{premise\_underivable}, \lf{premise\_unrefutable}, \lf{premise\_independent}, \lf{chain\_premise\_independent}, \lf{chain\_hypothesis\_realizable} \\
+$P$ (Section~\ref{sec:premise}) & \lf{Successive} (definition), \lf{OrientedSuccessive} (definition), \lf{oriented\_is\_successive}, \lf{oriented\_needs\_distinct\_tokens} \\
+Theorem~\ref{thm:actuality} & \lf{oriented\_tick}; undirected unpacking as \lf{actuality\_tick} \\
+Theorem~\ref{thm:chain} & \lf{OrientedRuns} (definition), \lf{oriented\_chain\_runs}, \lf{oriented\_runs\_run}; undirected unpacking as \lf{chain\_runs} \\
+Proposition~\ref{prop:independence} & \lf{premise\_fails\_still}, \lf{premise\_holds\_running}, \lf{premise\_independent}, \lf{chain\_premise\_independent}, \lf{no\_claim\_settles\_premise}, \lf{oriented\_premise\_independent}, \lf{chain\_hypothesis\_realizable}, with the witnesses \lf{stillWitness}, \lf{runningWitness}, \lf{chainWitness}, \lf{orientedStill}, \lf{orientedRunning}, \lf{alt}, \lf{self\_ne\_not} \\
+Proposition~\ref{prop:loci} & \lf{two\_loci\_never\_run}, \lf{one\_locus\_never\_run}, \lf{running\_witness\_never\_runs}, \lf{reflexive\_never\_runs} \\
+Proposition~\ref{prop:invsucc} & \lf{InvariantSucc} (definition), \lf{diag\_uniform}, \lf{offdiag\_uniform}, \lf{invariant\_succ\_classified}, \lf{invariant\_says\_is\_ne} \\
+Theorem~\ref{thm:orientation} & \lf{invariant\_succ\_symm}, \lf{no\_invariant\_orientation}, \lf{invariant\_never\_oriented}, \lf{symmetric\_never\_oriented}; witnesses \lf{adjacencyWitness}, \lf{adjacency\_runs}, \lf{adjacency\_not\_still}, \lf{adjacency\_symmetric}, \lf{adjacency\_not\_oriented}, \lf{running\_witness\_not\_oriented}, \lf{orientedWitness}, \lf{oriented\_witness\_runs}, \lf{oriented\_pair\_realizable}, \lf{succ\_ne\_plus\_two} \\
+Theorem~\ref{thm:hornone} & \lf{obstruction\_tensed} \\
+Theorem~\ref{thm:horntwo} & \lf{SuccDiscriminates} (definition), \lf{horn\_two\_is\_premise}, \lf{horn\_two} \\
 Proposition~\ref{prop:rigidity} & \lf{no\_half\_tick}, \lf{no\_interpolation}, \lf{prior\_value\_exists}, \lf{prior\_token\_determined} \\
 \bottomrule
-\end{tabular}
-\end{center}
+\end{longtable}
+\normalsize
 
-Declaration names \lf{two\_tick\_clock}, \lf{clock\_runs}, and \lf{refusal\_is\_running} are mnemonics; their statements are atemporal facts about the orbit. \lf{transp} is defined on all pairs, degenerate ones giving the identity, and the extra equivariance instances are vacuous. The audits comprise 30 lines in the first file and 17 in the second.
+The declaration names \lf{two\_tick\_clock}, \lf{clock\_runs}, and \lf{refusal\_is\_running} are mnemonics whose statements are atemporal facts about the orbit. \lf{transp} is defined on all pairs, degenerate ones giving the identity, so the extra equivariance instances are vacuous; the same holds of the mark-respecting instances on two values, where every transposition avoiding the mark is the identity. The audits comprise 52 lines in the first file and 47 in the second.
 
-The files accompany the paper as \lf{lean/Becoming.lean} and \lf{lean/Obstruction.lean}, with the toolchain pinned.
+The two Lean files accompany this submission as supplementary material. The toolchain is pinned to \lf{leanprover/lean4:v4.31.0}, and both files check with plain \lf{lean} and no build configuration. The public repository and its archival DOI will be cited on acceptance.
 
 \section{Conclusion}
 
-A medium that marks the denial of a distinction differently from its
-assertion has already drawn one. From that capacity alone, the
-development recovers the two-valued arena, the uniqueness of negation
-as the structureless ground, the absence of any fixed point, and the
-period-two alternation that is the only satisfaction the ground
-admits. The obstruction theorem shows that undeniability and temporal import
-cannot be combined in a single claim, so realisation in time is
-purchased tick by tick, one instance of the deniable premise $P$ per
-step, with the values of any realisation fixed rigidly by theorem once
-its existence is granted. The division of labour is the paper's
-result: structure is theorem; movement is premise. An ontological
-argument conducted at this level of parsimony delivers not a being but
-a becoming.
+A medium that marks the denial of a distinction differently from its assertion has already drawn one. From that capacity the development recovers the two-valued arena, under full relabeling and under the relabelings that fix a mark, the uniqueness of complement as the structureless ground, the absence of any fixed point, and the period-two alternation that is the only satisfaction the ground admits.
+
+The obstruction theorem shows that undeniability and temporal import are unavailable in one claim, so realization in time is purchased tick by tick, one oriented instance of the deniable premise $P$ per step. The still world the corollary needs is exhibited by ostension, and the ledger of Section~\ref{sec:intro} counts that exhibition along with the infinite supply of loci, the discrimination at every step, and the consistent constructive metalogic. Direction has an exact location: on loci with decidable equality every invariant succession is symmetric, so the orientation clause of $P$ carries content no invariance argument reaches. Once existence of a tick is granted, the values of any realization are fixed by theorem.
+
+The division of labor is the result. Structure is theorem; movement is premise. An ontological argument conducted at this level of parsimony delivers a becoming, and states its price.
 
 \begin{thebibliography}{99}
 
-\bibitem{albert1985} H.\ Albert, \emph{Treatise on Critical Reason}, Princeton University Press, 1985.
+\bibitem{albert1985} H.\ Albert, \emph{Treatise on Critical Reason}, trans.\ M.\ V.\ Rorty, Princeton University Press, 1985; the M\"unchhausen trilemma at ch.\ 1, p.\ 18.
 
 \bibitem{anderson1990} C.\ A.\ Anderson, ``Some Emendations of G\"odel's Ontological Proof,'' \emph{Faith and Philosophy} 7(3), 1990, 291--303.
 
 \bibitem{anselm} Anselm of Canterbury, \emph{Proslogion}, chs.\ 2--3, c.\ 1078; in \emph{Anselm of Canterbury: The Major Works}, ed.\ B.\ Davies and G.\ R.\ Evans, Oxford University Press, 1998.
 
-\bibitem{apel1980} K.-O.\ Apel, \emph{Towards a Transformation of Philosophy}, Routledge \& Kegan Paul, 1980.
+\bibitem{apel1980} K.-O.\ Apel, \emph{Towards a Transformation of Philosophy}, trans.\ G.\ Adey and D.\ Frisby, Routledge \& Kegan Paul, 1980.
 
-\bibitem{aristotle} Aristotle, \emph{Metaphysics} $\Gamma$.3--4, 1005b35--1006a28; in \emph{The Complete Works of Aristotle}, ed.\ J.\ Barnes, Princeton University Press, 1984.
+\bibitem{aristotle} Aristotle, \emph{Metaphysics} $\Gamma$.3--4; the elenctic defense of non-contradiction begins at $\Gamma$.4, 1006a11. In \emph{The Complete Works of Aristotle}, ed.\ J.\ Barnes, Princeton University Press, 1984.
 
 \bibitem{benzmuller2014} C.\ Benzm\"uller and B.\ Woltzenlogel Paleo, ``Automating G\"odel's Ontological Proof of God's Existence with Higher-order Automated Theorem Provers,'' in \emph{ECAI 2014}, IOS Press, 2014, 93--98.
 
 \bibitem{benzmuller2016} C.\ Benzm\"uller and B.\ Woltzenlogel Paleo, ``The Inconsistency in G\"odel's Ontological Argument: A Success Story for AI in Metaphysics,'' in \emph{Proceedings of IJCAI 2016}, 2016, 936--942.
 
-\bibitem{bonnay2008} D.\ Bonnay, ``Logicality and Invariance,'' \emph{Bulletin of Symbolic Logic} 14(1), 2008, 29--68.
+\bibitem{berto2007} F.\ Berto, ``Hegel's Dialectics as a Semantic Theory: An Analytic Reading,'' \emph{European Journal of Philosophy} 15(1), 2007, 19--39.
 
 \bibitem{broad1923} C.\ D.\ Broad, \emph{Scientific Thought}, Kegan Paul, 1923.
+
+\bibitem{burnyeat1976} M.\ F.\ Burnyeat, ``Protagoras and Self-Refutation in Plato's \emph{Theaetetus},'' \emph{Philosophical Review} 85(2), 1976, 172--195.
 
 \bibitem{cantor1891} G.\ Cantor, ``\"Uber eine elementare Frage der Mannigfaltigkeitslehre,'' \emph{Jahresbericht der Deutschen Mathematiker-Vereinigung} 1, 1891, 75--78.
 
 \bibitem{carneiro2019} M.\ Carneiro, \emph{The Type Theory of Lean}, MSc thesis, Carnegie Mellon University, 2019.
 
-\bibitem{castagnoli2010} L.\ Castagnoli, \emph{Ancient Self-Refutation}, Cambridge University Press, 2010.
+\bibitem{castagnoli2010} L.\ Castagnoli, \emph{Ancient Self-Refutation: The Logic and History of the Self-Refutation Argument from Democritus to Augustine}, Cambridge University Press, 2010.
+
+\bibitem{cullfrank1979} P.\ Cull and W.\ Frank, ``Flaws of Form,'' \emph{International Journal of General Systems} 5(4), 1979, 201--211.
 
 \bibitem{demoura2021} L.\ de Moura and S.\ Ullrich, ``The Lean 4 Theorem Prover and Programming Language,'' in \emph{Automated Deduction: CADE 28}, Springer, 2021, 625--635.
 
@@ -515,7 +866,7 @@ a becoming.
 
 \bibitem{findlay1948} J.\ N.\ Findlay, ``Can God's Existence Be Disproved?,'' \emph{Mind} 57(226), 1948, 176--183.
 
-\bibitem{fine2005} K.\ Fine, ``Tense and Reality,'' in \emph{Modality and Tense}, Oxford University Press, 2005, 261--320.
+\bibitem{fine2005} K.\ Fine, ``Tense and Reality,'' in \emph{Modality and Tense: Philosophical Papers}, Oxford University Press, 2005, 261--320.
 
 \bibitem{godel1931} K.\ G\"odel, ``\"Uber formal unentscheidbare S\"atze der Principia Mathematica und verwandter Systeme I,'' \emph{Monatshefte f\"ur Mathematik und Physik} 38, 1931, 173--198.
 
@@ -523,17 +874,15 @@ a becoming.
 
 \bibitem{grunbaum1967} A.\ Gr\"unbaum, ``The Status of Temporal Becoming,'' in \emph{Modern Science and Zeno's Paradoxes}, Wesleyan University Press, 1967, 7--36.
 
-\bibitem{habermas1990} J.\ Habermas, \emph{Moral Consciousness and Communicative Action}, MIT Press, 1990.
+\bibitem{habermas1990} J.\ Habermas, \emph{Moral Consciousness and Communicative Action}, trans.\ C.\ Lenhardt and S.\ W.\ Nicholsen, MIT Press, 1990.
 
-\bibitem{hartshorne1962} C.\ Hartshorne, \emph{The Logic of Perfection}, Open Court, 1962.
+\bibitem{hartshorne1962} C.\ Hartshorne, \emph{The Logic of Perfection and Other Essays in Neoclassical Metaphysics}, Open Court, 1962.
 
-\bibitem{hegel1812} G.\ W.\ F.\ Hegel, \emph{The Science of Logic} (1812--1816), trans.\ G.\ di Giovanni, Cambridge University Press, 2010, GW 21:53--70.
-
-\bibitem{heraclitus} Heraclitus, DK 22 B12, B49a, B91, in H.\ Diels and W.\ Kranz, \emph{Die Fragmente der Vorsokratiker}, 6th ed., Weidmann, 1952.
-
-\bibitem{hintikka1962} J.\ Hintikka, ``Cogito, Ergo Sum: Inference or Performance?,'' \emph{Philosophical Review} 71(1), 1962, 3--32.
+\bibitem{hegel1832} G.\ W.\ F.\ Hegel, \emph{The Science of Logic}, trans.\ G.\ di Giovanni, Cambridge Hegel Translations, Cambridge University Press, 2010. The Doctrine of Being there is the 1832 second edition, \emph{Gesammelte Werke} 21; the 1812 first edition of the Doctrine of Being is in \emph{Gesammelte Werke} 11, and the opening differs between them. The formula \emph{omnis determinatio est negatio} is Hegel's condensation of Spinoza's clause, used in the \emph{Science of Logic} and in the \emph{Lectures on the History of Philosophy} on Spinoza.
 
 \bibitem{houlgate2006} S.\ Houlgate, \emph{The Opening of Hegel's Logic: From Being to Infinity}, Purdue University Press, 2006.
+
+\bibitem{hintikka1962} J.\ Hintikka, ``Cogito, Ergo Sum: Inference or Performance?,'' \emph{Philosophical Review} 71(1), 1962, 3--32.
 
 \bibitem{illies2003} C.\ Illies, \emph{The Grounds of Ethical Judgement: New Transcendental Arguments in Moral Philosophy}, Oxford University Press, 2003.
 
@@ -545,7 +894,11 @@ a becoming.
 
 \bibitem{kauffmanvarela1980} L.\ H.\ Kauffman and F.\ J.\ Varela, ``Form Dynamics,'' \emph{Journal of Social and Biological Structures} 3(2), 1980, 171--206.
 
-\bibitem{kierkegaard1846} S.\ Kierkegaard, \emph{Concluding Unscientific Postscript} (1846), trans.\ H.\ V.\ Hong and E.\ H.\ Hong, Princeton University Press, 1992.
+\bibitem{kierkegaard1844} S.\ Kierkegaard, \emph{Philosophical Fragments} (1844), the ``Interlude'' between chs.\ IV and V; trans.\ H.\ V.\ Hong and E.\ H.\ Hong, \emph{Kierkegaard's Writings} VII, Princeton University Press, 1985.
+
+\bibitem{kierkegaard1846} S.\ Kierkegaard, \emph{Concluding Unscientific Postscript to Philosophical Fragments} (1846), trans.\ H.\ V.\ Hong and E.\ H.\ Hong, Princeton University Press, 1992.
+
+\bibitem{kuhlmann1985} W.\ Kuhlmann, \emph{Reflexive Letztbegr\"undung: Untersuchungen zur Transzendentalpragmatik}, Karl Alber, Freiburg and Munich, 1985.
 
 \bibitem{lawvere1969} F.\ W.\ Lawvere, ``Diagonal Arguments and Cartesian Closed Categories,'' in \emph{Category Theory, Homology Theory and their Applications II}, Springer, 1969, 134--145.
 
@@ -555,33 +908,37 @@ a becoming.
 
 \bibitem{maker1994} W.\ Maker, \emph{Philosophy Without Foundations: Rethinking Hegel}, SUNY Press, 1994.
 
+\bibitem{malcolm1960} N.\ Malcolm, ``Anselm's Ontological Arguments,'' \emph{Philosophical Review} 69(1), 1960, 41--62.
+
 \bibitem{mcgee1996} V.\ McGee, ``Logical Operations,'' \emph{Journal of Philosophical Logic} 25(6), 1996, 567--580.
 
 \bibitem{mctaggart1908} J.\ M.\ E.\ McTaggart, ``The Unreality of Time,'' \emph{Mind} 17(68), 1908, 457--474.
 
 \bibitem{mellor1998} D.\ H.\ Mellor, \emph{Real Time II}, Routledge, 1998.
 
-\bibitem{moore1939} G.\ E.\ Moore, ``Proof of an External World,'' \emph{Proceedings of the British Academy} 25, 1939, 273--300.
+\bibitem{moore1925} G.\ E.\ Moore, ``A Defence of Common Sense,'' in \emph{Contemporary British Philosophy, Second Series}, ed.\ J.\ H.\ Muirhead, George Allen \& Unwin, London, 1925, 192--233.
 
 \bibitem{oppenheimerzalta2011} P.\ E.\ Oppenheimer and E.\ N.\ Zalta, ``A Computationally-Discovered Simplification of the Ontological Argument,'' \emph{Australasian Journal of Philosophy} 89(2), 2011, 333--349.
 
 \bibitem{oppy1995} G.\ Oppy, \emph{Ontological Arguments and Belief in God}, Cambridge University Press, 1995.
 
-\bibitem{plantinga1974} A.\ Plantinga, \emph{The Nature of Necessity}, Oxford University Press, 1974.
+\bibitem{oppy2018} G.\ Oppy (ed.), \emph{Ontological Arguments}, Classic Philosophical Arguments, Cambridge University Press, 2018.
 
-\bibitem{priest2006} G.\ Priest, \emph{In Contradiction}, 2nd ed., Oxford University Press, 2006.
+\bibitem{plantinga1974} A.\ Plantinga, \emph{The Nature of Necessity}, Oxford University Press, 1974, ch.\ 10.
+
+\bibitem{plato} Plato, \emph{Theaetetus} 170e--171c; trans.\ M.\ J.\ Levett, rev.\ M.\ Burnyeat, in \emph{Plato: Complete Works}, ed.\ J.\ M.\ Cooper, Hackett, 1997.
+
+\bibitem{priest2006} G.\ Priest, \emph{In Contradiction: A Study of the Transconsistent}, 2nd ed., Oxford University Press, 2006.
 
 \bibitem{prior1959} A.\ N.\ Prior, ``Thank Goodness That's Over,'' \emph{Philosophy} 34(128), 1959, 12--17.
 
 \bibitem{putnam1967} H.\ Putnam, ``Time and Physical Geometry,'' \emph{Journal of Philosophy} 64(8), 1967, 240--247.
 
-\bibitem{rescher1996} N.\ Rescher, \emph{Process Metaphysics}, SUNY Press, 1996.
-
 \bibitem{schelling1994} F.\ W.\ J.\ Schelling, \emph{On the History of Modern Philosophy}, trans.\ A.\ Bowie, Cambridge University Press, 1994.
 
-\bibitem{sher1991} G.\ Sher, \emph{The Bounds of Logic}, MIT Press, 1991.
+\bibitem{sher1991} G.\ Sher, \emph{The Bounds of Logic: A Generalized Viewpoint}, MIT Press, 1991.
 
-\bibitem{sider2001} T.\ Sider, \emph{Four-Dimensionalism}, Oxford University Press, 2001.
+\bibitem{sider2001} T.\ Sider, \emph{Four-Dimensionalism: An Ontology of Persistence and Time}, Oxford University Press, 2001.
 
 \bibitem{skow2015} B.\ Skow, \emph{Objective Becoming}, Oxford University Press, 2015.
 
@@ -589,11 +946,11 @@ a becoming.
 
 \bibitem{sobel1987} J.\ H.\ Sobel, ``G\"odel's Ontological Proof,'' in \emph{On Being and Saying: Essays for Richard Cartwright}, ed.\ J.\ J.\ Thomson, MIT Press, 1987, 241--261.
 
-\bibitem{spencerbrown1969} G.\ Spencer-Brown, \emph{Laws of Form}, George Allen and Unwin, 1969.
+\bibitem{spencerbrown1969} G.\ Spencer-Brown, \emph{Laws of Form}, George Allen and Unwin, 1969; ch.\ 11, ``Equations of the second degree.''
 
-\bibitem{spinoza1674} B.\ Spinoza, Letter 50, to Jarig Jelles (1674), in \emph{The Letters}, trans.\ S.\ Shirley, Hackett, 1995.
+\bibitem{spinoza1674} B.\ Spinoza, Letter 50, to Jarig Jelles (2 June 1674), in \emph{The Letters}, trans.\ S.\ Shirley, Hackett, 1995. The Latin clause reads \emph{determinatio negatio est}.
 
-\bibitem{stern2000} R.\ Stern, \emph{Transcendental Arguments and Scepticism}, Oxford University Press, 2000.
+\bibitem{stern2000} R.\ Stern, \emph{Transcendental Arguments and Scepticism: Answering the Question of Justification}, Oxford University Press, 2000.
 
 \bibitem{strawson1985} P.\ F.\ Strawson, \emph{Skepticism and Naturalism: Some Varieties}, Columbia University Press, 1985.
 
@@ -601,17 +958,13 @@ a becoming.
 
 \bibitem{tarski1986} A.\ Tarski, ``What Are Logical Notions?,'' ed.\ J.\ Corcoran, \emph{History and Philosophy of Logic} 7(2), 1986, 143--154.
 
-\bibitem{trendelenburg1840} F.\ A.\ Trendelenburg, \emph{Logische Untersuchungen}, vol.\ 1, Bethge, 1840.
-
-\bibitem{vanbenthem1989} J.\ van Benthem, ``Logical Constants Across Varying Types,'' \emph{Notre Dame Journal of Formal Logic} 30(3), 1989, 315--342.
+\bibitem{trendelenburg1870} F.\ A.\ Trendelenburg, \emph{Logische Untersuchungen}, vol.\ 1, 3rd enlarged ed., S.\ Hirzel, Leipzig, 1870, ch.\ III, ``Die dialektische Methode,'' 36--129; first published G.\ Bethge, Berlin, 1840.
 
 \bibitem{varela1975} F.\ J.\ Varela, ``A Calculus for Self-Reference,'' \emph{International Journal of General Systems} 2(1), 1975, 5--24.
 
-\bibitem{whitehead1929} A.\ N.\ Whitehead, \emph{Process and Reality} (1929), corrected ed., Free Press, 1978.
+\bibitem{whitehead1929} A.\ N.\ Whitehead, \emph{Process and Reality} (1929), corrected ed., ed.\ D.\ R.\ Griffin and D.\ W.\ Sherburne, Free Press, 1978.
 
 \bibitem{williams1951} D.\ C.\ Williams, ``The Myth of Passage,'' \emph{Journal of Philosophy} 48(15), 1951, 457--472.
-
-\bibitem{yanofsky2003} N.\ S.\ Yanofsky, ``A Universal Approach to Self-Referential Paradoxes, Incompleteness and Fixed Points,'' \emph{Bulletin of Symbolic Logic} 9(3), 2003, 362--386.
 
 \end{thebibliography}
 

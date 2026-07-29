@@ -9,3 +9,4 @@ paper/*.fdb_latexmk
 paper/*.bbl
 paper/*.blg
 paper/*.tex
+paper/*.pdf
