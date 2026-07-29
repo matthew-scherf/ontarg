@@ -42,7 +42,7 @@ A medium that marks ``no distinction is drawn'' differently from its denial has 
 \section{Introduction}
 \label{sec:intro}
 
-Classical ontological arguments analyze a concept and reach a verdict about existence by reasoning alone \cite{anselm,descartes,godel1995}. The concept analyzed here is the bare capacity of a medium to mark one proposition differently from another, and the verdict has two parts: the structure of a two-state alternation, obtained as verified conditionals, and its realization in temporal succession, which is not obtained but assumed as a premise $P$ of proved independence. Throughout, \emph{becoming} names the alternation together with its realization; readers who reserve the word for passage in the A-theorist's sense should read it as restricted here, with Section~\ref{sec:premise} marking the further gap.
+Classical ontological arguments derive an existence claim from the analysis of a concept \cite{anselm,descartes,godel1995}. The concept here is the capacity of a medium to mark one proposition differently from another. Two results follow: the structure of a two-state alternation, obtained as verified conditionals, and its realization in temporal succession, which requires an independent premise $P$. Throughout, \emph{becoming} denotes the alternation together with that realization; Section~\ref{sec:premise} notes the further gap to A-theoretic passage.
 
 The first part is structural: a law sensitive only to the difference between values moves a point exactly when its carrier has two elements, where it is Boolean complement, a map with no fixed point whose orbit alternates with period two. Section~\ref{sec:brief} lists these results.
 
@@ -116,7 +116,7 @@ The equivalence of invariance with definability is used only on $\B$; elsewhere 
 
 \subsection{Groundhood requires exclusion}
 
-The \emph{ground} is a structureless law beyond the identity. What is at issue is the capacity to mark one proposition \emph{differently from} another; under the identity nothing is marked off from anything, its graph excluding nothing (\lf{id\_graph\_says\_nothing}), so a ground answering to the concept must exclude. Compare Hegel's \emph{omnis determinatio est negatio}, condensing Spinoza's \emph{determinatio negatio est} \cite{spinoza1674,hegel1832}. A Parmenidean ground that excludes nothing remains available at the cost of the concept. The condition is formalized as $\Says$ in Section~\ref{sec:formal}.
+The \emph{ground} is a structureless law beyond the identity. The concept requires marking one proposition differently from another; the identity marks nothing off (\lf{id\_graph\_says\_nothing}). Compare Spinoza/Hegel on determination as negation \cite{spinoza1674,hegel1832}. The condition is $\Says$ in Section~\ref{sec:formal}.
 
 \subsection{Satisfaction is objectual or processual}
 
@@ -127,7 +127,7 @@ Section~\ref{sec:formal} allows a relation to be satisfied in either of two ways
 
 The retorsion step is a fact about cardinality: if $t : \mathrm{Prop} \to M$ takes two values, then $M$ holds two elements, whatever pair of propositions is used. Taking $\lnot\Draws(M)$ and $\Draws(M)$ as the pair aims that fact at the denial.
 
-In Mackie's taxonomy of self-refutation, which distinguishes absolute, operational, and pragmatic kinds \cite{mackie1964}, the result here is absolute: Corollary~\ref{cor:noundrawn} refutes a conjunction. Making the tokening fact an antecedent converts a pragmatic phenomenon into a propositional one, which agrees with Castagnoli against assimilating ancient self-refutation to the pragmatic model \cite{castagnoli2010}. Theorem~\ref{thm:discrimination} is a near analogue of Hintikka's existential inconsistency, with the tokening made explicit \cite{hintikka1962}, and the ancient background is the \emph{peritrope} of the \emph{Theaetetus} and Aristotle's elenctic defense of non-contradiction \cite{plato,aristotle,burnyeat1976}. Kaplan marks the boundary Section~\ref{sec:obstruction} makes precise: a sentence can be true whenever tokened and contingent \cite{kaplan1989}.
+In Mackie's taxonomy the result is absolute (propositional): Corollary~\ref{cor:noundrawn} refutes a conjunction \cite{mackie1964}. Placing the tokening fact in the antecedent converts a pragmatic self-refutation into a propositional one \cite{castagnoli2010}. Theorem~\ref{thm:discrimination} is the analogue of Hintikka's existential inconsistency with the tokening made explicit \cite{hintikka1962}; compare the \emph{peritrope} of the \emph{Theaetetus} and Aristotle's elenctic defense of non-contradiction \cite{plato,aristotle,burnyeat1976}. Kaplan's distinction between context-validity and necessity is the boundary made precise in Section~\ref{sec:obstruction} \cite{kaplan1989}.
 
 \section{Formalization}
 \label{sec:formal}
@@ -138,7 +138,7 @@ Cardinalities are proved through constructive surrogates: ``exactly one element'
 
 \subsection{Arena}
 
-\begin{proposition}[One value is mute]
+\begin{proposition}[One-element carriers]
 \label{prop:one}
 If every two elements of $V$ are equal, every law on $V$ is the identity.
 \end{proposition}
@@ -160,7 +160,7 @@ f(x) = f(\tau_{f(x),z}(x)) = \tau_{f(x),z}(f(x)) = z,
 contradicting $z \neq f(x)$.
 \end{proof}
 
-\begin{proposition}[Three values are still]
+\begin{proposition}[Three values force the identity]
 \label{prop:threestill}
 Let $V$ have decidable equality and hold three pairwise-distinct values $a$, $b$, $c$. Every equivariant law on $V$ is the identity.
 \end{proposition}
@@ -522,7 +522,7 @@ $P$: the tokening of the denial and the tokening of the assertion stand in orien
 
 Both parts are carried by the formalism. The ordering part is $\mathrm{Successive}$: the locus of the denial succeeds to the locus of the assertion. The orientation part adds the failure of the reverse, and must be stated separately because on loci with decidable equality an invariant succession is symmetric (Section~\ref{sec:loci}).
 
-By Proposition~\ref{prop:freeze} the denial of $P$ is realized by a still structure over the same world, so $P$ is deniable, and by Corollary~\ref{cor:nobridge} an undeniable replacement is unavailable. Its standing is Moorean: better supported than any argument that would unseat it \cite{moore1925}. That standing attaches to each realized instance and covers both halves on the act instantiation, since a pair of readings each succeeding the other is beyond what a reader can report. It does not distribute over an infinite family, which is why item~(4) of Section~\ref{sec:intro} records the run separately.
+By Proposition~\ref{prop:freeze} the denial of $P$ is realized by a still structure over the same world, so $P$ is deniable; by Corollary~\ref{cor:nobridge} no undeniable replacement is available. On the act instantiation both halves of $P$ are ordinary reports of reading order \cite{moore1925}. Warrant for a single instance does not extend automatically to an infinite family, so item~(4) of Section~\ref{sec:intro} records the run separately.
 
 \begin{theorem}[Actuality, from $P$]
 \label{thm:actuality}
@@ -554,9 +554,7 @@ Empty succession and total succession over the same two-locus world; Proposition
 
 This is a two-model exhibition over a shared world, relative to one language: claims, in the sense of Definition~\ref{def:world}. The Lean declarations state it and nothing stronger, as \lf{premise\_independent}, \lf{chain\_premise\_independent}, \lf{no\_claim\_settles\_premise}, and \lf{oriented\_premise\_independent}.
 
-Independence is relative to the world signature $(T, h, \mathrm{tok})$, and enriching the signature can change the result. Mellor grounds temporal order in causal order \cite{mellor1998}; if a world carries causal facts and causal order fixes temporal order, then succession supervenes on the enriched signature and $P$ is derivable there. So the scope condition is explicit: independence holds relative to the tokening signature, which is chosen because it is what retorsion reaches, retorsion using a tokening, a reading, and a difference of values and nothing more. A defender of Mellor's reduction can accept the whole development and locate the cost in the causal facts.
-
-Putnam's relativistic argument bears on frame-independent succession between spacelike-separated loci \cite{putnam1967}. The realized instances of $P$ are readings by one reader, hence timelike-related, so the frame-dependence Putnam exploits leaves them alone; no claim of frame-independent succession for arbitrary loci is made here.
+Independence is relative to the signature $(T, h, \mathrm{tok})$. If the signature is enriched with causal facts and causal order determines temporal order, then $P$ may become derivable \cite{mellor1998}. The present signature is exactly what retorsion uses (tokening, reading, difference of values). Putnam's relativity argument concerns frame-independent succession between spacelike-separated events \cite{putnam1967}; realized instances of $P$ are successive readings by one reader and are therefore timelike.
 
 \subsection{Loci and succession}
 \label{sec:loci}
@@ -594,11 +592,11 @@ Let the loci have decidable equality. Every invariant succession on them is symm
 For distinct $u,v$ the off-diagonal uniformity of Proposition~\ref{prop:invsucc} gives $R(u,v) \leftrightarrow R(v,u)$, and the diagonal case is trivial. An oriented run requires a step whose reverse fails.
 \end{proof}
 
-Theorem~\ref{thm:orientation} locates the directional content of $P$: invariance returns the shape of succession, four relations and no more, and nothing about direction. Three witnesses make this concrete. Symmetric adjacency on $\mathbb{N}$ loci runs, is nowhere still, and holds in both orientations at once (\lf{adjacency\_runs}, \lf{adjacency\_not\_oriented}); the total relation satisfies the ordering part of $P$ for every tokening and the oriented part for none (\lf{running\_witness\_not\_oriented}); successor on $\mathbb{N}$ carries the oriented run (\lf{oriented\_witness\_runs}).
+Thus invariance determines the shape of succession (four relations) and not its direction. Witnesses: symmetric adjacency on $\mathbb{N}$ runs and is symmetric (\lf{adjacency\_runs}, \lf{adjacency\_not\_oriented}); the total relation satisfies the ordering half of $P$ everywhere and the oriented half nowhere (\lf{running\_witness\_not\_oriented}); successor on $\mathbb{N}$ yields an oriented run (\lf{oriented\_witness\_runs}).
 
-The clause is local. $\mathrm{OrientedRuns}$ asks of each step that its reverse fail, so a succession can meet it and still carry a closed directed loop: successor on $\mathbb{N}$ with one edge added back from a later locus to an earlier one runs, is nowhere still, and satisfies the oriented run. What the clause secures is irreversibility one step at a time, leaving the global shape of succession open.
+$\mathrm{OrientedRuns}$ requires only local irreversibility. A succession may satisfy it and still contain a directed cycle (e.g.\ successor on $\mathbb{N}$ plus one reverse edge). Global topology is left open.
 
-A C-theorist keeps a betweenness ordering of events and denies it a direction \cite{farr2020,mctaggart1908}, granting the ordering part of $P$ and refusing the orientation part; Theorem~\ref{thm:orientation} shows the refusal safe from any invariance argument, with symmetric adjacency as proxy for the ternary betweenness relation (\lf{adjacencyWitness}). Two gaps therefore remain: from structure to succession, which $P$ closes at a cost, and from succession to passage in the A-theorist's sense, which stays open \cite{sider2001,williams1951}.
+A C-theorist accepts order without direction \cite{farr2020,mctaggart1908}; Theorem~\ref{thm:orientation} shows that refusal is stable under invariance, with symmetric adjacency as a binary proxy for betweenness (\lf{adjacencyWitness}). Two gaps remain: structure to succession (closed by $P$), and succession to A-theoretic passage (left open) \cite{sider2001,williams1951}.
 
 \subsection{Rigidity}
 
@@ -636,57 +634,41 @@ Suppose tensed-level discrimination uses the succession component, so that a dis
 Unfolding the definition gives the first claim as an identity of statements. For the second, a succession fact contradicts stillness at the pair that witnesses it.
 \end{proof}
 
-On the first horn the obstruction survives the move to tensed worlds; on the second, tensed discrimination carries a succession fact with it, so tensed content arrives together with succession and is charged exactly as $P$ is. The alternative regimentation therefore reproduces the same charge. Kaplan's contingency of the context-valid marks the same boundary in other terms \cite{kaplan1989}.
+On the first horn the obstruction survives. On the second, discrimination already contains a succession fact, so the temporal content is assumed rather than derived. Either alternative reproduces the accounting of Section~\ref{sec:obstruction}. Compare Kaplan on context-validity versus necessity \cite{kaplan1989}.
 
 \section{Related work}
 \label{sec:related}
 
 \subsection{Ontological arguments}
-Anselm, Descartes, and Gödel argue from a concept to necessary existence \cite{anselm,descartes,godel1995}; Oppy surveys the family and its failures \cite{oppy1995,oppy2018}. The structure here is the same with both terms changed: the concept is the capacity to make a distinction, and what follows is an alternation.
+Anselm, Descartes, and Gödel derive necessary existence from a concept \cite{anselm,descartes,godel1995}; Oppy surveys the family \cite{oppy1995,oppy2018}. Here the concept is discrimination, and the derived structure is an alternation rather than a necessary being.
 
-Findlay argues that the concept of a necessary being is incoherent, the features that would make existence follow from the concept being the ones that make the concept unavailable \cite{findlay1948}; Malcolm's modal reply reinstates the argument \cite{malcolm1960}. Theorem~\ref{thm:nobeing} inherits one feature of Findlay's: a fixed point is what the concept would require of the ground, and the ground has none.
+Findlay holds that a necessary being is an incoherent concept \cite{findlay1948}; Malcolm replies in modal form \cite{malcolm1960}. Theorem~\ref{thm:nobeing} likewise rules out a fixed point of the ground. Hartshorne's dipolar theism separates necessary existence from contingent actuality \cite{hartshorne1962}; the present division is similar, except that realization is a premise rather than a theorem, for the reason given by Theorem~\ref{thm:obstruction}. Plantinga treats the modal argument as establishing rational acceptability \cite{plantinga1974}; Leibniz insists on a possibility premise \cite{leibniz1714}. The method here follows that demand: prove what can be proved, and isolate $P$.
 
-Hartshorne's dipolar theism divides the divine into an abstract pole, where existence is necessary and his modal argument applies, and a concrete pole of contingent actuality \cite{hartshorne1962}. The division here has that shape but differs at the end: Hartshorne still derives a necessary existent from the concept, whereas the concept analyzed here has no fixed point and the step to realization is a premise, for the reason Theorem~\ref{thm:obstruction} gives. Plantinga presents the modal argument as establishing only the rational acceptability of its conclusion \cite{plantinga1974}, and Leibniz insisted on the possibility premise behind Anselm and Descartes \cite{leibniz1714}, a demand the method here follows.
-
-Kant holds at A598/B626 that being is no real predicate \cite{kant1781}; the separate thesis that every existential judgment is synthetic is the one Theorem~\ref{thm:obstruction} bears on, since undeniability, available a priori, fails to reach temporal realization. The name ``ontological'' is kept on retorsive grounds: a discriminated tokening of the denial of occurrence makes the denial false (Corollary~\ref{cor:noundrawn}).
+Kant's claim that being is not a real predicate \cite{kant1781} is adjacent to the synthetic character of existential judgment. Theorem~\ref{thm:obstruction} bears on the latter: a priori undeniability does not yield temporal realization. The title is retained because the empirical discharge is retorsive (Corollary~\ref{cor:noundrawn}).
 
 \subsection{Verified ontological arguments}
-Oppenheimer and Zalta simplified Anselm's argument with an automated reasoner \cite{oppenheimerzalta2011}. Benzmüller and Woltzenlogel Paleo checked Gödel's proof with higher-order provers, confirmed the modal collapse of the Scott variant \cite{benzmuller2014} known since Sobel \cite{sobel1987}, and later showed Gödel's original axioms inconsistent \cite{benzmuller2016}; Anderson's emendations trade axiom strength against conclusion strength \cite{anderson1990}. Those projects place existential content in the premises and let a machine check the cost. The development here declares no axiom, its existential content sitting in the empirical step and in $P$; conditionalization relocates that content rather than removing it, which is why the commitments are listed in one place.
+Automated treatments of Anselm and of Gödel place existential content in the axioms and check the derivation \cite{oppenheimerzalta2011,benzmuller2014,sobel1987,benzmuller2016,anderson1990}. The present development declares no axiom; existential content sits in the ostensive step and in $P$.
 
 \subsection{Retorsion and transcendental arguments}
-Albert's Münchhausen trilemma sets out three ways an attempted final justification can end: infinite regress, circularity, or a break-off at a point chosen without further justification \cite{albert1985}. Apel and Kuhlmann answer with reflexive Letztbegründung, holding the break-off avoidable because the denial of certain premises is performatively self-defeating \cite{apel1980,kuhlmann1985}; Habermas declines the strong ultimate grounding \cite{habermas1990}. The position here accepts the break-off horn and describes the break: the conditionals are proved, the premise is exhibited and shown independent of the claim language, and Theorem~\ref{thm:obstruction} shows the break unavoidable for the temporal case.
+Albert's Münchhausen trilemma lists regress, circularity, and unjustified break-off \cite{albert1985}. Apel and Kuhlmann seek to avoid break-off by performative self-defeat \cite{apel1980,kuhlmann1985}; Habermas declines strong ultimate grounding \cite{habermas1990}. The present position accepts break-off for the temporal case: the conditionals are proved, $P$ is independent of the claim language, and Theorem~\ref{thm:obstruction} shows why an undeniable temporal bridge is unavailable.
 
-Stroud argues that transcendental arguments reach facts about what a denier must believe, leaving the world untouched \cite{stroud1968}. At world level the retorsion step derives an objective fact, occurrence, from a discrimination condition, so for that one fact the limit is passed, with Proposition~\ref{prop:undeniableweak} calibrating how little undeniability delivers on its own; at the level of succession the limit returns and Theorem~\ref{thm:obstruction} locates it. In Stern's terms the result is modest for succession and ambitious for occurrence \cite{stern2000}, so Illies, who defends an ambitious transcendental argument in moral philosophy \cite{illies2003}, is among the targets of the obstruction. Moore is the source for the standing given to $P$ \cite{moore1925}, and Strawson's naturalism, on which skeptical doubts are idle because the commitments they question are not up for choice \cite{strawson1985}, is its informal support.
+Stroud holds that transcendental arguments reach only what a denier must believe \cite{stroud1968}. Retorsion yields an objective occurrence fact, so that limit is passed for occurrence (with Proposition~\ref{prop:undeniableweak} showing how weak bare undeniability is); for succession the limit returns at Theorem~\ref{thm:obstruction}. In Stern's terms the result is ambitious for occurrence and modest for succession \cite{stern2000}; Illies's ambitious moral argument is among the targets of the obstruction \cite{illies2003}. The standing of a realized instance of $P$ follows Moore and Strawson \cite{moore1925,strawson1985}.
 
 \subsection{Laws of Form}
 \label{sec:lof}
-Spencer-Brown begins with an injunction to draw a distinction, and Chapter 11 resolves an equation with no solution by admitting an oscillating value, presented as the entry of time \cite{spencerbrown1969}. Four differences follow.
-
-First, he presents the primary arithmetic as derived from the act of distinction, a derivation whose success is contested \cite{cullfrank1979}. Here the arena and the uniqueness of the law are theorems with stated hypotheses (Corollary~\ref{cor:arena}, Proposition~\ref{prop:candidate}), and Section~\ref{sec:mark} runs the arena result again under the weaker symmetry a mark leaves standing.
-
-Second, Varela answers the oscillation with a third value, autonomous alongside marked and unmarked \cite{varela1975}. His calculus is marked, as Spencer-Brown's is, so the marked results apply: on three values every mark-respecting law fixes the mark by Corollary~\ref{cor:markstill}, and by Theorem~\ref{thm:markedarena} such a law moves the mark, or every value, exactly on two. No mark-respecting dynamics reaches a third state, and under full equivariance a third value stills the carrier outright (Proposition~\ref{prop:threestill}). The disagreement turns on the standing of the autonomous value, which Varela introduces with structure of its own.
-
-Third, Kauffman reads the oscillation as an eigenform, a fixed point existing as an infinite form \cite{kauffman1987,kauffmanvarela1980}, which Theorem~\ref{thm:nobeing} denies here; the disagreement turns on whether the infinite form counts as a value of the carrier, and on two values with decidable equality it does not.
-
-Fourth, the oscillation is introduced there by a construction, whereas here it arrives by classifying articulate relations (Theorem~\ref{thm:law}), and its temporal reading, stated directly there, is shown by Theorem~\ref{thm:obstruction} to be unavailable from undeniable premises.
+Spencer-Brown introduces an oscillating value to solve an equation with no ordinary solution and reads it as time \cite{spencerbrown1969}. Differences: (i)~the arena and uniqueness results here are theorems with stated hypotheses (Corollary~\ref{cor:arena}, Proposition~\ref{prop:candidate}; cf.\ \cite{cullfrank1979}); (ii)~Varela's third autonomous value \cite{varela1975} is incompatible with mark-respecting dynamics on three values (Corollary~\ref{cor:markstill}, Theorem~\ref{thm:markedarena}) and with full equivariance (Proposition~\ref{prop:threestill}); (iii)~Kauffman's eigenform reading \cite{kauffman1987,kauffmanvarela1980} posits a fixed point denied by Theorem~\ref{thm:nobeing} on the present carrier; (iv)~the temporal reading is not derived but assigned to $P$ by Theorem~\ref{thm:obstruction}.
 
 \subsection{Hegel and his critics}
 \label{sec:hegel}
-The Logic begins with pure Being, which, having no determination, is Nothing; their truth is Becoming, the movement in which each has already passed over into the other \cite{hegel1832}. Houlgate and Maker examine what a presuppositionless beginning can yield \cite{houlgate2006,maker1994}.
+Hegel's Logic moves from Being through Nothing to Becoming \cite{hegel1832}; Houlgate and Maker discuss presuppositionless beginnings \cite{houlgate2006,maker1994}. The present method is combinatorial and therefore concedes two points: Boolean complement is abstract negation, not determinate negation (Proposition~\ref{prop:candidate}), and the period-two orbit is the ``bad infinite'' at which the Logic does not stop.
 
-Replacing that method with combinatorics concedes two objections. Boolean complement is abstract negation, whereas determinate negation, the engine of the Logic, carries the content of what it negates; by Proposition~\ref{prop:candidate} complement is the only structureless option on two values, so the method has no room for the determinate kind. And the period-two orbit is, by Hegel's lights, the bad infinite: the Logic exists to supersede the alternation, and here the alternation is where the development stops.
-
-Trendelenburg's charge is that the derivation of movement in the Logic borrows covertly from intuition \cite{trendelenburg1870}. Theorem~\ref{thm:obstruction} is a formal analogue whose antecedent is the regimentation of claims as succession-free: a claim language blind to succession entails no succession. That regimentation is where the substantive question lies, and Section~\ref{sec:dilemma} defends it. Kierkegaard's Interlude states the division the premise marks, coming into existence being a change in being with essence unchanged \cite{kierkegaard1844}, and his attack on movement in logic converges with Trendelenburg's under a different diagnosis \cite{kierkegaard1846}. Schelling's demand that positive philosophy add existence to what negative philosophy derives stands in a similar relation to $P$ \cite{schelling1994}.
-
-Priest reads the opening as a true contradiction and accepts dialetheism \cite{priest2006}; Ficara reads Hegel's Widerspruch as a moment in a theory of truth with no dialetheia required \cite{ficara2020}, and Berto reads the dialectic as a semantic theory \cite{berto2007}. The development here is constructive and consistent, and Theorem~\ref{thm:nobeing} derives its contradiction with no ex falso step, so what a dialetheist would contest is non-contradiction itself, item~(5) of Section~\ref{sec:intro}.
+Trendelenburg charges that Hegel's derivation of movement imports intuition \cite{trendelenburg1870}. Theorem~\ref{thm:obstruction} is the formal analogue under a succession-blind claim language; Section~\ref{sec:dilemma} defends that regimentation. Kierkegaard separates coming-into-existence from essence \cite{kierkegaard1844,kierkegaard1846}; Schelling's demand that positive philosophy add existence is parallel to $P$ \cite{schelling1994}. Dialetheist readings of the opening \cite{priest2006} conflict with the constructive metalogic of item~(5); non-dialetheic readings are available \cite{ficara2020,berto2007}.
 
 \subsection{Temporal ontology}
-McTaggart separated the C-series, ordered and undirected, from the B- and A-series \cite{mctaggart1908}; the world and tensed-world distinction is broader, adding a bare binary relation to an unordered base. Farr's C-theory keeps the ordering of events and denies direction \cite{farr2020}, which Theorem~\ref{thm:orientation} shows to be stable. The formal alternation is at-at variation, which Williams and Smart contrast with passage \cite{williams1951,smart1949}: that contrast is the second gap, and Broad and Prior state what a believer in real becoming wants beyond variation \cite{broad1923,prior1959}. Grünbaum, who holds that becoming is mind-dependent, arising with conceptualized awareness of an event \cite{grunbaum1967}, is the nearest neighbor here.
-
-Mellor's token-reflexive account is the closest formal match to the $\mathrm{tok}/h$ signature \cite{mellor1998}: Proposition~\ref{prop:freeze} sits well with it, and Section~\ref{sec:indep} states the scope condition his causal reduction imposes. Fine's fragmentalism gives tensed facts without a global standpoint \cite{fine2005}, and since the still and running pair has no fragment structure, the framework here has nothing to say to a fragmentalist. Skow's moving spotlight \cite{skow2015} names the second gap precisely: the run is variation along a succession, and the spotlight is a further commitment. Putnam's relativistic argument is answered for the realized instances in Section~\ref{sec:indep} \cite{putnam1967}. One point of contact with the process tradition is exact: Proposition~\ref{prop:rigidity}(a) excludes alternation-refining interpolation, close in scope to Whitehead's epochal theory of becoming \cite{whitehead1929}.
+McTaggart's C-series is ordered without direction \cite{mctaggart1908}; Farr's C-theory is stable under Theorem~\ref{thm:orientation} \cite{farr2020}. The formal alternation is at-at variation, not passage \cite{williams1951,smart1949,broad1923,prior1959}. Grünbaum's mind-dependent becoming places content in awareness of events \cite{grunbaum1967}, close to a tokening-based account. Mellor's token-reflexive theory matches the $\mathrm{tok}/h$ signature; Section~\ref{sec:indep} records the scope condition imposed by his causal reduction \cite{mellor1998}. Fine's fragmentalism \cite{fine2005} and Skow's moving spotlight \cite{skow2015} lie outside the present framework: the former because the still/running pair has no fragment structure, the latter because the spotlight is a further commitment beyond the run. Proposition~\ref{prop:rigidity}(a) excludes alternation-refining interpolation, in the spirit of Whitehead's epochal becoming \cite{whitehead1929}.
 
 \subsection{Diagonal arguments}
-Theorem~\ref{thm:nobeing} and Proposition~\ref{prop:nofix} state that an involution has no fixed point here, and Lemma~\ref{lem:diaguniform} is a symmetry argument on two elements. Lawvere's fixed-point theorem organizes the classical diagonal arguments \cite{lawvere1969,cantor1891,godel1931}, and in contrapositive form a fixed-point-free endomap blocks the point-surjections that would produce a diagonal. The relation is family resemblance only: the results above are proved by case analysis on two values, with no instance of Lawvere's theorem used.
+Theorem~\ref{thm:nobeing}, Proposition~\ref{prop:nofix}, and Lemma~\ref{lem:diaguniform} are proved by case analysis on two values. They resemble the fixed-point-free side of Lawvere's diagonal theorem \cite{lawvere1969,cantor1891,godel1931} but do not instantiate it.
 
 \section{Verification}
 \label{sec:mech}
@@ -766,7 +748,7 @@ The files accompany this submission as supplementary material. The toolchain is 
 
 \section{Conclusion}
 
-From the bare capacity of a medium to mark a distinction, the development recovers the two-valued arena, under full relabeling and under the relabelings fixing a mark, the uniqueness of complement as the structureless ground, the absence of any fixed point, and the period-two alternation. Theorem~\ref{thm:obstruction} shows that undeniability and temporal import are unavailable in one claim, so realization in time is secured only by the deniable premise $P$, one oriented instance per step, and Theorem~\ref{thm:orientation} locates that premise's directional content. Structure is theorem; movement is premise.
+A discriminating medium yields a two-valued arena, a unique structureless excluding law (complement), the absence of fixed points, and a unique period-two alternation. Temporal realization is not among those consequences: by Theorem~\ref{thm:obstruction} it requires the deniable premise $P$, one oriented instance per step, whose directional content is fixed by Theorem~\ref{thm:orientation}. Structure is theorem; succession is premise.
 
 \begin{thebibliography}{99}
 
