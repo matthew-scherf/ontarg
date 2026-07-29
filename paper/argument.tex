@@ -1,0 +1,104 @@
+\documentclass[11pt]{article}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{mathpazo}
+\usepackage{microtype}
+\usepackage[margin=0.9in,a4paper]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{enumitem}
+\usepackage[hidelinks]{hyperref}
+\usepackage{parskip}
+\pagestyle{empty}
+\setlength{\parskip}{3pt}
+
+\newcommand{\Fix}{\mathrm{Fix}}
+\newcommand{\Run}{\mathrm{Run}}
+\newcommand{\lf}[1]{\texttt{#1}}
+
+\begin{document}
+
+\begin{center}
+{\Large\textbf{Ontology of Becoming}}\\[2pt]
+{\small Argument summary}
+\end{center}
+\vspace{2pt}
+
+\textbf{Primitive.} A \emph{law} is a map $m$ on a carrier. $\Fix m$ means $\exists x.\ x = m\,x$.
+$\Run m$ means: the recursion $x_{n+1}=m\,x_n$ is solved from every seed, and consecutive
+terms differ.
+
+\textbf{Df.} $m$ is \emph{structureless} if it commutes with every value-relabeling of its
+carrier. On two values this is commutation with the exchange. On $\mathbb{B}$ this coincides
+with definability from equality (theorem).
+
+\textbf{L1 (Arena).} A carrier with decidable equality admits a non-identity structureless
+law iff it has exactly two elements. (One element: only the identity. Three or more
+pairwise-distinct elements: every equivariant law is the identity. A moved point and its
+image exhaust the carrier. On two elements the exchange moves both.) The same equivalence
+holds for mark-respecting equivariance: a law commuting with transpositions that fix a
+marked value moves the mark, or moves every value, iff the carrier has two elements.
+
+\textbf{L2 (Uniqueness).} On two values the structureless laws are the identity and
+complement. The graph of the identity excludes nothing. Any structureless law that excludes
+something is complement.
+
+\textbf{L3 (Retorsion).} If a tokening marks ``no distinction is drawn'' differently from
+its denial, a distinction is drawn. Discriminated tokening of the denial refutes the denial.
+
+\textbf{Th.\,1.} $\lnot\Fix(\lnot)$: $!x\neq x$ on $\mathbb{B}$, and $X\leftrightarrow\lnot X$
+is unsatisfiable in $\mathrm{Prop}$.
+
+\textbf{Th.\,2.} $\Run(\lnot)$: the orbit from each seed is the unique period-two
+alternation; the two orbits are relabelings of each other.
+
+\textbf{Th.\,3.} $\lnot\Fix(\lnot)\leftrightarrow\Run(\lnot)$ (same instances; each direction
+is instantiation).
+
+\textbf{Th.\,4.} If a tokening marks the denial of occurrence differently from its assertion,
+occurrence holds and the two tokens are distinct. On two values, distinctness coincides with
+being one complement apart.
+
+\textbf{P.} The token of the denial and the token of the assertion stand in oriented
+succession (forward holds; reverse fails). One instance per realized step; a full run
+requires infinitely many pairwise-distinct loci and discrimination at each step. $P$ is
+independent of Th.\,1--4 relative to the world signature $(T,h,\mathrm{tok})$: two tensed
+structures over one world agree on all claims and disagree on $P$.
+
+\textbf{Th.\,5 (from $P$).} Discrimination plus one oriented instance yields distinct loci,
+complementary successive values, and non-stillness. A chain of oriented instances realizes
+the run.
+
+\textbf{Th.\,6.} Claims are properties of succession-free worlds. If $A$ is undeniable
+(true wherever its denial is discriminated) and entails running, then no still world
+discriminates the denial of $A$. Given a still discriminating world, no undeniable substitute
+for $P$ entails running. Such a world is exhibited by ostension.
+
+\textbf{Th.\,7.} On loci with decidable equality, every relabeling-invariant succession is
+symmetric. Hence no invariant succession is oriented, and the orientation clause of $P$ is
+not available from invariance.
+
+\textbf{Corollary.} The alternation exists and is unique up to seed relabeling; nothing
+static answers to the ground (Th.\,1--3). Discriminated denial witnesses occurrence
+(Th.\,4). Given $P$, each such denial realizes a step (Th.\,5). $P$ is required for the
+temporal reading (Th.\,6--7).
+
+\vspace{4pt}
+\begin{center}\rule{0.4\textwidth}{0.3pt}\end{center}
+\vspace{2pt}
+
+{\small\noindent
+\textbf{Commitments.}
+(1) Verified conditionals (empty axiom footprint).
+(2) Five regimentations: ground as law; structureless as equivariant; groundhood as
+exclusion; satisfaction as objectual or processual; claims as properties of
+succession-free worlds.
+(3) One empirical input: a discriminating tokening, discharged by ostension; stepwise
+discrimination in a run is part of (4).
+(4) Premise $P$: one oriented instance per step; full run needs infinitely many loci and
+stepwise discrimination.
+(5) Constructive metalogic.\\[2pt]
+L1--L3 and Th.\,1--4: \lf{lean/Becoming.lean}. Th.\,5--7, $P$, and independence:
+\lf{lean/Obstruction.lean}. Both are Lean~4, prelude only, no imports, no axioms.
+Axiom audits: 52 and 47 lines respectively.}
+\end{document}

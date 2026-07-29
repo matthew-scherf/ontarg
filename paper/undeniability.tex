@@ -1,0 +1,665 @@
+\documentclass[11pt]{article}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{mathpazo}
+\usepackage{microtype}
+\usepackage[margin=1in,a4paper]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{enumitem}
+\usepackage[hidelinks]{hyperref}
+\usepackage{parskip}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\lf}[1]{\texttt{#1}}
+\newcommand{\B}{\mathbb{B}}
+\newcommand{\Occurs}{\mathrm{Occurs}}
+
+\title{Undeniability Does Not Yield Succession}
+\author{}
+\date{}
+
+\begin{document}
+\maketitle
+\vspace{-2em}
+
+\begin{abstract}
+A tokening that marks the denial of occurrence differently from its assertion
+witnesses occurrence. That retorsive step is propositional once the tokening
+fact is an antecedent, and it is formalizable over an arbitrary domain of loci.
+Temporal succession is another matter. If claims are properties of
+succession-free worlds, then two tensed structures over one world satisfy
+exactly the same claims; in particular, a still structure and a
+running-capable one are claim-indiscernible. Consequently, no undeniable claim
+--- no claim true at every world that discriminates its denial --- can entail
+running. The same two-model exhibition shows that an oriented succession
+premise \(P\) is independent of the claim language relative to the signature
+\((T,h,\mathrm{tok})\). On loci with decidable equality, moreover, every
+relabeling-invariant succession is symmetric, so orientation is not available
+from invariance. Structural consequences of a bare distinction (two-valued
+arena, uniqueness of complement, fixed-point freeness, period-two alternation)
+are available as verified conditionals; none of them yields succession. The
+results are checked in Lean~4 with an empty axiom footprint. The upshot is a
+limit theorem for retorsive arguments: discrimination reaches occurrence; it
+does not reach time.
+\end{abstract}
+
+\section{Introduction}
+\label{sec:intro}
+
+Retorsive and transcendental arguments aim to extract objective content from
+the conditions of assertion or denial \cite{stroud1968,stern2000}. A standing
+worry is that such arguments report only on what a denier must accept, leaving
+the world untouched. The present paper isolates one place where the worry is
+decisive and one place where it is not.
+
+The positive half is familiar in outline. Let a medium classify propositions by
+assigning each a locus and reading loci with a two-valued map. If the denial of
+occurrence and its assertion receive different readings, then occurrence holds:
+the two loci witness a distinction. Once the tokening difference is an
+antecedent, the result is a propositional refutation of the conjunction of that
+difference with the denial \cite{mackie1964,hintikka1962}. Section~\ref{sec:discrimination}
+states the theorem.
+
+The negative half is the contribution. Regiment claims as properties of
+\emph{worlds} that carry loci, a reading, and a tokening, but no succession
+relation. A tensed world adds succession. Under that typing, succession is
+invisible to claims: any two tensed structures over one world satisfy exactly
+the same claims (Section~\ref{sec:obstruction}). It follows that no claim true
+wherever its denial is discriminated can entail running. Temporal realization
+therefore requires a premise \(P\) outside the undeniable fragment. Relative to
+the world signature, \(P\) is independent of every claim. A further theorem
+locates the directional content of \(P\): on loci with decidable equality,
+invariant succession is always symmetric (Section~\ref{sec:orientation}).
+
+The structural facts about a two-valued carrier --- that equivariant laws move
+a point exactly on two elements, that the excluding structureless law is
+complement, that complement has no fixed point and yields a unique period-two
+orbit --- are recorded in Section~\ref{sec:structure} as background, with
+proofs in the accompanying Lean development. They are not used to derive
+succession. The paper's thesis is the limit, not an existence proof for
+becoming.
+
+Section~\ref{sec:dilemma} answers the objection that claims ought to be tensed.
+Section~\ref{sec:related} situates the result. Section~\ref{sec:mech} records
+the verification.
+
+\section{Discrimination}
+\label{sec:discrimination}
+
+\begin{definition}[Occurrence]
+\label{def:occurs}
+For \(h : T \to \B\), write \(\Occurs(h)\) when there exist \(t_1,t_2 \in T\)
+with \(h(t_1) \neq h(t_2)\).
+\end{definition}
+
+\begin{theorem}[Discrimination]
+\label{thm:discrimination}
+Let \(\mathrm{tok} : \mathrm{Prop} \to T\) and \(h : T \to \B\). If
+\[
+h(\mathrm{tok}(\lnot\Occurs(h))) \neq h(\mathrm{tok}(\Occurs(h))),
+\]
+then \(\Occurs(h)\) and the two tokens are distinct.
+\end{theorem}
+
+\begin{proof}
+The two values of \(h\circ\mathrm{tok}\) are distinct elements of the image of
+\(h\), so \(\Occurs(h)\) holds. If the tokens were equal, the values of \(h\)
+at them would be equal.
+\end{proof}
+
+The argument is cardinality under a self-referential instance: any tokening
+that takes two values shows that the medium has two elements; aiming the pair
+at \(\lnot\Occurs\) and \(\Occurs\) refutes the denial. In Mackie's taxonomy
+the result is absolute (propositional) once the tokening fact is an antecedent
+\cite{mackie1964}. It is the explicit-tokening form of Hintikka's existential
+inconsistency \cite{hintikka1962}.
+
+The antecedent is not a theorem of the ambient type theory. A closed normal
+term of type \(\mathrm{Prop}\to\B\) cannot depend on its argument, hence is
+constant. Detachment is ostensive: some actual classification separates the
+two readings. One concrete discharge uses the pair
+\begin{quote}
+Occurrence fails: every reading of this page classifies alike.\\
+Occurrence holds: two readings of this page classify differently.
+\end{quote}
+Any \(h\) that separates those two readings satisfies the hypothesis. The
+paper assumes such a discharge for the limit argument below; nothing later
+requires more than the conditional. In particular, the obstruction does not
+depend on which medium supplies the still discriminating world --- only on
+there being one.
+
+\begin{remark}
+On \(\B\), distinctness coincides with being one complement apart. The third
+conjunct of the verified form of Theorem~\ref{thm:discrimination} is therefore
+redundant on two values. No temporal content is involved: a static pair of
+marks already satisfies the theorem. The formal alternation of
+Section~\ref{sec:structure} is likewise an \(\omega\)-indexed sequence of
+values, a tenselessly specifiable object. Realization in succession is a
+separate question, taken up next.
+\end{remark}
+
+\section{Worlds, freeze, and obstruction}
+\label{sec:obstruction}
+
+\begin{definition}[Worlds and claims]
+\label{def:world}
+A \emph{world} is a triple \(W=(T,h,\mathrm{tok})\): a type of loci, a reading
+\(h:T\to\B\), and a tokening \(\mathrm{tok}:\mathrm{Prop}\to T\). A
+\emph{claim} is a property of worlds. \(W\) \emph{discriminates the denial} of
+a claim \(A\) when
+\(h(\mathrm{tok}(\lnot A(W))) \neq h(\mathrm{tok}(A(W)))\). \(A\) is
+\emph{undeniable} when \(A(W)\) holds at every world \(W\) that discriminates
+the denial of \(A\).
+\end{definition}
+
+\begin{definition}[Tensed worlds]
+\label{def:tensed}
+A \emph{tensed world} is a world together with a binary succession relation on
+its loci. It is \emph{still} when the relation is empty. It \emph{runs} when
+there is an injective sequence of loci, each succeeding the last, whose
+readings alternate under complement.
+\end{definition}
+
+Occurrence, read as a claim, is undeniable: Theorem~\ref{thm:discrimination}
+transposed to worlds. Undeniability is nevertheless weak.
+
+\begin{proposition}[Calibration]
+\label{prop:calibration}
+The constant-true claim is undeniable.
+\end{proposition}
+
+\begin{proof}
+The consequent is trivial at every world.
+\end{proof}
+
+So undeniability constrains a claim only when the discrimination hypothesis
+reaches the claim's content. Occurrence is such a claim; an arbitrary bridge to
+running need not be.
+
+\begin{proposition}[Freeze]
+\label{prop:freeze}
+For any world \(W\) and any two succession relations \(R_1,R_2\) on its loci,
+every claim holds of the tensed world \((W,R_1)\) if and only if it holds of
+\((W,R_2)\). In particular, over any inhabited world a still structure and a
+structure with nonempty succession coexist and satisfy exactly the same claims.
+\end{proposition}
+
+\begin{proof}
+Claims are typed over worlds, not over tensed worlds. The two tensed worlds
+share \(W\), so they satisfy the same claims by definition. Equip \(W\) with
+the empty relation and with the total relation for the second clause.
+\end{proof}
+
+\begin{theorem}[Obstruction]
+\label{thm:obstruction}
+Let \(A\) be undeniable and suppose \(A\) entails running. Then no still tensed
+world discriminates the denial of \(A\).
+\end{theorem}
+
+\begin{proof}
+Suppose a still tensed world discriminates the denial of \(A\). By
+undeniability, \(A\) holds at its underlying world. By the entailment, the
+tensed world runs. But a still world has no succeeding pair, so it does not
+run.
+\end{proof}
+
+\begin{corollary}[No undeniable bridge]
+\label{cor:nobridge}
+If some still tensed world discriminates the denial of \(A\), then no
+undeniable \(A\) entails running.
+\end{corollary}
+
+The corollary is a rebuttal schema. Given a candidate axiom offered as an
+undeniable bridge from discrimination to succession, instantiate a still world
+that discriminates its denial (e.g.\ inscriptions on a page with empty
+succession). The candidate fails. The schema does not close the gap for
+candidates that are never so tokened; it shows that undeniability, as defined,
+cannot be the bridge.
+
+Two readings of the loci are useful. On the \emph{act} reading, \(T\) comprises
+readings performed by a reader; on the \emph{mark} reading, \(T\) comprises
+inscriptions. The still witness for Corollary~\ref{cor:nobridge} uses marks
+with empty succession. A reader who insists that the inscriptions were produced
+in order is describing a second tensed structure over the same world; by
+Proposition~\ref{prop:freeze} the two agree on every claim.
+
+\section{The succession premise}
+\label{sec:premise}
+
+\begin{definition}[Oriented succession]
+\label{def:P}
+Fix a tensed world and a tokening. The \emph{oriented succession premise} at a
+proposition \(X\) is
+\[
+P(X):\quad
+\mathrm{succ}(\mathrm{tok}(\lnot X),\mathrm{tok}(X))
+\;\land\;
+\lnot\mathrm{succ}(\mathrm{tok}(X),\mathrm{tok}(\lnot X)).
+\]
+The first conjunct is the ordering half; the second is the orientation half.
+\end{definition}
+
+By Proposition~\ref{prop:freeze}, \(P\) fails throughout the still structure
+over any world and holds (in its ordering half) throughout the total
+structure over the same world. By Corollary~\ref{cor:nobridge}, no undeniable
+replacement is available. On the act reading, a single instance of \(P\) is an
+ordinary report of reading order: the denial was read, then the assertion, and
+not conversely \cite{moore1925}. Warrant for one instance does not automatically
+extend to an infinite family of instances.
+
+\begin{theorem}[One instance]
+\label{thm:actuality}
+Given discrimination at \(X\) and one instance of \(P(X)\), the two tokens are
+distinct, the successor's value is the complement of the predecessor's, and the
+structure is not still.
+\end{theorem}
+
+\begin{proof}
+Distinctness follows from discrimination (equal tokens yield equal readings).
+The value claim is the two-element fact that distinct Boolean values are
+complements. Non-stillness is immediate from the ordering conjunct.
+\end{proof}
+
+\begin{theorem}[Chain]
+\label{thm:chain}
+A chain of oriented, stepwise-discriminated instances over pairwise-distinct
+loci yields an oriented run, hence a run, and refutes stillness.
+\end{theorem}
+
+\begin{proof}
+Assemble the sequence of tokens. Injectivity is the pairwise-distinctness
+hypothesis; each step contributes forward succession and failure of the
+reverse; values alternate by the two-element fact as in
+Theorem~\ref{thm:actuality}. Stillness fails at the first step.
+\end{proof}
+
+Theorem~\ref{thm:actuality} uses only the ordering conjunct of \(P\); the
+orientation conjunct is idle in its proof. Orientation is needed for
+distinctness without discrimination, and for oriented runs as opposed to mere
+runs. Symmetric adjacency on \(\mathbb{N}\) --- the relation
+\(n\,R\,m \leftrightarrow |n-m|=1\) --- runs and is not still, yet admits no
+oriented run, since every edge is reversible.
+
+Three commitments should be kept distinct:
+\begin{enumerate}[label=(\arabic*),itemsep=1pt]
+\item one oriented instance of \(P\) --- locally easy to grant on the act reading;
+\item an infinite run --- a further assumption, not discharged by~(1);
+\item A-theoretic passage --- a further gap beyond tenseless succession
+\cite{williams1951,mctaggart1908}.
+\end{enumerate}
+The obstruction concerns the step from undeniability to~(1)--(2). Item~(3) is
+left open even if~(2) is granted. The paper claims no derivation of~(2) or~(3)
+from retorsion.
+
+\section{Independence}
+\label{sec:indep}
+
+\begin{proposition}[Independence]
+\label{prop:independence}
+There is a world with two distinctly read loci such that:
+\begin{enumerate}[label=(\roman*),itemsep=1pt]
+\item the still tensed structure over it makes \(P\) fail for every tokening;
+\item a tensed structure over it makes the ordering half of \(P\) hold for
+every tokening;
+\item every claim holds at both structures or at neither.
+\end{enumerate}
+Hence no claim entails \(P\) and no claim refutes \(P\). The same exhibition
+works for oriented \(P\) over a world whose tokening separates a chosen pair.
+The full chain hypothesis is realized over a world with infinitely many loci
+(e.g.\ successor on \(\mathbb{N}\) with alternating values).
+\end{proposition}
+
+\begin{proof}
+Take \(T=\B\), \(h=\mathrm{id}\), and a constant tokening for the still/total
+pair; Proposition~\ref{prop:freeze} gives~(iii). For oriented independence, take
+succession to hold of \((\bot,\top)\) alone. For the chain, take \(T=\mathbb{N}\)
+with the successor relation and alternating reading.
+\end{proof}
+
+Independence is relative to the signature \((T,h,\mathrm{tok})\). If the
+signature is enriched with causal facts and causal order determines temporal
+order, \(P\) may become derivable \cite{mellor1998}. The present signature is
+exactly what retorsion uses. Putnam's relativity argument concerns
+frame-independent succession between spacelike-separated events
+\cite{putnam1967}; successive readings by one reader are timelike.
+
+\section{Orientation}
+\label{sec:orientation}
+
+Running constrains the supply of loci before it constrains succession: a
+one- or two-element carrier admits no injective infinite sequence, whatever the
+relation.
+
+Call a succession relation \emph{invariant} when it is preserved by every
+transposition of loci. (Loci are assumed to have decidable equality, so that
+transpositions are definable from equality.)
+
+\begin{proposition}[Classification]
+\label{prop:invsucc}
+An invariant succession takes one truth-value on the diagonal and one off it.
+The four possibilities are: empty, equality, disagreement, and the total
+relation. Equality and the empty relation carry no run. An invariant succession
+that fails somewhere on the diagonal and holds of some off-diagonal pair is
+disagreement.
+\end{proposition}
+
+\begin{proof}[Proof sketch]
+One transposition carries any diagonal pair to any other, so the diagonal is
+uniform. Two transpositions carry any off-diagonal pair to any other, so the
+off-diagonal is uniform when at least two loci exist. The four combinations of
+diagonal/off-diagonal truth-values are the four relations named. A succession
+contained in equality identifies consecutive terms of any sequence, against
+injectivity. The last claim: failure on the diagonal and success off it force
+\(R(u,v)\leftrightarrow u\neq v\) by the two uniformities.
+\end{proof}
+
+\begin{theorem}[Invariant succession is symmetric]
+\label{thm:orientation}
+Every invariant succession is symmetric. Hence no invariant succession is
+asymmetric on any pair, and no invariant succession carries an oriented run.
+\end{theorem}
+
+\begin{proof}
+For \(u=v\) symmetry is trivial. For \(u\neq v\), off-diagonal uniformity
+(Proposition~\ref{prop:invsucc}) yields \(R(u,v)\leftrightarrow R(v,u)\). An
+oriented run requires a step whose reverse fails.
+\end{proof}
+
+Thus invariance determines the \emph{shape} of succession and not its
+\emph{direction}. Three witnesses make the separation concrete:
+\begin{enumerate}[itemsep=1pt,leftmargin=*]
+\item symmetric adjacency on \(\mathbb{N}\) runs, is not still, and holds in
+both directions at once;
+\item the total relation satisfies the ordering half of \(P\) for every
+tokening and the oriented half for none;
+\item successor on \(\mathbb{N}\) yields an oriented run.
+\end{enumerate}
+A C-theorist who accepts order without direction \cite{farr2020,mctaggart1908}
+is therefore stable under any invariance argument: symmetric adjacency is a
+binary proxy for betweenness. The orientation clause of \(P\) is a genuine
+addition to the ordering clause. What it secures is local irreversibility; a
+succession may satisfy oriented-run and still contain a directed cycle
+(successor on \(\mathbb{N}\) plus one reverse edge). Global topology remains
+open.
+
+\section{Background structure}
+\label{sec:structure}
+
+For completeness, the conditional structural results used only as background
+are summarized here. Proofs are in \lf{lean/Becoming.lean}.
+
+\begin{enumerate}[itemsep=2pt,leftmargin=*]
+\item \emph{Arena.} On a carrier with decidable equality, an equivariant
+endofunction (commuting with every transposition) moves some point if and only
+if the carrier has exactly two elements. The same equivalence holds for
+mark-respecting equivariance (commutation with transpositions fixing a
+distinguished mark).
+\item \emph{Uniqueness.} On \(\B\), the structureless (complement-equivariant)
+unary laws are the identity and Boolean complement. Only complement excludes a
+diagonal entry.
+\item \emph{No fixed point; alternation.} Complement has no fixed point. Its
+orbit from either seed is the unique period-two solution of the recursion; the
+two orbits are relabelings. Fixed-point freeness is equivalent to stepwise
+movement of every orbit.
+\item \emph{Articulate relations.} Definable binary relations on \(\B\) that
+exclude something and are satisfied (objectually or processually) are
+extensionally inequality; satisfaction is then necessarily processual.
+\end{enumerate}
+
+Each item is a conditional or a classification. None mentions succession on
+loci. Detaching occurrence for an actual medium uses the ostension of
+Section~\ref{sec:discrimination}; detaching a temporal run uses \(P\).
+
+\section{The regimentation dilemma}
+\label{sec:dilemma}
+
+The obstruction has the succession-blind typing of claims as an antecedent. An
+objector may reply that tokenings are acts, acts are events, and the relevant
+claims are therefore tensed \cite{apel1980,hintikka1962}. Grant the proposal.
+Discrimination at the tensed level then either uses only the world components
+or also uses the succession component.
+
+\begin{theorem}[First horn]
+\label{thm:hornone}
+Suppose tensed-level discrimination depends on the world components alone. Let
+\(A'\) hold at every tensed world whose world part discriminates, and let
+\(A'\) entail running. Then no still tensed world discriminates.
+\end{theorem}
+
+\begin{proof}
+As in Theorem~\ref{thm:obstruction}, one level up.
+\end{proof}
+
+\begin{theorem}[Second horn]
+\label{thm:horntwo}
+Suppose tensed-level discrimination requires that the two tokens stand in
+succession. Then discrimination is an instance of the ordering half of \(P\),
+and any predicate entailing a succession fact refutes stillness wherever it
+holds.
+\end{theorem}
+
+\begin{proof}
+The first claim is definitional. The second: a succeeding pair contradicts
+stillness.
+\end{proof}
+
+On the first horn the obstruction survives. On the second, temporal content is
+built into discrimination, so it is assumed rather than derived. Either way,
+undeniability alone does not produce succession. The same boundary appears in
+Kaplan's distinction between context-validity and necessity \cite{kaplan1989}:
+a sentence may hold whenever tokened and still fail to be necessary.
+
+\section{Related work}
+\label{sec:related}
+
+\paragraph{Transcendental arguments.}
+Stroud's limit --- that such arguments reach the denier's commitments rather
+than the world --- is the template \cite{stroud1968}.
+Theorem~\ref{thm:discrimination} passes the limit for occurrence: an objective
+distinction follows from a discrimination hypothesis.
+Theorem~\ref{thm:obstruction} reinstates the limit for succession. In Stern's
+terms the result is ambitious for occurrence and modest for succession
+\cite{stern2000}. Illies's defence of ambitious transcendental arguments in
+moral philosophy is among the targets of the obstruction if those arguments
+require temporal or dynamical import from undeniability alone \cite{illies2003}.
+
+\paragraph{Final justification.}
+Albert's Münchhausen trilemma lists regress, circularity, and break-off
+\cite{albert1985}. Apel and Kuhlmann seek to avoid break-off by performative
+self-defeat \cite{apel1980,kuhlmann1985}; Habermas declines strong ultimate
+grounding \cite{habermas1990}. The present position accepts break-off for the
+temporal case: the conditionals are proved, \(P\) is independent of the claim
+language, and the obstruction explains why an undeniable temporal bridge is
+unavailable. The acceptance is local to succession; occurrence remains on the
+ambitious side.
+
+\paragraph{Hegel and Trendelenburg.}
+Trendelenburg charged that Hegel's derivation of movement imports intuition
+\cite{trendelenburg1870,hegel1832}. Theorem~\ref{thm:obstruction} is a formal
+analogue under a succession-blind claim language: such a language entails no
+succession. Section~\ref{sec:dilemma} defends the regimentation by showing that
+the tensed alternative reproduces the same accounting. The paper does not offer
+a reading of the Logic; it records that a presuppositionless combinatorial
+beginning, if regimented as here, stops short of succession.
+
+\paragraph{Temporal ontology.}
+C-theory keeps order without direction \cite{mctaggart1908,farr2020}.
+Theorem~\ref{thm:orientation} shows that refusal of direction is stable under
+relabeling. The formal run, even when granted, is at-at variation along a
+succession, not A-theoretic passage
+\cite{williams1951,smart1949,prior1959,skow2015}. Mellor's token-reflexive
+account matches the \(\mathrm{tok}/h\) signature and imposes the causal scope
+condition of Section~\ref{sec:indep} \cite{mellor1998}. Grünbaum's
+mind-dependent becoming places temporal content in awareness of events
+\cite{grunbaum1967}, adjacent to a tokening-based account but silent on the
+obstruction.
+
+\paragraph{Laws of Form.}
+Spencer-Brown's oscillating value \cite{spencerbrown1969} and related
+three-valued or eigenform proposals \cite{varela1975,kauffman1987} address the
+structural half of Section~\ref{sec:structure}. The present paper does not
+re-derive that half; it separates it from succession and assigns the latter to
+\(P\). Under mark-respecting equivariance, a third value does not yield
+mark-moving dynamics (Section~\ref{sec:structure}, item~1).
+
+\paragraph{Verified arguments.}
+Machine-checked ontological arguments typically place existential content in
+axioms and verify the derivation
+\cite{oppenheimerzalta2011,benzmuller2014,benzmuller2016}. Here no axiom is
+declared. Existential temporal content sits in \(P\) and in the ostensive
+discharge of discrimination; the verified material is the surrounding
+conditional and limit structure.
+
+\section{Verification}
+\label{sec:mech}
+
+The definitions and theorems of Sections~\ref{sec:discrimination}--\ref{sec:dilemma}
+are named declarations in two standalone Lean~4 files \cite{demoura2021},
+prelude only, with no imports and no axioms. Each file ends with a
+\lf{\#print axioms} audit; every line reports independence from all axioms,
+including Lean's standard three (\(\mathrm{propext}\),
+\(\mathrm{Classical.choice}\), \(\mathrm{Quot.sound}\)).
+
+\begin{center}
+\begin{tabular}{@{}ll@{}}
+\hline
+Result & Lean \\
+\hline
+Theorem~\ref{thm:discrimination} & \lf{event\_retorsion}, \lf{discrimination} \\
+Definition~\ref{def:world} & \lf{World}, \lf{Claim}, \lf{Undeniable}, \ldots \\
+Proposition~\ref{prop:freeze} & \lf{freeze}, \lf{two\_models} \\
+Theorem~\ref{thm:obstruction} & \lf{obstruction}, \lf{still\_never\_runs} \\
+Corollary~\ref{cor:nobridge} & \lf{no\_undeniable\_bridge} \\
+Definition~\ref{def:P} & \lf{Successive}, \lf{OrientedSuccessive} \\
+Theorem~\ref{thm:actuality} & \lf{oriented\_tick} \\
+Theorem~\ref{thm:chain} & \lf{oriented\_chain\_runs} \\
+Proposition~\ref{prop:independence} & \lf{premise\_independent}, \ldots \\
+Theorem~\ref{thm:orientation} & \lf{invariant\_succ\_symm}, \lf{no\_invariant\_orientation} \\
+Theorems~\ref{thm:hornone},~\ref{thm:horntwo} & \lf{obstruction\_tensed}, \lf{horn\_two} \\
+Section~\ref{sec:structure} & \lf{lean/Becoming.lean} \\
+\hline
+\end{tabular}
+\end{center}
+
+\vspace{0.5em}
+\noindent
+Check with \lf{lean lean/Becoming.lean} and \lf{lean lean/Obstruction.lean}
+against toolchain \lf{leanprover/lean4:v4.31.0}.
+
+\section{Conclusion}
+\label{sec:conclusion}
+
+Discrimination yields occurrence. Under a succession-blind claim language, it
+does not yield succession: undeniability and running are incompatible in the
+presence of a still discriminating world, and such worlds are available by
+freeze. The succession premise \(P\) is independent of every claim relative to
+the retorsive signature, and its orientation clause is invisible to invariant
+structure. The a priori core is therefore the conditionals together with this
+limit. Time, if wanted, is paid for separately.
+
+\begin{thebibliography}{99}
+
+\bibitem{albert1985} H.\ Albert, \emph{Treatise on Critical Reason}, trans.\
+M.\ V.\ Rorty, Princeton University Press, 1985.
+
+\bibitem{apel1980} K.-O.\ Apel, \emph{Towards a Transformation of Philosophy},
+trans.\ G.\ Adey and D.\ Frisby, Routledge \& Kegan Paul, 1980.
+
+\bibitem{benzmuller2014} C.\ Benzm\"uller and B.\ Woltzenlogel Paleo,
+``Automating G\"odel's Ontological Proof of God's Existence with Higher-order
+Automated Theorem Provers,'' in \emph{ECAI 2014}, IOS Press, 2014, 93--98.
+
+\bibitem{benzmuller2016} C.\ Benzm\"uller and B.\ Woltzenlogel Paleo, ``The
+Inconsistency in G\"odel's Ontological Argument,'' in \emph{Proceedings of
+IJCAI 2016}, 2016, 936--942.
+
+\bibitem{demoura2021} L.\ de Moura and S.\ Ullrich, ``The Lean 4 Theorem Prover
+and Programming Language,'' in \emph{Automated Deduction: CADE 28}, Springer,
+2021, 625--635.
+
+\bibitem{farr2020} M.\ Farr, ``C-Theories of Time: On the Adirectionality of
+Time,'' \emph{Philosophy Compass} 15(12), 2020.
+
+\bibitem{grunbaum1967} A.\ Gr\"unbaum, ``The Status of Temporal Becoming,'' in
+\emph{Modern Science and Zeno's Paradoxes}, Wesleyan University Press, 1967,
+7--36.
+
+\bibitem{habermas1990} J.\ Habermas, \emph{Moral Consciousness and
+Communicative Action}, trans.\ C.\ Lenhardt and S.\ W.\ Nicholsen, MIT Press,
+1990.
+
+\bibitem{hegel1832} G.\ W.\ F.\ Hegel, \emph{The Science of Logic}, trans.\
+G.\ di Giovanni, Cambridge University Press, 2010.
+
+\bibitem{hintikka1962} J.\ Hintikka, ``Cogito, Ergo Sum: Inference or
+Performance?,'' \emph{Philosophical Review} 71(1), 1962, 3--32.
+
+\bibitem{illies2003} C.\ Illies, \emph{The Grounds of Ethical Judgement},
+Oxford University Press, 2003.
+
+\bibitem{kaplan1989} D.\ Kaplan, ``Demonstratives,'' in \emph{Themes from
+Kaplan}, ed.\ J.\ Almog, J.\ Perry, and H.\ Wettstein, Oxford University Press,
+1989, 481--563.
+
+\bibitem{kauffman1987} L.\ H.\ Kauffman, ``Self-Reference and Recursive Forms,''
+\emph{Journal of Social and Biological Structures} 10(1), 1987, 53--72.
+
+\bibitem{kuhlmann1985} W.\ Kuhlmann, \emph{Reflexive Letztbegr\"undung}, Karl
+Alber, 1985.
+
+\bibitem{mackie1964} J.\ L.\ Mackie, ``Self-Refutation: A Formal Analysis,''
+\emph{Philosophical Quarterly} 14(56), 1964, 193--203.
+
+\bibitem{mctaggart1908} J.\ M.\ E.\ McTaggart, ``The Unreality of Time,''
+\emph{Mind} 17(68), 1908, 457--474.
+
+\bibitem{mellor1998} D.\ H.\ Mellor, \emph{Real Time II}, Routledge, 1998.
+
+\bibitem{moore1925} G.\ E.\ Moore, ``A Defence of Common Sense,'' in
+\emph{Contemporary British Philosophy, Second Series}, ed.\ J.\ H.\ Muirhead,
+George Allen \& Unwin, 1925, 192--233.
+
+\bibitem{oppenheimerzalta2011} P.\ E.\ Oppenheimer and E.\ N.\ Zalta, ``A
+Computationally-Discovered Simplification of the Ontological Argument,''
+\emph{Australasian Journal of Philosophy} 89(2), 2011, 333--349.
+
+\bibitem{prior1959} A.\ N.\ Prior, ``Thank Goodness That's Over,''
+\emph{Philosophy} 34(128), 1959, 12--17.
+
+\bibitem{putnam1967} H.\ Putnam, ``Time and Physical Geometry,'' \emph{Journal
+of Philosophy} 64(8), 1967, 240--247.
+
+\bibitem{skow2015} B.\ Skow, \emph{Objective Becoming}, Oxford University Press,
+2015.
+
+\bibitem{smart1949} J.\ J.\ C.\ Smart, ``The River of Time,'' \emph{Mind}
+58(232), 1949, 483--494.
+
+\bibitem{spencerbrown1969} G.\ Spencer-Brown, \emph{Laws of Form}, George Allen
+and Unwin, 1969.
+
+\bibitem{stern2000} R.\ Stern, \emph{Transcendental Arguments and Scepticism},
+Oxford University Press, 2000.
+
+\bibitem{stroud1968} B.\ Stroud, ``Transcendental Arguments,'' \emph{Journal of
+Philosophy} 65(9), 1968, 241--256.
+
+\bibitem{trendelenburg1870} F.\ A.\ Trendelenburg, \emph{Logische
+Untersuchungen}, vol.\ 1, 3rd ed., S.\ Hirzel, Leipzig, 1870.
+
+\bibitem{varela1975} F.\ J.\ Varela, ``A Calculus for Self-Reference,''
+\emph{International Journal of General Systems} 2(1), 1975, 5--24.
+
+\bibitem{williams1951} D.\ C.\ Williams, ``The Myth of Passage,'' \emph{Journal
+of Philosophy} 48(15), 1951, 457--472.
+
+\end{thebibliography}
+
+\end{document}
