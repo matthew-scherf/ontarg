@@ -1,18 +1,20 @@
 /-!
 # Obstruction
 
+Premise `P`, independence, obstruction, orientation, and rigidity (Th. 5–7).
+Standalone Lean 4; prelude only; no imports; no axioms.
 -/
 
 namespace Obstruction
 
-/- ---------- worlds---------- -/
+/- Worlds -/
 
 structure World : Type 1 where
   T : Type
   h : T → Bool
   tok : Prop → T
 
-/-- A claim is a property of worlds. -/
+/-- Property of worlds. -/
 def Claim : Type 1 := World → Prop
 
 def DiscriminatesDenial (w : World) (A : Claim) : Prop :=
@@ -27,19 +29,17 @@ theorem occurs_undeniable :
   exact ⟨w.tok (¬ (∃ t₁ t₂ : w.T, w.h t₁ ≠ w.h t₂)),
          w.tok (∃ t₁ t₂ : w.T, w.h t₁ ≠ w.h t₂), hd⟩
 
-/-- Calibration: the constant-true claim is undeniable vacuously. The
-notion earns its keep only on claims, like occurrence, whose content the
-discrimination hypothesis reaches. -/
+/-- The constant-true claim is undeniable. -/
 theorem undeniable_trivial : Undeniable (fun _ => True) :=
   fun _ _ => trivial
 
-/- ---------- tensed worlds ---------- -/
+/- Tensed worlds -/
 
 structure TensedWorld : Type 1 where
   w : World
   succ : w.T → w.T → Prop
 
-/-- Still: nothing succeeds anything. -/
+/-- No succession holds. -/
 def Still (s : TensedWorld) : Prop := ∀ t t' : s.w.T, ¬ s.succ t t'
 
 def Runs (s : TensedWorld) : Prop :=
@@ -48,7 +48,7 @@ def Runs (s : TensedWorld) : Prop :=
     (∀ n, s.succ (seq n) (seq (n + 1))) ∧
     (∀ n, s.w.h (seq (n + 1)) = !(s.w.h (seq n)))
 
-/- ---------- freeze lemma ---------- -/
+/- Freeze -/
 
 
 theorem freeze (A : Claim) (w : World) (r₁ r₂ : w.T → w.T → Prop) :
@@ -63,7 +63,7 @@ theorem two_models (w : World) (t : w.T) :
     ∧ ¬ Still (TensedWorld.mk w (fun _ _ => True)) :=
   ⟨fun _ => Iff.rfl, fun _ _ h => h, fun h => h t t trivial⟩
 
-/- ---------- obstruction ---------- -/
+/- Obstruction -/
 
 
 theorem still_never_runs (s : TensedWorld) (hs : Still s) : ¬ Runs s :=
@@ -86,7 +86,7 @@ theorem obstruction_tensed {A' : TensedWorld → Prop} {D : World → Prop}
     ∀ s : TensedWorld, Still s → ¬ D s.w :=
   fun s hs hd => still_never_runs s hs (hB s (hU s hd))
 
-/- ---------- premise  ---------- -/
+/- Premise -/
 
 
 theorem ne_eq_not : ∀ a b : Bool, a ≠ b → b = !a := by
@@ -113,7 +113,7 @@ theorem chain_runs (s : TensedWorld) (seq : Nat → s.w.T)
     (hd : ∀ n, s.w.h (seq n) ≠ s.w.h (seq (n + 1))) : Runs s :=
   ⟨seq, hinj, hsucc, fun n => ne_eq_not _ _ (hd n)⟩
 
-/- ---------- independence of the premise ---------- -/
+/- Independence -/
 
 def stillWitness : TensedWorld :=
   ⟨⟨Bool, id, fun _ => true⟩, fun _ _ => False⟩
@@ -123,8 +123,7 @@ def runningWitness : TensedWorld :=
   ⟨⟨Bool, id, fun _ => true⟩, fun _ _ => True⟩
 
 
-/-- The still model: discriminated, still, and the premise fails for every
-tokening while every discrimination consequent survives. -/
+/-- Still witness: discrimination holds; `Successive` fails for every tokening. -/
 theorem premise_fails_still :
     (∃ t₁ t₂ : stillWitness.w.T, stillWitness.w.h t₁ ≠ stillWitness.w.h t₂)
     ∧ Still stillWitness
@@ -139,16 +138,13 @@ theorem premise_fails_still :
          ne_eq_not _ _ hd,
          fun h => h⟩
 
-/-- The running model: the premise holds for every tokening. -/
+/-- Running witness: `Successive` holds for every tokening. -/
 theorem premise_holds_running :
     ∀ (tok : Prop → runningWitness.w.T) (X : Prop),
       Successive runningWitness tok X :=
   fun _ _ => trivial
 
-/-- Independence relative to the claim language: the two structures share
-one world, so they satisfy exactly the same claims; the premise fails
-throughout one and holds throughout the other. No claim entails or
-refutes it. -/
+/-- `stillWitness` and `runningWitness` agree on all claims and disagree on `Successive`. -/
 theorem premise_independent :
     (∀ A : Claim, A stillWitness.w ↔ A runningWitness.w)
     ∧ (∀ (tok : Prop → stillWitness.w.T) (X : Prop),
@@ -165,11 +161,7 @@ theorem chain_premise_independent :
         ∀ n, runningWitness.succ (seq n) (seq (n + 1))) :=
   ⟨fun _ => Iff.rfl, fun _ h => h 0, fun _ _ => trivial⟩
 
-/-- Independence relative to a named language. Take any claim holding at
-the shared world. It fails to entail the premise, and it fails to refute
-the premise, since the two structures over that world differ on the
-premise and agree on every claim. This is the two-model exhibition, with
-the language identified as `Claim`. -/
+/-- No claim true at the shared world entails or refutes `Successive` for all tensed worlds. -/
 theorem no_claim_settles_premise (A : Claim) (hA : A stillWitness.w) :
     (¬ ∀ s : TensedWorld, A s.w →
         ∀ (tok : Prop → s.w.T) (X : Prop), Successive s tok X)
@@ -196,9 +188,9 @@ theorem chain_hypothesis_realizable :
   ⟨fun n => n, fun _ _ h => h, fun _ => trivial,
    fun n => self_ne_not (alt n)⟩
 
-/- ---------- loci ---------- -/
+/- Loci -/
 
-/-- Two loci cannot carry the pairwise-distinct sequence a run demands. -/
+/-- A two-element carrier admits no run. -/
 theorem two_loci_never_run (s : TensedWorld) {a b : s.w.T}
     (h2 : ∀ z : s.w.T, z = a ∨ z = b) : ¬ Runs s := by
   intro ⟨seq, hinj, _, _⟩
@@ -225,9 +217,7 @@ theorem one_locus_never_run (s : TensedWorld)
     (h1 : ∀ x y : s.w.T, x = y) : ¬ Runs s :=
   fun ⟨seq, hinj, _, _⟩ => hinj 0 1 (by decide) (h1 (seq 0) (seq 1))
 
-/-- The running witness carries two loci, so it satisfies the premise
-throughout and runs nowhere. The chain witness carries `Nat` loci for
-this reason. -/
+/-- `runningWitness` has a two-element carrier, hence does not run. -/
 theorem running_witness_never_runs : ¬ Runs runningWitness := by
   refine two_loci_never_run runningWitness (a := true) (b := false) ?_
   intro z
@@ -235,13 +225,13 @@ theorem running_witness_never_runs : ¬ Runs runningWitness := by
   | false => exact Or.inr rfl
   | true  => exact Or.inl rfl
 
-/-- A succession contained in equality carries no run. -/
+/-- If succession implies equality, there is no run. -/
 theorem reflexive_never_runs (s : TensedWorld)
     (h : ∀ u v : s.w.T, s.succ u v → u = v) : ¬ Runs s :=
   fun ⟨seq, hinj, hsucc, _⟩ =>
     hinj 0 1 (by decide) (h (seq 0) (seq 1) (hsucc 0))
 
-/- ---------- structureless succession ---------- -/
+/- Invariant succession -/
 
 def transp {V : Type u} [DecidableEq V] (a b : V) : V → V :=
   fun x => if x = a then b else if x = b then a else x
@@ -256,7 +246,7 @@ theorem transp_fixes {V : Type u} [DecidableEq V] {a b x : V}
   show (if x = a then b else if x = b then a else x) = x
   rw [if_neg hxa, if_neg hxb]
 
-/-- A succession blind to which locus is which. -/
+/-- Succession invariant under transposition. -/
 def InvariantSucc {T : Type} [DecidableEq T] (R : T → T → Prop) : Prop :=
   ∀ a b x y, R (transp a b x) (transp a b y) ↔ R x y
 
@@ -290,16 +280,14 @@ theorem offdiag_uniform {T : Type} [DecidableEq T] {R : T → T → Prop}
     exact h
   exact (step2.trans step1).symm
 
-/-- Two bits fix an invariant succession: its diagonal value and its
-off-diagonal value. Four relations, and no more. -/
+/-- An invariant succession is determined by its diagonal and off-diagonal values. -/
 theorem invariant_succ_classified {T : Type} [DecidableEq T]
     {R : T → T → Prop} (hR : InvariantSucc R) (x y : T) (hxy : x ≠ y) :
     (∀ u : T, R u u ↔ R x x)
     ∧ (∀ u v : T, u ≠ v → (R u v ↔ R x y)) :=
   ⟨fun u => diag_uniform hR u x, fun _ _ huv => offdiag_uniform hR huv hxy⟩
 
-/-- An invariant succession that excludes something and holds of some
-pair is disagreement. -/
+/-- An invariant succession that fails somewhere on the diagonal and holds off-diagonal is inequality. -/
 theorem invariant_says_is_ne {T : Type} [DecidableEq T] {R : T → T → Prop}
     (hR : InvariantSucc R) (hsays : ∃ u, ¬ R u u)
     (hsat : ∃ u v, u ≠ v ∧ R u v) : ∀ u v, R u v ↔ u ≠ v := by
@@ -311,8 +299,7 @@ theorem invariant_says_is_ne {T : Type} [DecidableEq T] {R : T → T → Prop}
   · intro huv he; exact hdiag u (he ▸ huv)
   · intro huv; exact (offdiag_uniform hR hqr huv).mp hR'
 
-/-- An invariant succession is symmetric: it holds of an ordered pair
-exactly when it holds of the reverse pair. -/
+/-- Every invariant succession is symmetric. -/
 theorem invariant_succ_symm {T : Type} [DecidableEq T] {R : T → T → Prop}
     (hR : InvariantSucc R) : ∀ u v, R u v ↔ R v u := by
   intro u v
@@ -320,17 +307,15 @@ theorem invariant_succ_symm {T : Type} [DecidableEq T] {R : T → T → Prop}
   · subst huv; exact Iff.rfl
   · exact offdiag_uniform hR huv (fun h => huv h.symm)
 
-/-- Orientation is invariantly inexpressible: no invariant succession
-holds of a pair while failing of its reverse. -/
+/-- No invariant succession is asymmetric on any pair. -/
 theorem no_invariant_orientation {T : Type} [DecidableEq T]
     {R : T → T → Prop} (hR : InvariantSucc R) :
     ¬ ∃ u v, R u v ∧ ¬ R v u :=
   fun ⟨u, v, hf, hb⟩ => hb ((invariant_succ_symm hR u v).mp hf)
 
-/- ---------- orientation ---------- -/
+/- Orientation -/
 
-/-- The oriented premise: the tokening of the denial succeeds to the
-tokening of the assertion, and the reverse fails. -/
+/-- Oriented succession: `tok (¬X)` succeeds to `tok X`, and not conversely. -/
 def OrientedSuccessive (s : TensedWorld) (tok : Prop → s.w.T)
     (X : Prop) : Prop :=
   s.succ (tok (¬ X)) (tok X) ∧ ¬ s.succ (tok X) (tok (¬ X))
@@ -339,15 +324,13 @@ theorem oriented_is_successive (s : TensedWorld) (tok : Prop → s.w.T)
     (X : Prop) (h : OrientedSuccessive s tok X) : Successive s tok X :=
   h.1
 
-/-- Orientation forces discrimination at the loci: an oriented instance
-holds only between distinct tokens. -/
+/-- Oriented succession requires distinct tokens. -/
 theorem oriented_needs_distinct_tokens (s : TensedWorld)
     (tok : Prop → s.w.T) (X : Prop) (h : OrientedSuccessive s tok X) :
     tok (¬ X) ≠ tok X :=
   fun he => h.2 (he ▸ h.1)
 
-/-- An oriented run: pairwise-distinct loci, each step irreversible,
-values alternating. -/
+/-- Run with irreversible succession at each step. -/
 def OrientedRuns (s : TensedWorld) : Prop :=
   ∃ seq : Nat → s.w.T,
     (∀ m n : Nat, m ≠ n → seq m ≠ seq n) ∧
@@ -358,22 +341,18 @@ theorem oriented_runs_run (s : TensedWorld) (h : OrientedRuns s) : Runs s :=
   let ⟨seq, hinj, hsucc, halt⟩ := h
   ⟨seq, hinj, fun n => (hsucc n).1, halt⟩
 
-/-- A symmetric succession carries no oriented run. -/
+/-- Symmetric succession admits no oriented run. -/
 theorem symmetric_never_oriented (s : TensedWorld)
     (hsym : ∀ u v : s.w.T, s.succ u v → s.succ v u) : ¬ OrientedRuns s :=
   fun ⟨_, _, hsucc, _⟩ => (hsucc 0).2 (hsym _ _ (hsucc 0).1)
 
-/-- An invariant succession carries no oriented run: direction cannot be
-had from invariance. -/
+/-- Invariant succession admits no oriented run. -/
 theorem invariant_never_oriented (s : TensedWorld) [DecidableEq s.w.T]
     (hR : InvariantSucc s.succ) : ¬ OrientedRuns s :=
   symmetric_never_oriented s
     (fun u v h => (invariant_succ_symm hR u v).mp h)
 
-/-- One oriented instance at a discriminated pair yields distinct tokens,
-the successor value as the negation of its predecessor's, and a structure
-that is nowhere still. Each conjunct is derived: the first two from the
-discrimination hypothesis, the third from the instance. -/
+/-- Oriented succession at a discriminated pair yields distinct tokens, complementary values, and non-stillness. -/
 theorem oriented_tick (s : TensedWorld) (tok : Prop → s.w.T) (X : Prop)
     (hd : s.w.h (tok (¬ X)) ≠ s.w.h (tok X))
     (hax : OrientedSuccessive s tok X) :
@@ -384,9 +363,7 @@ theorem oriented_tick (s : TensedWorld) (tok : Prop → s.w.T) (X : Prop)
    ne_eq_not _ _ hd,
    fun hstill => hstill _ _ hax.1⟩
 
-/-- A chain of oriented instances over pairwise-distinct, stepwise
-discriminated loci realizes the oriented run, hence the run, and refutes
-stillness. -/
+/-- A chain of oriented, discriminated steps yields an oriented run. -/
 theorem oriented_chain_runs (s : TensedWorld) (seq : Nat → s.w.T)
     (hinj : ∀ m n : Nat, m ≠ n → seq m ≠ seq n)
     (hsucc : ∀ n, s.succ (seq n) (seq (n + 1))
@@ -397,15 +374,13 @@ theorem oriented_chain_runs (s : TensedWorld) (seq : Nat → s.w.T)
     ⟨seq, hinj, hsucc, fun n => ne_eq_not _ _ (hd n)⟩
   ⟨ho, oriented_runs_run s ho, fun hstill => hstill _ _ (hsucc 0).1⟩
 
-/-- The total succession satisfies the undirected premise everywhere and
-the oriented premise nowhere. -/
+/-- On `runningWitness`, `OrientedSuccessive` fails for every tokening. -/
 theorem running_witness_not_oriented :
     ∀ (tok : Prop → runningWitness.w.T) (X : Prop),
       ¬ OrientedSuccessive runningWitness tok X :=
   fun _ _ ⟨_, hb⟩ => hb trivial
 
-/-- Symmetric adjacency on `Nat` loci: it runs, it is nowhere still, and
-every succession fact holds in both orientations at once. -/
+/-- Symmetric adjacency on `Nat`. -/
 def adjacencyWitness : TensedWorld :=
   ⟨⟨Nat, alt, fun _ => 0⟩, fun m n => n = m + 1 ∨ m = n + 1⟩
 
@@ -419,11 +394,11 @@ theorem adjacency_symmetric :
     ∀ u v, adjacencyWitness.succ u v → adjacencyWitness.succ v u :=
   fun _ _ h => h.elim Or.inr Or.inl
 
-/-- The adjacency structure runs undirected: no oriented run survives. -/
+/-- `adjacencyWitness` admits no oriented run. -/
 theorem adjacency_not_oriented : ¬ OrientedRuns adjacencyWitness :=
   symmetric_never_oriented adjacencyWitness adjacency_symmetric
 
-/-- Successor on `Nat` loci: the oriented witness. -/
+/-- Successor relation on `Nat`. -/
 def orientedWitness : TensedWorld :=
   ⟨⟨Nat, alt, fun _ => 0⟩, fun m n => n = m + 1⟩
 
@@ -433,13 +408,13 @@ theorem succ_ne_plus_two : ∀ n : Nat, n ≠ n + 2 := by
   | zero => intro h; exact Nat.noConfusion h
   | succ k ih => intro h; exact ih (Nat.succ.inj h)
 
-/-- The oriented chain hypothesis is realizable. -/
+/-- `orientedWitness` admits an oriented run. -/
 theorem oriented_witness_runs : OrientedRuns orientedWitness :=
   ⟨fun n => n, fun _ _ h => h,
    fun n => ⟨rfl, fun h => succ_ne_plus_two n h⟩,
    fun _ => rfl⟩
 
-/-- One oriented discriminated pair is realizable. -/
+/-- An oriented discriminated pair exists in `orientedWitness`. -/
 theorem oriented_pair_realizable :
     ∃ t t' : orientedWitness.w.T,
       orientedWitness.succ t t'
@@ -447,18 +422,15 @@ theorem oriented_pair_realizable :
       ∧ orientedWitness.w.h t ≠ orientedWitness.w.h t' :=
   ⟨(0 : Nat), (1 : Nat), rfl, fun h => Nat.noConfusion h, by decide⟩
 
-/-- Two structures over one world, parametrized by a tokening that reads
-the denial and the assertion differently. -/
+/-- Still structure over `Bool` with given tokening. -/
 def orientedStill (tok : Prop → Bool) : TensedWorld :=
   ⟨⟨Bool, id, tok⟩, fun _ _ => False⟩
 
+/-- Oriented succession `false → true` over the same world. -/
 def orientedRunning (tok : Prop → Bool) : TensedWorld :=
   ⟨⟨Bool, id, tok⟩, fun u v => u = false ∧ v = true⟩
 
-/-- Independence of the oriented premise. Over one world the two
-structures satisfy exactly the same claims; the oriented premise fails
-for every tokening in the first and holds at the discriminated pair in
-the second. -/
+/-- `orientedStill` and `orientedRunning` agree on claims and disagree on oriented succession at a discriminated pair. -/
 theorem oriented_premise_independent (tok : Prop → Bool) (X : Prop)
     (h0 : tok (¬ X) = false) (h1 : tok X = true) :
     (∀ A : Claim, A (orientedStill tok).w ↔ A (orientedRunning tok).w)
@@ -470,21 +442,18 @@ theorem oriented_premise_independent (tok : Prop → Bool) (X : Prop)
   rw [h1] at hf
   exact Bool.noConfusion hf
 
-/- ---------- the second horn ---------- -/
+/- Succession-using discrimination -/
 
-/-- Discrimination through the succession component: the two tokenings
-stand in succession. -/
+/-- Succession between the tokens of `¬A s` and `A s`. -/
 def SuccDiscriminates (s : TensedWorld) (A : TensedWorld → Prop) : Prop :=
   s.succ (s.w.tok (¬ A s)) (s.w.tok (A s))
 
-/-- Instance form: succession-using discrimination is an instance of the
-premise's form. -/
+/-- `SuccDiscriminates` is an instance of `Successive`. -/
 theorem horn_two_is_premise (s : TensedWorld) (A : TensedWorld → Prop) :
     SuccDiscriminates s A ↔ Successive s s.w.tok (A s) :=
   Iff.rfl
 
-/-- General form: a discrimination notion that entails a succession fact
-refutes stillness wherever it holds. -/
+/-- Any predicate entailing a succession fact refutes stillness. -/
 theorem horn_two (D : TensedWorld → Prop)
     (hD : ∀ s : TensedWorld, D s → ∃ t t', s.succ t t') :
     ∀ s : TensedWorld, D s → ¬ Still s :=
@@ -492,7 +461,7 @@ theorem horn_two (D : TensedWorld → Prop)
     let ⟨t, t', h⟩ := hD s hd
     hstill t t' h
 
-/- ---------- rigidity ---------- -/
+/- Rigidity -/
 
 theorem no_half_tick : ∀ a u b : Bool, b = !a → u = !a → b = !u → False := by
   decide
@@ -515,7 +484,7 @@ theorem prior_token_determined (s : TensedWorld) (t₀ p q : s.w.T)
 
 end Obstruction
 
-/- audit -/
+/- Axiom audit -/
 #print axioms Obstruction.occurs_undeniable
 #print axioms Obstruction.undeniable_trivial
 #print axioms Obstruction.freeze
