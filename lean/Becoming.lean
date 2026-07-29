@@ -1,15 +1,16 @@
 /-!
 # Becoming
 
+Conditional core: L1–L3 and Th. 1–4.
+Standalone Lean 4; prelude only; no imports; no axioms.
 -/
 
 namespace Becoming
 
+/- Retorsion -/
 
-
-/-- Two states of `M` differ. -/
+/-- Distinct values exist in `M`. -/
 def Draws (M : Type) : Prop := ∃ a b : M, a ≠ b
-
 
 theorem retorsion {M : Type} (t : Prop → M)
     (h : t (¬ Draws M) ≠ t (Draws M)) : Draws M :=
@@ -19,9 +20,9 @@ theorem no_undrawn_denial {M : Type} (t : Prop → M) :
     ¬ (t (¬ Draws M) ≠ t (Draws M) ∧ ¬ Draws M) :=
   fun ⟨hd, hn⟩ => hn (retorsion t hd)
 
+/- Equivariance -/
 
-
-/-- Transposition of two values. -/
+/-- Transposition of `a` and `b`. -/
 def transp {V : Type u} [DecidableEq V] (a b : V) : V → V :=
   fun x => if x = a then b else if x = b then a else x
 
@@ -51,7 +52,7 @@ theorem transp_same {V : Type u} [DecidableEq V] (a x : V) :
 def Equivariant {V : Type u} [DecidableEq V] (f : V → V) : Prop :=
   ∀ a b x : V, f (transp a b x) = transp a b (f x)
 
-/-- On three or more values, no equivariant map moves anything. -/
+/-- If every pair of points has a third distinct from both, every equivariant map is the identity. -/
 theorem bare_three_is_mute {V : Type u} [DecidableEq V] (f : V → V)
     (hequiv : Equivariant f)
     (h3 : ∀ x y : V, ∃ z : V, z ≠ x ∧ z ≠ y) :
@@ -70,16 +71,14 @@ theorem bare_one_is_mute {V : Type u} (f : V → V)
     (h1 : ∀ x y : V, x = y) : ∀ x, f x = x :=
   fun x => h1 (f x) x
 
-/-- A third value stills the arena: with three points, no equivariant law
-moves anything. -/
+/-- Equivariant maps have no non-fixed points when a third value always exists. -/
 theorem third_value_stills {V : Type u} [DecidableEq V] (f : V → V)
     (hequiv : Equivariant f)
     (h3 : ∀ x y : V, ∃ z : V, z ≠ x ∧ z ≠ y) :
     ¬ ∃ x, f x ≠ x :=
   fun ⟨x, hx⟩ => hx (bare_three_is_mute f hequiv h3 x)
 
-/-- Three pairwise-distinct values supply a third value beside any two:
-two points exclude at most two of the three. -/
+/-- Three pairwise-distinct values yield, for any `x y`, a `z` distinct from both. -/
 theorem three_gives_third {V : Type u} [DecidableEq V] {a b c : V}
     (hab : a ≠ b) (hac : a ≠ c) (hbc : b ≠ c) (x y : V) :
     ∃ z : V, z ≠ x ∧ z ≠ y := by
@@ -95,9 +94,7 @@ theorem three_gives_third {V : Type u} [DecidableEq V] {a b c : V}
       · exact ⟨b, hbx, fun h => hab (hay.trans h.symm)⟩
     · exact ⟨a, hax, hay⟩
 
-/-- Three values still the arena. A carrier holding three pairwise-distinct
-values admits no equivariant law beyond the identity, so adding a third
-value to the two-valued arena costs every motion. -/
+/-- On a carrier with three pairwise-distinct values, every equivariant map is the identity. -/
 theorem three_values_are_still {V : Type u} [DecidableEq V] {a b c : V}
     (hab : a ≠ b) (hac : a ≠ c) (hbc : b ≠ c)
     (f : V → V) (hf : Equivariant f) : ∀ x, f x = x :=
@@ -117,8 +114,7 @@ theorem two_at_most {V : Type u} [DecidableEq V] (f : V → V)
       rw [hxfix, transp_left] at h
       exact absurd h.symm hzf
 
-/-- On a two-element carrier the transposition is equivariant and moves
-its points. -/
+/-- On a two-element carrier, `transp a b` is equivariant and moves `a`. -/
 theorem two_swaps {V : Type u} [DecidableEq V] {a b : V} (hab : a ≠ b)
     (h2 : ∀ z : V, z = a ∨ z = b) :
     Equivariant (transp a b) ∧ transp a b a ≠ a := by
@@ -138,8 +134,7 @@ theorem two_swaps {V : Type u} [DecidableEq V] {a b : V} (hab : a ≠ b)
   · rw [transp_left]
     exact Ne.symm hab
 
-/-- The arena is two: an equivariant map displaces a point exactly when
-the carrier has two elements. -/
+/-- An equivariant map moves some point iff the carrier has exactly two elements. -/
 theorem moves_iff_two {V : Type u} [DecidableEq V] :
     (∃ f : V → V, Equivariant f ∧ ∃ x : V, f x ≠ x)
       ↔ ∃ a b : V, a ≠ b ∧ ∀ z : V, z = a ∨ z = b := by
@@ -157,9 +152,11 @@ theorem two_speaks :
   · intro x; cases x <;> decide
 
 
+/- Structureless laws -/
+
 def Structureless (g : Bool → Bool) : Prop := ∀ b, g (!b) = !(g b)
 
-/-- A structureless `g : Bool → Bool` is `id` or `not`. -/
+/-- A structureless `g : Bool → Bool` is identity or complement. -/
 theorem one_candidate (g : Bool → Bool) (h : Structureless g) :
     (∀ b, g b = b) ∨ (∀ b, g b = !b) := by
   cases htrue : g true with
@@ -199,8 +196,7 @@ theorem transp_true_false : ∀ x : Bool, transp true false x = !x := by
 theorem transp_false_true : ∀ x : Bool, transp false true x = !x := by
   intro x; cases x <;> decide
 
-/-- On `Bool` the two notions coincide: commuting with every transposition
-is commuting with the swap, which is commuting with complement. -/
+/-- On `Bool`, equivariance is equivalent to structurelessness. -/
 theorem equivariant_iff_structureless (g : Bool → Bool) :
     Equivariant g ↔ Structureless g := by
   constructor
@@ -216,6 +212,8 @@ theorem equivariant_iff_structureless (g : Bool → Bool) :
     · rw [transp_true_false, transp_true_false]
       exact hs x
     · rw [transp_same, transp_same]
+
+/- Definability -/
 
 inductive Defble : (Bool → Bool → Prop) → Prop where
   | eq : Defble (fun a b => a = b)
@@ -242,7 +240,7 @@ theorem defble_invariant {R : Bool → Bool → Prop} (h : Defble R) :
            fun h => h.elim (fun h1 => Or.inl ((ih1 a b).mpr h1))
                            (fun h2 => Or.inr ((ih2 a b).mpr h2))⟩
 
-/-- `Defble R` gives `R a a ↔ R b b` for all `a b`. -/
+/-- Definable relations are uniform on the diagonal. -/
 theorem diagonal_uniform {R : Bool → Bool → Prop} (h : Defble R) :
     ∀ a b, R a a ↔ R b b := by
   intro a b
@@ -288,7 +286,7 @@ theorem invariant_binary_classified (f : Bool → Bool → Bool)
     · exact htf
     · exact htt
 
-/-- Definable relations are decidable, as a disjunction in `Prop`. -/
+/-- Definable relations are decidable. -/
 theorem defble_decidable {R : Bool → Bool → Prop} (h : Defble R) :
     ∀ a b, R a b ∨ ¬ R a b := by
   induction h with
@@ -319,8 +317,7 @@ theorem defble_decidable {R : Bool → Bool → Prop} (h : Defble R) :
       | inl h2 => exact Or.inl (Or.inr h2)
       | inr h2 => exact Or.inr (fun hd => hd.elim h1 h2)
 
-/-- The `Defble` classification: a definable relation is extensionally
-equality, disagreement, the full relation, or the empty one. -/
+/-- A definable relation is extensionally `=`, `≠`, full, or empty. -/
 theorem defble_classified {R : Bool → Bool → Prop} (h : Defble R) :
     (∀ a b, R a b ↔ a = b) ∨ (∀ a b, R a b ↔ a ≠ b)
     ∨ (∀ a b, R a b) ∨ (∀ a b, ¬ R a b) := by
@@ -365,8 +362,7 @@ theorem defble_classified {R : Bool → Bool → Prop} (h : Defble R) :
       · exact hntf
       · exact hntt
 
-/-- Bool-to-Prop bridge: every invariant Boolean-valued binary function is
-the extension of a definable relation. -/
+/-- Every invariant `Bool`-valued binary function extends a definable relation. -/
 theorem invariant_extends_defble (f : Bool → Bool → Bool)
     (hinv : ∀ a b, f (!a) (!b) = f a b) :
     ∃ S, Defble S ∧ ∀ a b, (f a b = true ↔ S a b) := by
@@ -398,8 +394,7 @@ theorem invariant_extends_defble (f : Bool → Bool → Bool)
         rw [hempty]
         cases a <;> cases b <;> decide
 
-/-- Prop-to-Bool bridge: every definable relation is the extension of an
-invariant Boolean-valued binary function. -/
+/-- Every definable relation is the extension of an invariant `Bool`-valued function. -/
 theorem defble_extends_invariant {R : Bool → Bool → Prop} (h : Defble R) :
     ∃ f : Bool → Bool → Bool,
       (∀ a b, f (!a) (!b) = f a b) ∧ ∀ a b, (f a b = true ↔ R a b) := by
@@ -428,29 +423,29 @@ theorem defble_extends_invariant {R : Bool → Bool → Prop} (h : Defble R) :
           fun a b => ⟨fun he => Bool.noConfusion he,
             fun hr => absurd hr (hempty a b)⟩⟩
 
-/- no necessary being -/
+/- Fixed points -/
 
 theorem no_static_instance : ∀ b : Bool, not b ≠ b := by
   intro b
   cases b <;> decide
 
-/-- `X ↔ ¬X` has no solution. -/
+/-- `X ↔ ¬X` is unsatisfiable. -/
 theorem no_being (X : Prop) (h : X ↔ ¬ X) : False :=
   have hn : ¬ X := fun hx => h.mp hx hx
   hn (h.mpr hn)
 
-/-- The equality form, derived from the biconditional. -/
+/-- Equality form of `no_being`. -/
 theorem no_being_eq (X : Prop) (h : X = ¬ X) : False :=
   no_being X (Iff.of_eq h)
 
-/- necessary becoming -/
+/- Recursion and orbits -/
 
 variable {S : Type u}
 
-/-- `x` solves the recursion `f`. -/
+/-- `x` is a solution of the recursion for `f`. -/
 def Solves (f : S → S) (x : Nat → S) : Prop := ∀ n, x (n + 1) = f (x n)
 
-/-- Trajectory of `f` from `seed`. -/
+/-- Orbit of `f` from `seed`. -/
 def orbit (f : S → S) (seed : S) : Nat → S
   | 0     => seed
   | n + 1 => f (orbit f seed n)
@@ -476,7 +471,7 @@ theorem two_tick_clock (seed : Bool) :
   | true  => rfl
   | false => rfl
 
-/- link 4:  -/
+/- Articulation -/
 
 theorem no_fixpoint : ∀ x : Bool, x ≠ !x := by
   intro x; cases x <;> decide
@@ -489,27 +484,27 @@ theorem ne_eq_not : ∀ a b : Bool, a ≠ b → b = !a := by
   · rfl
   · exact absurd rfl h
 
-/-- `R` excludes `x`: read of itself, it fails there. -/
+/-- `¬ R x x`. -/
 def Excludes (R : Bool → Bool → Prop) (x : Bool) : Prop := ¬ R x x
 
-/-- `R` excludes some state. -/
+/-- `R` fails on some diagonal entry. -/
 def Says (R : Bool → Bool → Prop) : Prop := ∃ x, Excludes R x
 
-/-- The graph of the identity excludes nothing. -/
+/-- Equality excludes no diagonal entry. -/
 theorem id_graph_says_nothing : ¬ Says (fun a b : Bool => a = b) :=
   fun ⟨_, hx⟩ => hx rfl
 
-/-- A state satisfies `R` read of itself. -/
+/-- `R` holds on some diagonal entry. -/
 def ObjSat (R : Bool → Bool → Prop) : Prop := ∃ x, R x x
 
-/-- An unending run each of whose steps satisfies `R`. -/
+/-- There is an infinite sequence with consecutive pairs in `R`. -/
 def ProcSat (R : Bool → Bool → Prop) : Prop :=
   ∃ s : Nat → Bool, ∀ n, R (s n) (s (n + 1))
 
-/-- `R` is satisfied in some frame. -/
+/-- Objectual or processual satisfaction. -/
 def Sat (R : Bool → Bool → Prop) : Prop := ObjSat R ∨ ProcSat R
 
-/-- `R` excludes something and is satisfied somewhere. -/
+/-- `Says R` and `Sat R`. -/
 def Articulates (R : Bool → Bool → Prop) : Prop := Says R ∧ Sat R
 
 theorem says_kills_the_object {R : Bool → Bool → Prop}
@@ -532,7 +527,7 @@ theorem run_unique {t : Nat → Bool} (ht : ∀ n, t n ≠ t (n + 1)) :
     rw [← ih]
     exact ne_eq_not (t n) (t (n + 1)) (ht n)
 
-/-- A `Defble`, `Articulates` relation is `R a b ↔ a ≠ b`. -/
+/-- A definable articulating relation is inequality. -/
 theorem absolute_law {R : Bool → Bool → Prop}
     (hD : Defble R) (hA : Articulates R) : ∀ a b, R a b ↔ a ≠ b := by
   obtain ⟨hS, hSat⟩ := hA
@@ -588,7 +583,7 @@ theorem absolute_is_inhabited :
   intro n
   exact clock_runs true n
 
-/- link 5: -/
+/- Fixed-point freeness and running -/
 
 theorem refusal_is_running (f : S → S) :
     (∀ x, f x ≠ x) ↔ ∀ seed n, orbit f seed (n + 1) ≠ orbit f seed n := by
@@ -598,9 +593,9 @@ theorem refusal_is_running (f : S → S) :
   · intro h x
     exact h x 0
 
-/- link 6: -/
+/- Relabelling -/
 
-/-- Relabelling a run: negate every value. -/
+/-- Pointwise complement of a sequence. -/
 def relabel (s : Nat → Bool) : Nat → Bool := fun n => !(s n)
 
 theorem seed_is_relabel :
@@ -614,9 +609,9 @@ theorem seed_is_relabel :
     rfl
 
 
-/- link 7: discrimination -/
+/- Discrimination -/
 
-/-- `h` takes different values at two loci of `T`. -/
+/-- `h` takes distinct values at two points of `T`. -/
 def Occurs {T : Type} (h : T → Bool) : Prop := ∃ t₁ t₂ : T, h t₁ ≠ h t₂
 
 theorem event_retorsion {T : Type} (h : T → Bool) (tok : Prop → T)
@@ -633,15 +628,13 @@ theorem discrimination {T : Type} (h : T → Bool)
    fun he => hd (congrArg h he),
    ne_eq_not _ _ hd⟩
 
-/- link 8: the mark -/
+/- Marked equivariance -/
 
-/-- `f` commutes with the transpositions fixing the mark `m`. -/
+/-- `f` commutes with transpositions of points other than `m`. -/
 def MarkedEquivariant {V : Type u} [DecidableEq V] (m : V) (f : V → V) : Prop :=
   ∀ a b x : V, a ≠ m → b ≠ m → f (transp a b x) = transp a b (f x)
 
-/-- Marking one point releases the stillness of `bare_three_is_mute`: the
-map sending everything to the mark respects every symmetry fixing the mark
-and displaces each other point. The minimal draw is the price of dynamics. -/
+/-- The constant map to `m` is mark-equivariant and moves every `x ≠ m`. -/
 theorem marked_three_moves {V : Type u} [DecidableEq V] (m x : V)
     (hx : x ≠ m) :
     ∃ f : V → V, MarkedEquivariant m f ∧ f x ≠ x := by
@@ -653,8 +646,7 @@ theorem marked_three_moves {V : Type u} [DecidableEq V] (m x : V)
   · intro h
     exact hx h.symm
 
-/-- Given two points beside the mark, every mark-respecting map fixes the
-mark: the motion released by the first distinction leaves it standing. -/
+/-- If every non-mark has another non-mark distinct from it, every mark-equivariant map fixes `m`. -/
 theorem mark_is_fixed {V : Type u} [DecidableEq V] (m : V) (f : V → V)
     (hf : MarkedEquivariant m f)
     (h2 : ∀ c : V, c ≠ m → ∃ b : V, b ≠ m ∧ b ≠ c) :
@@ -668,9 +660,7 @@ theorem mark_is_fixed {V : Type u} [DecidableEq V] (m : V) (f : V → V)
     rw [hfix, transp_left] at h
     exact absurd h.symm hbc
 
-/-- On the dyad, negation respects the mark vacuously and moves it. The
-hypothesis of `mark_is_fixed` is sharp: stillness of the mark begins at
-the third point. -/
+/-- On `Bool`, complement is mark-equivariant at `true` and moves `true`. -/
 theorem two_moves_the_mark :
     MarkedEquivariant true (fun x : Bool => !x)
     ∧ (fun x : Bool => !x) true ≠ true := by
@@ -684,8 +674,7 @@ theorem two_moves_the_mark :
       | false => cases x <;> decide
   · decide
 
-/-- Under mark-respecting dynamics with two witnesses beside the mark, the
-whole orbit of the mark is the mark: it holds at every tick. -/
+/-- Under the hypotheses of `mark_is_fixed`, the orbit of `m` is constantly `m`. -/
 theorem mark_orbit_still {V : Type u} [DecidableEq V] (m : V) (f : V → V)
     (hf : MarkedEquivariant m f)
     (h2 : ∀ c : V, c ≠ m → ∃ b : V, b ≠ m ∧ b ≠ c) :
@@ -698,8 +687,7 @@ theorem mark_orbit_still {V : Type u} [DecidableEq V] (m : V) (f : V → V)
     rw [ih]
     exact mark_is_fixed m f hf h2
 
-/-- The mark as pivot: a mark-respecting map that moves the mark leaves
-the carrier at the mark and its image. -/
+/-- If a mark-equivariant map moves `m`, the carrier is `{m, f m}`. -/
 theorem marked_two_at_most {V : Type u} [DecidableEq V] (m : V) (f : V → V)
     (hf : MarkedEquivariant m f) (hm : f m ≠ m) :
     ∀ z : V, z = m ∨ z = f m := by
@@ -714,7 +702,7 @@ theorem marked_two_at_most {V : Type u} [DecidableEq V] (m : V) (f : V → V)
       rw [hfix, transp_left] at h
       exact absurd h.symm hzf
 
-/-- Two points hold one point beside the mark. -/
+/-- On a two-element carrier, all non-mark points coincide. -/
 theorem two_off_mark_eq {V : Type u} {a b m : V}
     (h2 : ∀ z : V, z = a ∨ z = b) {c d : V} (hc : c ≠ m) (hd : d ≠ m) :
     c = d := by
@@ -734,8 +722,7 @@ theorem two_off_mark_eq {V : Type u} {a b m : V}
       | inr hdb => exact absurd (hdb.trans hm.symm) hd
     | inr hcb => exact absurd (hcb.trans hm.symm) hc
 
-/-- On two points the transposition respects every mark and refuses
-everywhere. -/
+/-- On a two-element carrier, `transp a b` is mark-equivariant at every mark and has no fixed points. -/
 theorem two_swaps_marked {V : Type u} [DecidableEq V] (m : V) {a b : V}
     (hab : a ≠ b) (h2 : ∀ z : V, z = a ∨ z = b) :
     MarkedEquivariant m (transp a b) ∧ ∀ x : V, transp a b x ≠ x := by
@@ -747,8 +734,7 @@ theorem two_swaps_marked {V : Type u} [DecidableEq V] (m : V) {a b : V}
     | inl hx => rw [hx, transp_left]; exact Ne.symm hab
     | inr hx => rw [hx, transp_right hab]; exact hab
 
-/-- A mark-respecting map moves the mark exactly when the carrier is
-two. -/
+/-- A mark-equivariant map moves `m` iff the carrier has exactly two elements. -/
 theorem mark_moves_iff_two {V : Type u} [DecidableEq V] (m : V) :
     (∃ f : V → V, MarkedEquivariant m f ∧ f m ≠ m)
       ↔ ∃ a b : V, a ≠ b ∧ ∀ z : V, z = a ∨ z = b := by
@@ -759,8 +745,7 @@ theorem mark_moves_iff_two {V : Type u} [DecidableEq V] (m : V) :
     exact ⟨transp a b, (two_swaps_marked m hab h2).1,
       (two_swaps_marked m hab h2).2 m⟩
 
-/-- Refusal everywhere under a mark-respecting map holds exactly on two:
-the marked route to the arena, matching `moves_iff_two`. -/
+/-- A mark-equivariant map is fixed-point-free iff the carrier has exactly two elements. -/
 theorem marked_refuses_iff_two {V : Type u} [DecidableEq V] (m : V) :
     (∃ f : V → V, MarkedEquivariant m f ∧ ∀ x : V, f x ≠ x)
       ↔ ∃ a b : V, a ≠ b ∧ ∀ z : V, z = a ∨ z = b := by
@@ -771,13 +756,13 @@ theorem marked_refuses_iff_two {V : Type u} [DecidableEq V] (m : V) :
     exact ⟨transp a b, (two_swaps_marked m hab h2).1,
       (two_swaps_marked m hab h2).2⟩
 
-/- the conjunction -/
+/- Summary theorem -/
 
-/-- formal core: one conjunction of conditionals. -/
+/-- Conjunction of the principal conditional results. -/
 theorem ontological_argument :
-    -- 1. the distinction is drawn
+    -- retorsion
     (∀ (M : Type) (t : Prop → M), t (¬ Draws M) ≠ t (Draws M) → Draws M)
-    -- 2. the arena is two
+    -- arena cardinality
     ∧ (∀ (V : Type) (f : V → V), (∀ x y : V, x = y) → ∀ x, f x = x)
     ∧ (∀ (V : Type) [DecidableEq V] (f : V → V), Equivariant f →
         (∀ x y : V, ∃ z : V, z ≠ x ∧ z ≠ y) → ∀ x, f x = x)
@@ -785,42 +770,42 @@ theorem ontological_argument :
         (∃ f : V → V, Equivariant f ∧ ∃ x : V, f x ≠ x)
           ↔ ∃ a b : V, a ≠ b ∧ ∀ z : V, z = a ∨ z = b)
     ∧ (Equivariant (fun x : Bool => !x) ∧ ∀ x : Bool, !x ≠ x)
-    -- 3. one candidate: structureless laws are {id, not}
+    -- structureless laws on Bool
     ∧ (∀ g : Bool → Bool, Structureless g →
         (∀ b, g b = b) ∨ (∀ b, g b = !b))
     ∧ (∀ c : Bool, ¬ Structureless (fun _ => c))
     ∧ (∀ b : Bool, id b = b)
     ∧ ¬ Says (fun a b : Bool => a = b)
     ∧ (∀ R : Bool → Bool → Prop, Defble R → ∀ a b, R a a ↔ R b b)
-    -- 4. so the absolute runs, and can only run
+    -- articulation classification
     ∧ (∀ R : Bool → Bool → Prop, Defble R → Articulates R →
         (∀ a b, R a b ↔ a ≠ b)
         ∧ (¬ ∃ x, R x x)
         ∧ (∃ s : Nat → Bool, ∀ n, R (s n) (s (n + 1)))
         ∧ (∀ t : Nat → Bool, (∀ n, R (t n) (t (n + 1))) →
             ∀ n, t n = orbit not (t 0) n))
-    -- no necessary being: nothing static answers to the ground
+    -- no fixed point
     ∧ (∀ b : Bool, not b ≠ b)
     ∧ (∀ x : Bool, x ≠ !x)
     ∧ (∀ X : Prop, (X ↔ ¬ X) → False)
-    -- necessary becoming: the run exists, is unique, has period two
+    -- existence, uniqueness, period 2
     ∧ (∀ seed : Bool,
         (Solves not (orbit not seed) ∧ orbit not seed 0 = seed)
         ∧ (∀ x, Solves not x → x 0 = seed →
             ∀ n, x n = orbit not seed n)
         ∧ (∀ n, orbit not seed (n + 2) = orbit not seed n))
-    -- 5. the refusal is the running
+    -- fixed-point freeness iff running
     ∧ ((∀ b : Bool, not b ≠ b) ↔
         ∀ seed n, orbit not seed (n + 1) ≠ orbit not seed n)
-    -- 6. the seed is a label
+    -- seed relabelling
     ∧ (∀ n, orbit not false n = relabel (orbit not true) n)
-    -- 7. discrimination
+    -- discrimination
     ∧ (∀ (T : Type) (h : T → Bool) (tok : Prop → T),
         h (tok (¬ Occurs h)) ≠ h (tok (Occurs h)) →
         Occurs h
         ∧ tok (¬ Occurs h) ≠ tok (Occurs h)
         ∧ h (tok (Occurs h)) = !(h (tok (¬ Occurs h))))
-    -- 8. the mark moves the mute arena and stays fixed
+    -- marked equivariance
     ∧ (∀ (V : Type) [DecidableEq V] (m x : V), x ≠ m →
         ∃ f : V → V, MarkedEquivariant m f ∧ f x ≠ x)
     ∧ (∀ (V : Type) [DecidableEq V] (m : V) (f : V → V),
@@ -862,6 +847,7 @@ theorem ontological_argument :
 
 end Becoming
 
+/- Axiom audit -/
 #print axioms Becoming.retorsion
 #print axioms Becoming.no_undrawn_denial
 #print axioms Becoming.bare_one_is_mute
