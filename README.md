@@ -2,15 +2,52 @@
 
 [![DOI](https://zenodo.org/badge/1302552048.svg)](https://doi.org/10.5281/zenodo.21449017)
 
-Lean 4 formalization of an ontological argument whose ground concept is
-discrimination on a carrier. The conditional core (L1–L3, Th. 1–4) is
-proved in `lean/Becoming.lean`. The succession premise `P`, its
-independence, the obstruction, orientation, and rigidity results
-(Th. 5–7) are proved in `lean/Obstruction.lean`. Both files are
-standalone (prelude only), declare no axioms, and end with
-`#print axioms` audits.
+Lean~4 formalization of an ontological argument whose ground is discrimination
+on a carrier. The **complete picture** is one two-part argument; the
+**machine-checked spine** is three standalone Lean files.
 
-## Results
+## The picture
+
+| Part | Claim | Lean | Does it use premise `P`? |
+|---|---|---|---|
+| **I — Limit** | Discrimination yields occurrence, not succession. Under a succession-blind claim language, no undeniable claim entails running; oriented succession premise `P` is independent of every claim. | `Becoming.lean` (L1–L3, Th.~1–4), `Obstruction.lean` (Th.~5–7, independence) | `P` is the priced joint for tensed succession |
+| **II — Cut** | Absolute := cut := Boolean `not` (unique self-dual excluding law). Absolute models are runs of `not`. Still/world structure remains as non-absolute. | `Cut.lean` | No — packages `Run(¬)` under the cut identification |
+
+Part~II does **not** overcome Part~I. It changes the type of absolute status.
+Public language is **absolute** / **cut** (not deity-names). The named stance of
+Part~II is: absolute = cut = `not`.
+
+### Cut conclusion (posterity)
+
+Under that identification: the cut is self-dual, involutive, and fixed-point-free;
+`X ↔ ¬X` is unsatisfiable; every seed determines a unique period-2 absolute
+model; no constant sequence is an absolute model. Still tensed structures can
+exist as a different kind. Not concluded: succession from claims, oriented
+time, or that a deity exists.
+
+## How to present
+
+| Form | Use |
+|---|---|
+| **One narrative paper** | Preferred complete picture: limit then cut (`paper/becoming.tex` is the natural home; fold in cut material as Part~II) |
+| **Short extracts** | `paper/undeniability.tex` (limit only), `paper/cut.tex` (cut only) |
+| **One-pager** | `paper/argument.tex` |
+| **Lean** | Keep three files — do not merge; separation mirrors the two parts |
+
+## Lean spine
+
+All three files are **standalone** (prelude only, no imports, no axioms).
+Helpers are duplicated on purpose. Check each file on its own:
+
+```sh
+lean lean/Becoming.lean
+lean lean/Obstruction.lean
+lean lean/Cut.lean
+```
+
+Toolchain: `leanprover/lean4:v4.31.0` (`lean-toolchain`).
+
+## Results (Part I — limit)
 
 | Claim | Lean |
 |---|---|
@@ -27,26 +64,34 @@ standalone (prelude only), declare no axioms, and end with
 | Independence of `P` | `premise_independent`, `chain_premise_independent`, `no_claim_settles_premise`, `oriented_premise_independent` |
 
 `Becoming.ontological_argument` packages the principal conjuncts of the
-conditional core.
+conditional core (Th.~1–4 side).
+
+## Results (Part II — cut)
+
+| Claim | Lean |
+|---|---|
+| Self-duality | `SelfDual`, `not_selfDual`, `selfDual_dichotomy` |
+| Absolute = cut = `not` | `absolute`, `absolute_selfDual`, `absolute_involutive`, `absolute_no_fixpoint` |
+| Unique self-dual excluder | `absolute_unique_excluding` |
+| Absolute models | `AbsoluteModel`, `absoluteModel_orbit`, `absoluteModel_unique`, `absolute_period_two` |
+| No static absolute | `no_static_absoluteModel` |
+| Package | `absolute_as_cut` |
 
 ## Contents
 
 | Path | Description |
 |---|---|
-| `paper/undeniability.tex` | Limit paper: discrimination reaches occurrence, not succession |
-| `paper/becoming.tex` | Longer companion: structural development and OA framing |
-| `paper/argument.tex` | One-page argument summary |
-| `lean/Becoming.lean` | Conditional core |
-| `lean/Obstruction.lean` | Premise, obstruction, orientation, rigidity |
+| `paper/becoming.tex` | Full narrative (target home for Parts I–II) |
+| `paper/undeniability.tex` | Limit extract |
+| `paper/cut.tex` | Cut extract |
+| `paper/argument.tex` | One-page summary (both tracks) |
+| `lean/Becoming.lean` | Conditional core (L1–L3, Th.~1–4) |
+| `lean/Obstruction.lean` | Premise `P`, obstruction, orientation, rigidity (Th.~5–7) |
+| `lean/Cut.lean` | Process-first absolute package |
 | `lean-toolchain` | `leanprover/lean4:v4.31.0` |
 
-## Checking
+## Still priced (outside the cut package)
 
-```sh
-lean lean/Becoming.lean
-lean lean/Obstruction.lean
-```
-
-Each `#print axioms` line reports no axiom dependencies (`propext`,
-`Classical.choice`, `Quot.sound` unused). Shared helpers (`transp`,
-`ne_eq_not`) are duplicated deliberately so the files remain standalone.
+Oriented succession, infinite injective runs beyond the Bool clock, felt
+passage, and physics / measurement dictionaries. Orientation theorems remain
+in `Obstruction.lean` (Th.~7).
