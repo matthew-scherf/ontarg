@@ -1,43 +1,43 @@
-# Ontology of Becoming
+# Undeniability Does Not Yield Succession
 
 [![DOI](https://zenodo.org/badge/1302552048.svg)](https://doi.org/10.5281/zenodo.21449017)
 
-Lean 4 formalization of an ontological argument whose ground concept is
-discrimination on a carrier. The conditional core (L1–L3, Th. 1–4) is
-proved in `lean/Becoming.lean`. The succession premise `P`, its
-independence, the obstruction, orientation, and rigidity results
-(Th. 5–7) are proved in `lean/Obstruction.lean`. Both files are
-standalone (prelude only), declare no axioms, and end with
-`#print axioms` audits.
+A tokening that marks the denial of occurrence differently from its
+assertion witnesses occurrence. Temporal succession is another matter:
+if claims are properties of succession-free worlds, no undeniable claim
+can entail running. An oriented succession premise `P` is independent of
+every claim true at a two-model witness, and on loci with decidable
+equality every relabeling-invariant succession is symmetric.
+
+Lead paper: `paper/undeniability.tex`. Formal results live in two
+standalone Lean 4 files (prelude only; no imports; no axioms; `#print
+axioms` audits at the end of each).
 
 ## Results
 
 | Claim | Lean |
 |---|---|
-| L1 Arena | `bare_one_is_mute`, `bare_three_is_mute`, `three_gives_third`, `three_values_are_still`, `two_at_most`, `two_swaps`, `two_speaks`, `moves_iff_two`; marked route: `marked_three_moves`, `marked_two_at_most`, `mark_is_fixed`, `mark_orbit_still`, `two_moves_the_mark`, `two_swaps_marked`, `mark_moves_iff_two`, `marked_refuses_iff_two` |
-| L2 Uniqueness | `one_candidate`, `constants_not_structureless`, `id_says_nothing`, `id_graph_says_nothing`, `equivariant_iff_structureless`, `defble_classified`, `invariant_extends_defble`, `defble_extends_invariant` |
-| L3 Retorsion | `retorsion`, `no_undrawn_denial` |
-| Th. 1 | `no_being`, `no_being_eq`, `no_static_instance`, `no_fixpoint` |
-| Th. 2 | `becoming_exists`, `becoming_unique`, `two_tick_clock`, `seed_is_relabel` |
-| Th. 3 | `refusal_is_running` |
-| Th. 4 | `event_retorsion`, `discrimination` |
-| Th. 5 (from `P`) | `Successive`, `OrientedSuccessive`; `oriented_tick`, `oriented_chain_runs`, `actuality_tick`, `chain_runs` |
-| Th. 6 | `obstruction`, `no_undeniable_bridge`, `obstruction_tensed`, `horn_two_is_premise`, `horn_two` |
-| Th. 7 | `invariant_succ_symm`, `no_invariant_orientation`, `invariant_never_oriented`, `symmetric_never_oriented` |
-| Independence of `P` | `premise_independent`, `chain_premise_independent`, `no_claim_settles_premise`, `oriented_premise_independent` |
+| Discrimination | `event_retorsion`, `discrimination` |
+| Freeze / two models | `freeze`, `two_models` |
+| Obstruction | `obstruction`, `still_never_runs`, `no_undeniable_bridge` |
+| Premise `P` | `Successive`, `OrientedSuccessive`; `oriented_tick`, `oriented_chain_runs` |
+| Independence of `P` | `premise_independent`, `premise_fails_still`, `premise_holds_running`, `no_claim_settles_premise`, `oriented_premise_independent` |
+| Orientation | `invariant_succ_symm`, `no_invariant_orientation`, `invariant_never_oriented` |
+| Regimentation dilemma | `obstruction_tensed`, `horn_two_is_premise`, `horn_two` |
 
-`Becoming.ontological_argument` packages the principal conjuncts of the
-conditional core.
+Structural background (two-valued arena, uniqueness of complement, fixed-point
+freeness, period-two alternation) is in `lean/Becoming.lean` and is summarized
+in the paper; it does not yield succession.
 
 ## Contents
 
 | Path | Description |
 |---|---|
-| `paper/undeniability.tex` | Limit paper: discrimination reaches occurrence, not succession |
-| `paper/becoming.tex` | Longer companion: structural development and OA framing |
-| `paper/argument.tex` | One-page argument summary |
-| `lean/Becoming.lean` | Conditional core |
-| `lean/Obstruction.lean` | Premise, obstruction, orientation, rigidity |
+| `paper/undeniability.tex` | Limit paper (lead) |
+| `paper/becoming.tex` | Longer companion: structural development |
+| `paper/argument.tex` | One-page summary of the structural argument |
+| `lean/Becoming.lean` | Conditional structural core |
+| `lean/Obstruction.lean` | Worlds, obstruction, `P`, independence, orientation |
 | `lean-toolchain` | `leanprover/lean4:v4.31.0` |
 
 ## Checking
