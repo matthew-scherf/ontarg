@@ -35,12 +35,13 @@ witnesses occurrence. That retorsive step is propositional once the tokening
 fact is an antecedent, and it is formalizable over an arbitrary domain of loci.
 Temporal succession is another matter. If claims are properties of
 succession-free worlds, then two tensed structures over one world satisfy
-exactly the same claims; in particular, a still structure and a
-running-capable one are claim-indiscernible. Consequently, no undeniable claim
+exactly the same claims; in particular, a still structure and a structure with
+nonempty succession are claim-indiscernible. Consequently, no undeniable claim
 --- no claim true at every world that discriminates its denial --- can entail
-running. The same two-model exhibition shows that an oriented succession
-premise \(P\) is independent of the claim language relative to the signature
-\((T,h,\mathrm{tok})\). On loci with decidable equality, moreover, every
+running. Relative to the signature \((T,h,\mathrm{tok})\), an oriented
+succession premise \(P\) is independent of every claim true at a shared
+two-model witness: no such claim entails \(P\) for all tensed worlds, and none
+refutes it. On loci with decidable equality, moreover, every
 relabeling-invariant succession is symmetric, so orientation is not available
 from invariance. Structural consequences of a bare distinction (two-valued
 arena, uniqueness of complement, fixed-point freeness, period-two alternation)
@@ -74,17 +75,18 @@ invisible to claims: any two tensed structures over one world satisfy exactly
 the same claims (Section~\ref{sec:obstruction}). It follows that no claim true
 wherever its denial is discriminated can entail running. Temporal realization
 therefore requires a premise \(P\) outside the undeniable fragment. Relative to
-the world signature, \(P\) is independent of every claim. A further theorem
-locates the directional content of \(P\): on loci with decidable equality,
-invariant succession is always symmetric (Section~\ref{sec:orientation}).
+the world signature, \(P\) is independent of every claim true at the two-model
+witness of Section~\ref{sec:indep}. A further theorem locates the directional
+content of \(P\): on loci with decidable equality, invariant succession is
+always symmetric (Section~\ref{sec:orientation}).
 
-The structural facts about a two-valued carrier --- that equivariant laws move
-a point exactly on two elements, that the excluding structureless law is
-complement, that complement has no fixed point and yields a unique period-two
-orbit --- are recorded in Section~\ref{sec:structure} as background, with
-proofs in the accompanying Lean development. They are not used to derive
-succession. The paper's thesis is the limit, not an existence proof for
-becoming.
+The structural facts about a two-valued carrier --- that some equivariant law
+moves a point exactly when the carrier has two elements, that the excluding
+structureless law is complement, that complement has no fixed point and yields
+a unique period-two orbit --- are recorded in Section~\ref{sec:structure} as
+background, with proofs in the accompanying Lean development. They are not used
+to derive succession. The paper's thesis is the limit, not an existence proof
+for becoming.
 
 Section~\ref{sec:dilemma} answers the objection that claims ought to be tensed.
 Section~\ref{sec:related} situates the result. Section~\ref{sec:mech} records
@@ -216,12 +218,14 @@ If some still tensed world discriminates the denial of \(A\), then no
 undeniable \(A\) entails running.
 \end{corollary}
 
-The corollary is a rebuttal schema. Given a candidate axiom offered as an
-undeniable bridge from discrimination to succession, instantiate a still world
-that discriminates its denial (e.g.\ inscriptions on a page with empty
-succession). The candidate fails. The schema does not close the gap for
-candidates that are never so tokened; it shows that undeniability, as defined,
-cannot be the bridge.
+The corollary is a rebuttal schema against bridges to \emph{running}. Given a
+candidate axiom offered as an undeniable entailment of \(\mathrm{Runs}\),
+instantiate a still world that discriminates its denial (e.g.\ inscriptions on
+a page with empty succession, once a separating reading is granted). The
+candidate fails. The schema does not close the gap for candidates that are
+never so tokened; it shows that undeniability, as defined, cannot be that
+bridge. A parallel observation for the ordering half of \(P\) is recorded in
+Section~\ref{sec:premise}.
 
 Two readings of the loci are useful. On the \emph{act} reading, \(T\) comprises
 readings performed by a reader; on the \emph{mark} reading, \(T\) comprises
@@ -246,13 +250,18 @@ P(X):\quad
 The first conjunct is the ordering half; the second is the orientation half.
 \end{definition}
 
-By Proposition~\ref{prop:freeze}, \(P\) fails throughout the still structure
-over any world and holds (in its ordering half) throughout the total
-structure over the same world. By Corollary~\ref{cor:nobridge}, no undeniable
-replacement is available. On the act reading, a single instance of \(P\) is an
-ordinary report of reading order: the denial was read, then the assertion, and
-not conversely \cite{moore1925}. Warrant for one instance does not automatically
-extend to an infinite family of instances.
+Over a fixed world, the empty succession makes every instance of \(P\) fail and
+the total succession makes every ordering-half instance hold
+(\lf{premise\_fails\_still}, \lf{premise\_holds\_running});
+Proposition~\ref{prop:freeze} ensures the two structures agree on all claims.
+Moreover, no undeniable claim can entail the ordering half of \(P\): if it did,
+any still world discriminating that claim's denial would satisfy the claim and
+hence witness a succession, contradicting stillness. (Corollary~\ref{cor:nobridge}
+is the companion fact for entailments of \(\mathrm{Runs}\).) On the act
+reading, a single instance of \(P\) is an ordinary report of reading order: the
+denial was read, then the assertion, and not conversely \cite{moore1925}.
+Warrant for one instance does not automatically extend to an infinite family of
+instances.
 
 \begin{theorem}[One instance]
 \label{thm:actuality}
@@ -310,17 +319,23 @@ There is a world with two distinctly read loci such that:
 every tokening;
 \item every claim holds at both structures or at neither.
 \end{enumerate}
-Hence no claim entails \(P\) and no claim refutes \(P\). The same exhibition
-works for oriented \(P\) over a world whose tokening separates a chosen pair.
-The full chain hypothesis is realized over a world with infinitely many loci
-(e.g.\ successor on \(\mathbb{N}\) with alternating values).
+Hence no claim \emph{true at that shared world} entails \(P\) for all tensed
+worlds, and none such refutes \(P\)
+(\lf{no\_claim\_settles\_premise}). The unrestricted reading is false: the
+constant-false claim vacuously entails and refutes every target. The same
+exhibition works for oriented \(P\) over a world whose tokening separates a
+chosen pair. The full chain hypothesis is realized over a world with infinitely
+many loci (total succession on \(\mathbb{N}\) with alternating reading, or
+successor on \(\mathbb{N}\) for the oriented run).
 \end{proposition}
 
 \begin{proof}
 Take \(T=\B\), \(h=\mathrm{id}\), and a constant tokening for the still/total
-pair; Proposition~\ref{prop:freeze} gives~(iii). For oriented independence, take
-succession to hold of \((\bot,\top)\) alone. For the chain, take \(T=\mathbb{N}\)
-with the successor relation and alternating reading.
+pair; Proposition~\ref{prop:freeze} gives~(iii), and the \(P\)-behaviour is as
+above. For oriented independence, take succession to hold of \((\bot,\top)\)
+alone. For the chain hypothesis, take \(T=\mathbb{N}\) with the total relation
+and alternating reading (\lf{chain\_hypothesis\_realizable}); successor on
+\(\mathbb{N}\) supplies the oriented run (\lf{oriented\_witness\_runs}).
 \end{proof}
 
 Independence is relative to the signature \((T,h,\mathrm{tok})\). If the
@@ -343,21 +358,27 @@ transpositions are definable from equality.)
 
 \begin{proposition}[Classification]
 \label{prop:invsucc}
-An invariant succession takes one truth-value on the diagonal and one off it.
-The four possibilities are: empty, equality, disagreement, and the total
-relation. Equality and the empty relation carry no run. An invariant succession
-that fails somewhere on the diagonal and holds of some off-diagonal pair is
-disagreement.
+An invariant succession is uniform on the diagonal and, given two distinct
+loci, uniform off the diagonal: it is determined by the propositions
+\(R(x,x)\) and \(R(x,y)\) for any \(x\neq y\). Equality and the empty relation
+carry no run. An invariant succession that fails somewhere on the diagonal and
+holds of some off-diagonal pair is disagreement. When the relation is
+decidable (equivalently, \(\B\)-valued), the diagonal and off-diagonal values
+each case into true or false, yielding exactly four extensionally possible
+relations: empty, equality, disagreement, and total.
 \end{proposition}
 
 \begin{proof}[Proof sketch]
 One transposition carries any diagonal pair to any other, so the diagonal is
-uniform. Two transpositions carry any off-diagonal pair to any other, so the
-off-diagonal is uniform when at least two loci exist. The four combinations of
-diagonal/off-diagonal truth-values are the four relations named. A succession
-contained in equality identifies consecutive terms of any sequence, against
-injectivity. The last claim: failure on the diagonal and success off it force
-\(R(u,v)\leftrightarrow u\neq v\) by the two uniformities.
+uniform. Two transpositions carry any off-diagonal pair to any other when at
+least two loci exist, so the off-diagonal is uniform. The verified content is
+this biconditional uniformity (\lf{invariant\_succ\_classified}); a four-way
+exhaustive classification for arbitrary \(\mathrm{Prop}\)-valued relations would
+decide those two propositions and is not claimed. A succession contained in
+equality identifies consecutive terms of any sequence, against injectivity.
+The last claim: failure on the diagonal and success off it force
+\(R(u,v)\leftrightarrow u\neq v\) by the two uniformities
+(\lf{invariant\_says\_is\_ne}).
 \end{proof}
 
 \begin{theorem}[Invariant succession is symmetric]
@@ -396,11 +417,16 @@ For completeness, the conditional structural results used only as background
 are summarized here. Proofs are in \lf{lean/Becoming.lean}.
 
 \begin{enumerate}[itemsep=2pt,leftmargin=*]
-\item \emph{Arena.} On a carrier with decidable equality, an equivariant
-endofunction (commuting with every transposition) moves some point if and only
-if the carrier has exactly two elements. The same equivalence holds for
-mark-respecting equivariance (commutation with transpositions fixing a
-distinguished mark).
+\item \emph{Arena.} On a carrier with decidable equality, there exists an
+equivariant endofunction that moves some point if and only if the carrier has
+exactly two elements (\lf{moves\_iff\_two}). For mark-respecting equivariance
+(commutation with transpositions fixing a distinguished mark \(m\)), the
+matching facts are: some mark-respecting map moves \(m\) iff the carrier has
+two elements, and some mark-respecting map is fixed-point-free iff the carrier
+has two elements (\lf{mark\_moves\_iff\_two}, \lf{marked\_refuses\_iff\_two}).
+Moving an unmarked point is weaker: the constant map to \(m\) is
+mark-respecting on any carrier and moves every \(x\neq m\)
+(\lf{marked\_three\_moves}).
 \item \emph{Uniqueness.} On \(\B\), the structureless (complement-equivariant)
 unary laws are the identity and Boolean complement. Only complement excludes a
 diagonal entry.
@@ -534,16 +560,23 @@ Result & Lean \\
 \hline
 Theorem~\ref{thm:discrimination} & \lf{event\_retorsion}, \lf{discrimination} \\
 Definition~\ref{def:world} & \lf{World}, \lf{Claim}, \lf{Undeniable}, \ldots \\
+Proposition~\ref{prop:calibration} & \lf{undeniable\_trivial} \\
 Proposition~\ref{prop:freeze} & \lf{freeze}, \lf{two\_models} \\
 Theorem~\ref{thm:obstruction} & \lf{obstruction}, \lf{still\_never\_runs} \\
 Corollary~\ref{cor:nobridge} & \lf{no\_undeniable\_bridge} \\
 Definition~\ref{def:P} & \lf{Successive}, \lf{OrientedSuccessive} \\
 Theorem~\ref{thm:actuality} & \lf{oriented\_tick} \\
 Theorem~\ref{thm:chain} & \lf{oriented\_chain\_runs} \\
-Proposition~\ref{prop:independence} & \lf{premise\_independent}, \ldots \\
+Proposition~\ref{prop:independence} & \lf{premise\_independent},
+  \lf{premise\_fails\_still}, \lf{premise\_holds\_running},
+  \lf{no\_claim\_settles\_premise}, \lf{chain\_hypothesis\_realizable},
+  \lf{oriented\_witness\_runs} \\
+Proposition~\ref{prop:invsucc} & \lf{invariant\_succ\_classified},
+  \lf{invariant\_says\_is\_ne} \\
 Theorem~\ref{thm:orientation} & \lf{invariant\_succ\_symm}, \lf{no\_invariant\_orientation} \\
 Theorems~\ref{thm:hornone},~\ref{thm:horntwo} & \lf{obstruction\_tensed}, \lf{horn\_two} \\
-Section~\ref{sec:structure} & \lf{lean/Becoming.lean} \\
+Section~\ref{sec:structure} & \lf{lean/Becoming.lean}
+  (\lf{moves\_iff\_two}, \lf{mark\_moves\_iff\_two}, \ldots) \\
 \hline
 \end{tabular}
 \end{center}
@@ -557,12 +590,14 @@ against toolchain \lf{leanprover/lean4:v4.31.0}.
 \label{sec:conclusion}
 
 Discrimination yields occurrence. Under a succession-blind claim language, it
-does not yield succession: undeniability and running are incompatible in the
-presence of a still discriminating world, and such worlds are available by
-freeze. The succession premise \(P\) is independent of every claim relative to
-the retorsive signature, and its orientation clause is invisible to invariant
-structure. The a priori core is therefore the conditionals together with this
-limit. Time, if wanted, is paid for separately.
+does not yield succession: undeniability and running are incompatible once a
+still world that discriminates the relevant denial is granted --- freeze
+supplies the still structure over a given world, and discrimination at that
+world is the ostensive step of Section~\ref{sec:discrimination}. The succession
+premise \(P\) is independent of every claim true at the two-model witness,
+relative to the retorsive signature, and its orientation clause is invisible to
+invariant structure. The a priori core is therefore the conditionals together
+with this limit. Time, if wanted, is paid for separately.
 
 \begin{thebibliography}{99}
 
