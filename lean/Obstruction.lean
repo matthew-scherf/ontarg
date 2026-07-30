@@ -123,7 +123,9 @@ def runningWitness : TensedWorld :=
   ⟨⟨Bool, id, fun _ => true⟩, fun _ _ => True⟩
 
 
-/-- Still witness: discrimination holds; `Successive` fails for every tokening. -/
+/-- Still witness: occurrence holds on the carrier; `Successive` fails for every
+tokening. (Discrimination for a hypothetical tokening is the antecedent of the
+inner claim, not a proved fact about `stillWitness.w.tok`.) -/
 theorem premise_fails_still :
     (∃ t₁ t₂ : stillWitness.w.T, stillWitness.w.h t₁ ≠ stillWitness.w.h t₂)
     ∧ Still stillWitness
